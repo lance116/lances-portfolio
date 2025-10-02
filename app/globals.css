@@ -29,6 +29,9 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+
+    /* grid color */
+    --grid: 215 16% 92%;
   }
 
   .dark {
@@ -56,6 +59,8 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+
+    --grid: 217 16% 20%;
   }
 }
 
@@ -65,5 +70,26 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Faint grid background */
+@layer utilities {
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, hsl(var(--grid) / 0.35) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--grid) / 0.35) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .link-minimal {
+    @apply underline underline-offset-[3px] decoration-transparent hover:decoration-foreground/30 transition-colors;
+  }
+
+  .hover-nudge {
+    transition: transform 120ms ease;
+  }
+  .hover-nudge:hover {
+    transform: translateY(-1px);
   }
 }

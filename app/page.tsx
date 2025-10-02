@@ -58,9 +58,9 @@ export default function Home() {
         {/* Building */}
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div>◆ Building:</div>
-          <div>↳ The worlds first agentic CRM for mortgage brokers/loan officers.</div>
-          <div>↳ Potentially 1000+ mortgage brokers/loan officers are interested.</div>
-          <div>↳ Loan officers who make $1M+ have told me: “I would pay thousands a month for this.”</div>
+          <div>↳ The <span className="font-semibold italic">worlds first</span> agentic CRM for mortgage brokers/loan officers.</div>
+          <div>↳ Potentially <span className="font-semibold italic">1000+</span> mortgage brokers/loan officers are interested.</div>
+          <div>↳ Loan officers who make <span className="font-semibold italic">$1M+</span> have told me: “I would pay <span className="font-semibold italic">thousands</span> a month for this.”</div>
         </div>
 
         <div className="my-3 border-t border-neutral-200" />

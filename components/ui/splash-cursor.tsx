@@ -1102,10 +1102,11 @@ function SplashCursor({
     }
 
     function generateColor() {
-      let c = HSVtoRGB(Math.random(), 1.0, 1.0);
-      c.r *= 0.15;
-      c.g *= 0.15;
-      c.b *= 0.15;
+      // Favor darker tones: moderate saturation, lower value
+      const hue = Math.random();
+      const saturation = 0.85; // rich but not neon
+      const value = 0.3 + Math.random() * 0.2; // 0.3–0.5 keeps colors dark
+      let c = HSVtoRGB(hue, saturation, value);
       return c;
     }
 

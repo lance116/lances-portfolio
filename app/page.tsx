@@ -69,7 +69,7 @@ export default function Home() {
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div>◆ Currently:</div>
           <div>↳ Raising preseed, October 1st to November 1st (seeking ~$400K)</div>
-          <div>↳ Interest from:</div>
+          <div>↳ In touch with:</div>
           <div className="ml-4 space-y-1">
             <div className="flex items-center gap-2">↳ <Logo src="/YClogo.png" alt="Y Combinator" /><Label><a href="https://www.ycombinator.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Y Combinator</a></Label></div>
             <div className="flex items-center gap-2">↳ <Logo src="/a16z.jpg" alt="a16z" /><Label><a href="https://a16z.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">a16z</a></Label></div>

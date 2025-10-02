@@ -59,7 +59,7 @@ export default function Home() {
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div>◆ Building:</div>
           <div>↳ The <span className="font-semibold italic">worlds first</span> agentic CRM for mortgage brokers/loan officers.</div>
-          <div>↳ <span className="font-semibold italic">1000+</span> mortgage brokers/loan officers to use my solution.</div>
+          <div>↳ Have <span className="font-semibold italic">1000+</span> mortgage brokers/loan officers lined up to use my solution.</div>
           <div>↳ Loan officers who earn <span className="font-semibold italic">$1M+</span> have told me: “I would pay <span className="font-semibold italic">thousands</span> a month for this.”</div>
         </div>
 
@@ -68,7 +68,7 @@ export default function Home() {
         {/* Currently */}
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div>◆ Currently:</div>
-          <div>↳ Raising preseed (seeking ~$400K)</div>
+          <div>↳ Raising preseed, October 1st to November 1st (seeking ~$400K)</div>
           <div>↳ Interest from:</div>
           <div className="ml-4 space-y-1">
             <div className="flex items-center gap-2">↳ <Logo src="/YClogo.png" alt="Y Combinator" /><Label><a href="https://www.ycombinator.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Y Combinator</a></Label></div>

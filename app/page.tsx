@@ -102,19 +102,21 @@ export default function Home() {
           <div>↳ Someone curious in what I’m doing</div>
         </div>
 
+        {/* Contact */}
         <div className="my-3 border-t border-neutral-200" />
 
-        {/* Contact */}
-        <div className="pt-4" />
-        <footer className="pb-16 sm:pb-24 text-sm text-neutral-700">
-          <div>◆ Contact:</div>
-          <div className="mt-2 flex items-center gap-4 text-neutral-700">
-            <a className="link-minimal inline-flex items-center gap-1" href="mailto:lance.yan.business@gmail.com"><Mail size={14} /> Email</a>
-            <a className="link-minimal inline-flex items-center gap-1" href="https://github.com/lance116" target="_blank" rel="noreferrer"><Github size={14} /> GitHub</a>
-            <a className="link-minimal inline-flex items-center gap-1" href="https://x.com/cnnguan/" target="_blank" rel="noreferrer">Twitter</a>
-            <a className="link-minimal inline-flex items-center gap-1" href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer"><Linkedin size={14} /> LinkedIn</a>
-          </div>
-        </footer>
+        <div className="text-sm sm:text-[0.95rem] leading-tight">
+          <div className="pt-4" />
+          <footer className="pb-16 sm:pb-24">
+            <div>◆ Contact:</div>
+            <div className="mt-2 flex items-center gap-3 text-neutral-700">
+              <a className="link-minimal inline-flex items-center gap-1" href="mailto:lance.yan.business@gmail.com"><Mail size={14} /><Label>Email</Label></a>
+              <a className="link-minimal inline-flex items-center gap-1" href="https://github.com/lance116" target="_blank" rel="noreferrer"><Github size={14} /><Label>GitHub</Label></a>
+              <a className="link-minimal inline-flex items-center gap-1" href="https://x.com/cnnguan/" target="_blank" rel="noreferrer"><Logo src="/X.png" alt="X" /><Label>Twitter</Label></a>
+              <a className="link-minimal inline-flex items-center gap-1" href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer"><Logo src="/linkedin.webp" alt="LinkedIn" /><Label>LinkedIn</Label></a>
+            </div>
+          </footer>
+        </div>
       </div>
     </main>
   );

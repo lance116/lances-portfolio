@@ -6,13 +6,13 @@ function SplashCursor({
   SIM_RESOLUTION = 128,
   DYE_RESOLUTION = 1440,
   CAPTURE_RESOLUTION = 512,
-  DENSITY_DISSIPATION = 2.45, // was 3.5 → ~30% lower to persist longer
-  VELOCITY_DISSIPATION = 1.4, // was 2 → ~30% lower to persist longer
+  DENSITY_DISSIPATION = 2.08, // was 2.45 → ~15% lower (lingers more)
+  VELOCITY_DISSIPATION = 1.19, // was 1.4 → ~15% lower (lingers more)
   PRESSURE = 0.1,
   PRESSURE_ITERATIONS = 20,
   CURL = 3,
-  SPLAT_RADIUS = 0.26, // was 0.2 → ~30% larger splat
-  SPLAT_FORCE = 7800, // was 6000 → ~30% stronger
+  SPLAT_RADIUS = 0.3, // was 0.26 → ~15% larger
+  SPLAT_FORCE = 9000, // was 7800 → ~15% stronger
   SHADING = true,
   COLOR_UPDATE_SPEED = 10,
   BACK_COLOR = { r: 0.5, g: 0, b: 0 },

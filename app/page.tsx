@@ -95,11 +95,11 @@ export default function Home() {
 
         {/* Reach out */}
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
-          <div>◆ Reach out if you’re:</div>
+          <div>◆ Please reach out if you’re:</div>
           <div>↳ A mortgage broker/loan officer</div>
           <div>↳ A founder</div>
           <div>↳ A VC</div>
-          <div>↳ Someone curious in what I’m doing</div>
+          <div>↳ Someone curious about me or what I'm doing</div>
         </div>
 
         {/* Contact */}

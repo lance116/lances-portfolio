@@ -11,7 +11,7 @@ function SplashCursor({
   PRESSURE = 0.1,
   PRESSURE_ITERATIONS = 20,
   CURL = 3,
-  SPLAT_RADIUS = 0.3, // was 0.26 → ~15% larger
+  SPLAT_RADIUS = 0.217, // was 0.255 → another ~15% smaller for the white circle
   SPLAT_FORCE = 9000, // was 7800 → ~15% stronger
   SHADING = true,
   COLOR_UPDATE_SPEED = 10,
@@ -1105,7 +1105,7 @@ function SplashCursor({
       // Favor darker tones: moderate saturation, lower value
       const hue = Math.random();
       const saturation = 0.85; // rich but not neon
-      const value = 0.3 + Math.random() * 0.2; // 0.3–0.5 keeps colors dark
+      const value = 0.1 + Math.random() * 0.2; // 0.3–0.5 keeps colors dark
       let c = HSVtoRGB(hue, saturation, value);
       return c;
     }

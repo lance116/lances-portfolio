@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'], weight: ['200','300'] })
 export const metadata: Metadata = {
   title: "Lance's Portfolio",
   description: 'Sparse, minimal online résumé',
-  icons: { icon: '/L logo.png' },
+  icons: { icon: '/logo L.png' },
 }
 
 export default function RootLayout({

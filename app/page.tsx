@@ -99,7 +99,7 @@ export default function Home() {
           <div>↳ A mortgage broker/loan officer</div>
           <div>↳ A founder</div>
           <div>↳ A VC</div>
-          <div>↳ Someone curious about me or what I'm doing</div>
+          <div>↳ Someone who is curious about me or what I'm doing</div>
         </div>
 
         <div className="my-3 border-t border-neutral-200" />

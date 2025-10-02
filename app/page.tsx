@@ -3,13 +3,13 @@ import { Mail, Github, Twitter, Linkedin, Square } from "lucide-react";
 
 function Logo({ src, alt, size = 16 }: { src: string; alt: string; size?: number }) {
   return (
-    <span className="inline-flex items-center align-middle relative -top-px leading-none">
+    <span className="inline-flex items-center align-middle">
       <Image
         src={src}
         alt={alt}
         width={size}
         height={size}
-        className="inline-block align-middle"
+        className="h-4 w-4 object-contain"
       />
     </span>
   );
@@ -34,17 +34,17 @@ export default function Home() {
               Track Record
             </span>
             <div className="mt-1 space-y-1 text-neutral-800">
-              <div className="text-neutral-700">↳ SWE Internships: <span className="inline-flex items-center gap-3 flex-wrap align-middle leading-none">
-                <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/ConsultingPFP.png" alt="RCL Consulting" /><span>RCL Consulting</span></span>
-                <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/stealthlogo.jpg" alt="Stealth" /><span>Stealth startup</span></span>
-                <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/moscrop.jpg" alt="Moscrop" /><span>Moscrop CS dept</span></span>
+              <div className="text-neutral-700">↳ SWE Internships: <span className="inline-flex items-center gap-3 flex-wrap align-middle">
+                <span className="inline-flex items-center gap-1 align-middle hover-nudge"><Logo src="/ConsultingPFP.png" alt="RCL Consulting" /><span>RCL Consulting</span></span>
+                <span className="inline-flex items-center gap-1 align-middle hover-nudge"><Logo src="/stealthlogo.jpg" alt="Stealth" /><span>Stealth startup</span></span>
+                <span className="inline-flex items-center gap-1 align-middle hover-nudge"><Logo src="/moscrop.jpg" alt="Moscrop" /><span>Moscrop CS dept</span></span>
               </span></div>
-              <div>↳ SWE for most selective team at <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/wat.jpeg" alt="Wat.ai" /><span>Wat.ai</span></span>.</div>
+              <div>↳ SWE for most selective team at <span className="inline-flex items-center gap-1 align-middle hover-nudge"><Logo src="/wat.jpeg" alt="Wat.ai" /><span>Wat.ai</span></span>.</div>
               <div>↳ Coding since age 5, entrepreneur since age 11.</div>
               <div>↳ Youngest + fastest in UWaterloo history flown to SF to raise venture.</div>
               <div>↳ Turned down $300K+ offers + full-time interest at Icon (spent $12M on domain).</div>
               <div>↳ 1200+ Twitter followers, posts w/ 100K+ views.</div>
-              <div>↳ Mentored by <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/YClogo.png" alt="YC" /><span>YC</span></span> + <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/speedrun.jpg" alt="speedrun" /><span>speedrun</span></span> founders.</div>
+              <div>↳ Mentored by <span className="inline-flex items-center gap-1 align-middle hover-nudge"><Logo src="/YClogo.png" alt="YC" /><span>YC</span></span> + <span className="inline-flex items-center gap-1 align-middle hover-nudge"><Logo src="/speedrun.jpg" alt="speedrun" /><span>speedrun</span><span>founders.</span></span></div>
             </div>
           </div>
 
@@ -78,10 +78,10 @@ export default function Home() {
               Previously
             </span>
             <div className="mt-1 space-y-1 text-neutral-800">
-              <div>↳ SWE Internships: <span className="inline-flex items-center gap-3 flex-wrap align-middle leading-none">
-                <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/ConsultingPFP.png" alt="RCL Consulting" /><span>RCL Consulting</span></span>
-                <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/stealthlogo.jpg" alt="Stealth" /><span>Stealth startup</span></span>
-                <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/moscrop.jpg" alt="Moscrop" /><span>Moscrop CS dept</span></span>
+              <div>↳ SWE Internships: <span className="inline-flex items-center gap-3 flex-wrap align-middle">
+                <span className="inline-flex items-center gap-1 align-middle hover-nudge"><Logo src="/ConsultingPFP.png" alt="RCL Consulting" /><span>RCL Consulting</span></span>
+                <span className="inline-flex items-center gap-1 align-middle hover-nudge"><Logo src="/stealthlogo.jpg" alt="Stealth" /><span>Stealth startup</span></span>
+                <span className="inline-flex items-center gap-1 align-middle hover-nudge"><Logo src="/moscrop.jpg" alt="Moscrop" /><span>Moscrop CS dept</span></span>
               </span></div>
             </div>
           </div>
@@ -95,10 +95,10 @@ export default function Home() {
             <span className="tracking-tight">L</span>
           </div>
           <div className="mt-2 flex items-center gap-4 text-neutral-700">
-            <a className="link-minimal hover-nudge inline-flex items-center gap-1" href="mailto:lance@example.com"><Mail size={14} /> Email</a>
+            <a className="link-minimal hover-nudge inline-flex items-center gap-1" href="mailto:lance.yan.business@gmail.com"><Mail size={14} /> Email</a>
             <a className="link-minimal hover-nudge inline-flex items-center gap-1" href="https://github.com/lance116" target="_blank" rel="noreferrer"><Github size={14} /> GitHub</a>
-            <a className="link-minimal hover-nudge inline-flex items-center gap-1" href="https://twitter.com/" target="_blank" rel="noreferrer"><Twitter size={14} /> Twitter</a>
-            <a className="link-minimal hover-nudge inline-flex items-center gap-1" href="https://www.linkedin.com/in/" target="_blank" rel="noreferrer"><Linkedin size={14} /> LinkedIn</a>
+            <a className="link-minimal hover-nudge inline-flex items-center gap-1" href="https://x.com/cnnguan/" target="_blank" rel="noreferrer"><Twitter size={14} /> Twitter</a>
+            <a className="link-minimal hover-nudge inline-flex items-center gap-1" href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer"><Linkedin size={14} /> LinkedIn</a>
           </div>
         </footer>
       </div>

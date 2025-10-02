@@ -99,6 +99,7 @@ export default function Home() {
           <div>↳ A mortgage broker/loan officer</div>
           <div>↳ A founder</div>
           <div>↳ A VC</div>
+          <div>↳ An angel investor</div>
           <div>↳ Someone who is curious about me or what I'm doing</div>
         </div>
 

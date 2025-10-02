@@ -3,7 +3,7 @@ import { Mail, Github, Twitter, Linkedin } from "lucide-react";
 
 function Logo({ src, alt, size = 18 }: { src: string; alt: string; size?: number }) {
   return (
-    <span className="inline-flex items-center">
+    <span className="inline-flex items-center align-middle">
       <Image
         src={src}
         alt={alt}
@@ -12,11 +12,15 @@ function Logo({ src, alt, size = 18 }: { src: string; alt: string; size?: number
         sizes={`${size}px`}
         quality={100}
         priority={false}
-        className="h-[18px] w-[18px] object-contain"
+        className="h-[18px] w-[18px] object-contain align-middle"
       />
     </span>
   );
 }
+
+const Label = ({ children }: { children: React.ReactNode }) => (
+  <span className="relative -top-[1px] leading-none align-middle">{children}</span>
+);
 
 const FallbackLogo = ({ alt }: { alt: string }) => (
   <Logo src="/YClogo.png" alt={alt} />
@@ -31,7 +35,7 @@ export default function Home() {
         {/* Header */}
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <h1 className="underline underline-offset-[3px] font-extralight">◆ Lance Yan</h1>
-          <div>↳ CS @ <span className="inline-flex items-center gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><span>UWaterloo</span></span></div>
+          <div>↳ CS @ <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label>UWaterloo</Label></span></div>
           <div>↳ Building Clice, the worlds first agentic CRM for mortgage brokers and loan officers</div>
         </div>
 
@@ -40,13 +44,13 @@ export default function Home() {
         {/* Track Record */}
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div>◆ Track Record:</div>
-          <div>↳ The <span className="font-semibold italic">youngest</span> and <span className="font-semibold italic">fastest</span> ever in <span className="inline-flex items-center gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><span>UWaterloo</span></span>’s <span className="font-semibold italic">entire history</span> to get flown out to San Francisco to raise venture.</div>
-          <div>↳ Turned down full time interest at <span className="font-semibold italic">$300K</span> a year, and full-time interest at <span className="inline-flex items-center gap-1"><Logo src="/icon.jpg" alt="Icon" /><span>Icon</span></span> ($12M domain, $5M ARR) to build Clice.</div>
+          <div>↳ The <span className="font-semibold italic">youngest</span> and <span className="font-semibold italic">fastest</span> ever in <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label>UWaterloo</Label></span>’s <span className="font-semibold italic">entire history</span> to get flown out to San Francisco to raise venture.</div>
+          <div>↳ Turned down full time interest at <span className="font-semibold italic">$300K</span> a year, and full-time interest at <span className="inline-flex items-center align-middle gap-1"><Logo src="/icon.jpg" alt="Icon" /><Label>Icon</Label></span> ($12M domain, $5M ARR) to build Clice.</div>
           <div>↳ Did 3 <span className="font-semibold italic">highschool</span> software engineering internships.</div>
-          <div>↳ Software engineer at the <span className="font-semibold italic">most selective</span> team in UWaterloo’s AI org, <span className="inline-flex items-center gap-1"><Logo src="/wat.jpeg" alt="wat.ai" /><span>wat.ai</span></span>.</div>
+          <div>↳ Software engineer at the <span className="font-semibold italic">most selective</span> team in UWaterloo’s AI org, <span className="inline-flex items-center align-middle gap-1"><Logo src="/wat.jpeg" alt="wat.ai" /><Label>wat.ai</Label></span>.</div>
           <div>↳ Programming since <span className="font-semibold italic">age 5</span>, entrepreneur since <span className="font-semibold italic">age 11</span>.</div>
-          <div>↳ Mentored by <span className="font-semibold italic">a lot</span> of cool people. Including founders from <span className="inline-flex items-center gap-1"><Logo src="/YClogo.png" alt="YC" /><span>YC</span></span>, <span className="inline-flex items-center gap-1"><Logo src="/speedrun.jpg" alt="speedrun" /><span>speedrun</span></span>, <span className="inline-flex items-center gap-1"><Logo src="/zfellows.jpg" alt="Z Fellows" /><span>Z Fellows</span></span> and <span className="inline-flex items-center gap-1"><Logo src="/thielfellow.png" alt="Thiel Fellows" /><span>Thiel Fellows</span></span>.</div>
-          <div>↳ <span className="font-semibold italic">1200+</span> followers on 𝕏 with posts totaling <span className="font-semibold italic">600K+</span> views.</div>
+          <div>↳ Mentored by <span className="font-semibold italic">a lot</span> of cool people. Including founders from <span className="inline-flex items-center align-middle gap-1"><Logo src="/YClogo.png" alt="YC" /><Label>YC</Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/speedrun.jpg" alt="speedrun" /><Label>speedrun</Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/zfellows.jpg" alt="Z Fellows" /><Label>Z Fellows</Label></span> and <span className="inline-flex items-center align-middle gap-1"><Logo src="/thielfellow.png" alt="Thiel Fellows" /><Label>Thiel Fellows</Label></span>.</div>
+          <div>↳ <span className="font-semibold italic">1200+</span> followers on <span className="inline-flex items-center align-middle gap-1"><Logo src="/X.png" alt="X" /></span> with posts totaling <span className="font-semibold italic">600K+</span> views.</div>
         </div>
 
         <div className="my-3 border-t border-neutral-200" />
@@ -67,23 +71,23 @@ export default function Home() {
           <div>↳ Raising preseed (looking for ~$400K)</div>
           <div>↳ Interest from:</div>
           <div className="ml-4 space-y-1">
-            <div className="flex items-center gap-2">↳ <Logo src="/YClogo.png" alt="Y Combinator" /><span>Y Combinator</span></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/a16z.jpg" alt="a16z" /><span>a16z</span></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/speedrun.jpg" alt="a16z speedrun" /><span>a16z speedrun</span></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/finc.jpg" alt="Founders Inc." /><span>Founders Inc.</span></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/zfellows.jpg" alt="Z Fellows" /><span>Z Fellows</span></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/EF.png" alt="Entrepreneurs First" /><span>Entrepreneurs First</span></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/afore.png" alt="Afore Capital" /><span>Afore Capital</span></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/radical.webp" alt="Radical Ventures" /><span>Radical Ventures</span></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/pear.jpg" alt="Pear VC" /><span>Pear VC</span></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/index ventures.jpg" alt="Index Ventures" /><span>Index Ventures</span></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/crv.png" alt="CRV" /><span>CRV</span></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/moxxie.jpg" alt="Moxxie Ventures" /><span>Moxxie Ventures</span></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/goldenventures.jpg" alt="Golden Ventures" /><span>Golden Ventures</span></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/nexus ventures.jpg" alt="Nexus Ventures" /><span>Nexus Ventures</span></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/panache.jpg" alt="Panache Ventures" /><span>Panache Ventures</span></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/frontrow.jpg" alt="Front Row Ventures" /><span>Front Row Ventures</span></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/rippleventures.jpg" alt="Ripple Ventures" /><span>Ripple Ventures</span></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/YClogo.png" alt="Y Combinator" /><Label>Y Combinator</Label></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/a16z.jpg" alt="a16z" /><Label>a16z</Label></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/speedrun.jpg" alt="a16z speedrun" /><Label>a16z speedrun</Label></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/finc.jpg" alt="Founders Inc." /><Label>Founders Inc.</Label></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/zfellows.jpg" alt="Z Fellows" /><Label>Z Fellows</Label></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/EF.png" alt="Entrepreneurs First" /><Label>Entrepreneurs First</Label></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/afore.png" alt="Afore Capital" /><Label>Afore Capital</Label></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/radical.webp" alt="Radical Ventures" /><Label>Radical Ventures</Label></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/pear.jpg" alt="Pear VC" /><Label>Pear VC</Label></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/index ventures.jpg" alt="Index Ventures" /><Label>Index Ventures</Label></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/crv.png" alt="CRV" /><Label>CRV</Label></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/moxxie.jpg" alt="Moxxie Ventures" /><Label>Moxxie Ventures</Label></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/goldenventures.jpg" alt="Golden Ventures" /><Label>Golden Ventures</Label></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/nexus ventures.jpg" alt="Nexus Ventures" /><Label>Nexus Ventures</Label></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/panache.jpg" alt="Panache Ventures" /><Label>Panache Ventures</Label></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/frontrow.jpg" alt="Front Row Ventures" /><Label>Front Row Ventures</Label></div>
+            <div className="flex items-center gap-2">↳ <Logo src="/rippleventures.jpg" alt="Ripple Ventures" /><Label>Ripple Ventures</Label></div>
           </div>
         </div>
 

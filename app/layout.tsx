@@ -6,8 +6,9 @@ import { SplashCursor } from '@/components/ui/splash-cursor'
 const inter = Inter({ subsets: ['latin'], weight: ['200','300'] })
 
 export const metadata: Metadata = {
-  title: 'Lance Yan S',
+  title: "Lance's Portfolio",
   description: 'Sparse, minimal online résumé',
+  icons: { icon: '/icon.svg' },
 }
 
 export default function RootLayout({

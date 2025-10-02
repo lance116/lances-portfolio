@@ -1,10 +1,25 @@
+import Image from "next/image";
 import { Mail, Github, Twitter, Linkedin, Square } from "lucide-react";
+
+function Logo({ src, alt, size = 16 }: { src: string; alt: string; size?: number }) {
+  return (
+    <span className="inline-flex items-center align-middle relative -top-px leading-none">
+      <Image
+        src={src}
+        alt={alt}
+        width={size}
+        height={size}
+        className="inline-block align-middle"
+      />
+    </span>
+  );
+}
 
 export default function Home() {
   return (
     <main className="relative">
       {/* Centered narrow column */}
-      <div className="mx-auto max-w-screen-sm px-4 sm:px-0">
+      <div className="relative z-10 mx-auto max-w-screen-sm px-4 sm:px-0">
         <div className="pt-16 sm:pt-24" />
 
         {/* Name */}
@@ -14,28 +29,28 @@ export default function Home() {
         <div className="mt-3 space-y-2 text-sm sm:text-[0.95rem] leading-tight">
           {/* Track Record */}
           <div>
-            <span className="italic text-neutral-600 inline-flex items-center gap-2">
+            <span className="italic text-neutral-600 inline-flex items-center gap-2 align-middle">
               <span className="inline-block rotate-45"><Square size={8} className="text-neutral-500" /></span>
               Track Record
             </span>
             <div className="mt-1 space-y-1 text-neutral-800">
-              <div className="text-neutral-700">↳ SWE Internships: <span className="inline-flex items-center gap-2">
-                <span className="inline-flex items-center gap-1 hover-nudge"><Square size={10} className="text-neutral-400 rotate-45" />RCL Consulting</span>
-                <span className="inline-flex items-center gap-1 hover-nudge"><Square size={10} className="text-neutral-400 rotate-45" />Stealth startup</span>
-                <span className="inline-flex items-center gap-1 hover-nudge"><Square size={10} className="text-neutral-400 rotate-45" />Moscrop CS dept</span>
+              <div className="text-neutral-700">↳ SWE Internships: <span className="inline-flex items-center gap-3 flex-wrap align-middle leading-none">
+                <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/ConsultingPFP.png" alt="RCL Consulting" /><span>RCL Consulting</span></span>
+                <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/stealthlogo.jpg" alt="Stealth" /><span>Stealth startup</span></span>
+                <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/moscrop.jpg" alt="Moscrop" /><span>Moscrop CS dept</span></span>
               </span></div>
-              <div>↳ SWE for most selective team at Wat.ai.</div>
+              <div>↳ SWE for most selective team at <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/wat.jpeg" alt="Wat.ai" /><span>Wat.ai</span></span>.</div>
               <div>↳ Coding since age 5, entrepreneur since age 11.</div>
               <div>↳ Youngest + fastest in UWaterloo history flown to SF to raise venture.</div>
               <div>↳ Turned down $300K+ offers + full-time interest at Icon (spent $12M on domain).</div>
               <div>↳ 1200+ Twitter followers, posts w/ 100K+ views.</div>
-              <div>↳ Mentored by YC + Speedrun founders.</div>
+              <div>↳ Mentored by <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/YClogo.png" alt="YC" /><span>YC</span></span> + <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/speedrun.jpg" alt="speedrun" /><span>speedrun</span></span> founders.</div>
             </div>
           </div>
 
           {/* What I’ve Been Building */}
           <div>
-            <span className="italic text-neutral-600 inline-flex items-center gap-2">
+            <span className="italic text-neutral-600 inline-flex items-center gap-2 align-middle">
               <span className="inline-block rotate-45"><Square size={8} className="text-neutral-500" /></span>
               What I’ve Been Building
             </span>
@@ -47,7 +62,7 @@ export default function Home() {
 
           {/* Currently */}
           <div>
-            <span className="italic text-neutral-600 inline-flex items-center gap-2">
+            <span className="italic text-neutral-600 inline-flex items-center gap-2 align-middle">
               <span className="inline-block rotate-45"><Square size={8} className="text-neutral-500" /></span>
               Currently
             </span>
@@ -58,12 +73,16 @@ export default function Home() {
 
           {/* Previously */}
           <div>
-            <span className="italic text-neutral-600 inline-flex items-center gap-2">
+            <span className="italic text-neutral-600 inline-flex items-center gap-2 align-middle">
               <span className="inline-block rotate-45"><Square size={8} className="text-neutral-500" /></span>
               Previously
             </span>
             <div className="mt-1 space-y-1 text-neutral-800">
-              <div>↳ SWE Internships: RCL Consulting, Stealth startup, Moscrop CS dept.</div>
+              <div>↳ SWE Internships: <span className="inline-flex items-center gap-3 flex-wrap align-middle leading-none">
+                <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/ConsultingPFP.png" alt="RCL Consulting" /><span>RCL Consulting</span></span>
+                <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/stealthlogo.jpg" alt="Stealth" /><span>Stealth startup</span></span>
+                <span className="inline-flex items-center gap-1 hover-nudge align-middle leading-none"><Logo src="/moscrop.jpg" alt="Moscrop" /><span>Moscrop CS dept</span></span>
+              </span></div>
             </div>
           </div>
         </div>
@@ -84,7 +103,7 @@ export default function Home() {
         </footer>
       </div>
 
-      {/* Keep background effect untouched (SplashCursor already mounted elsewhere) */}
+      {/* Keep background effect untouched (SplashCursor already mounted globally) */}
     </main>
   );
 }

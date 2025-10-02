@@ -89,6 +89,7 @@
   /* Smooth underline + slight nudge without affecting layout at rest */
   .hover-underline-nudge {
     position: relative;
+    display: inline-block; /* ensure transform affects line box */
     transition: transform 150ms ease;
   }
   .hover-underline-nudge::after {

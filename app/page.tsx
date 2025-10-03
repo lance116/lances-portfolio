@@ -69,26 +69,6 @@ export default function Home() {
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div>◆ Currently:</div>
           <div>↳ Raising preseed, October 1st to November 1st (seeking ~$400K)</div>
-          <div>↳ In touch with:</div>
-          <div className="ml-4 space-y-1">
-            <div className="flex items-center gap-2">↳ <Logo src="/YClogo.png" alt="Y Combinator" /><Label><a href="https://www.ycombinator.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Y Combinator</a></Label></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/a16z.jpg" alt="a16z" /><Label><a href="https://a16z.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">a16z</a></Label></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/speedrun.jpg" alt="a16z speedrun" /><Label><a href="https://speedrun.a16z.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">a16z speedrun</a></Label></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/finc.jpg" alt="Founders Inc." /><Label><a href="https://f.inc/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Founders Inc.</a></Label></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/zfellows.jpg" alt="Z Fellows" /><Label><a href="https://www.zfellows.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Z Fellows</a></Label></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/EF.png" alt="Entrepreneurs First" /><Label><a href="https://www.joinef.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Entrepreneurs First</a></Label></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/afore.png" alt="Afore Capital" /><Label><a href="https://www.afore.vc/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Afore Capital</a></Label></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/radical.webp" alt="Radical Ventures" /><Label><a href="https://radical.vc/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Radical Ventures</a></Label></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/pear.jpg" alt="Pear VC" /><Label><a href="https://pear.vc/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Pear VC</a></Label></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/index ventures.jpg" alt="Index Ventures" /><Label><a href="https://www.indexventures.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Index Ventures</a></Label></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/crv.png" alt="CRV" /><Label><a href="https://www.crv.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">CRV</a></Label></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/moxxie.jpg" alt="Moxxie Ventures" /><Label><a href="https://www.moxxie.vc/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Moxxie Ventures</a></Label></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/goldenventures.jpg" alt="Golden Ventures" /><Label><a href="https://www.golden.ventures/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Golden Ventures</a></Label></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/nexus ventures.jpg" alt="Nexus Ventures" /><Label><a href="https://nexusvp.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Nexus Ventures</a></Label></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/panache.jpg" alt="Panache Ventures" /><Label><a href="https://www.panache.vc/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Panache Ventures</a></Label></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/frontrow.jpg" alt="Front Row Ventures" /><Label><a href="https://frontrow.ventures/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Front Row Ventures</a></Label></div>
-            <div className="flex items-center gap-2">↳ <Logo src="/rippleventures.jpg" alt="Ripple Ventures" /><Label><a href="https://rippleventures.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Ripple Ventures</a></Label></div>
-          </div>
         </div>
 
         <div className="my-3 border-t border-neutral-200" />

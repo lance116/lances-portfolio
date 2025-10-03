@@ -60,7 +60,7 @@ export default function Home() {
           <div>◆ Building:</div>
           <div>↳ The <span className="font-semibold italic">worlds first</span> agentic CRM for mortgage brokers/loan officers.</div>
           <div>↳ Have <span className="font-semibold italic">1000+</span> mortgage brokers/loan officers lined up to use my solution.</div>
-          <div>↳ Loan officers who earn <span className="font-semibold italic">$1M+</span> have told me: “I would pay <span className="font-semibold italic">thousands</span> a month for this.”</div>
+          <div>↳ Loan officers who earn <span className="font-semibold italic">$1M+</span>/year have told me: “I would pay <span className="font-semibold italic">thousands</span> a month for this.”</div>
         </div>
 
         <div className="my-3 border-t border-neutral-200" />

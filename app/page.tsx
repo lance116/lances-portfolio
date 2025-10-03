@@ -65,13 +65,6 @@ export default function Home() {
 
         <div className="my-3 border-t border-neutral-200" />
 
-        {/* Currently */}
-        <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
-          <div>◆ Currently:</div>
-          <div>↳ Raising preseed, October 1st to November 1st (seeking ~$400K)</div>
-        </div>
-
-        <div className="my-3 border-t border-neutral-200" />
 
         {/* Reach out */}
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">

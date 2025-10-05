@@ -38,11 +38,10 @@ export default function About() {
             <h1 className="underline underline-offset-[3px] font-extralight">◆ Lance Yan</h1>
             <a href="/" className="font-extralight hover-underline-nudge">Home</a>
           </div>
-          <div>↳ Grew up in <span className="inline-flex items-center align-middle gap-1"><Logo src="/caflag.webp" alt="Canada" /><Label>Vancouver</Label></span></div>
-          <div>↳ Played the Cello since I was 6 - played for the Vancouver Youth Symphony Orchestra and was the Principal Cellist of VAMSO</div>
-          <div>↳ Really enjoy photography</div>
-          <div>↳ Live in Vancouver, Waterloo, Toronto, and San Francisco</div>
-          <div>↳ Favorite sport is hands down <span className="inline-flex items-center align-middle gap-1"><Logo src="/badminton.png" alt="Badminton" /><Label>badminton</Label></span></div>
+          <div>↳ Grew up in <span className="inline-flex items-center align-middle gap-1"><Logo src="/caflag.webp" alt="Canada" /><Label>Vancouver</Label></span>, but also live in Waterloo, Toronto, and San Francisco.</div>
+          <div>↳ Played the Cello since I was 6.</div>
+          <div className="ml-4">↳ Played for the Vancouver Youth Symphony Orchestra and was Principal Cellist of VAMSO.</div>
+          <div>↳ My favorite hobby is photography, favorite sport is <span className="inline-flex items-center align-middle gap-1"><Logo src="/badminton.png" alt="Badminton" /><Label>badminton.</Label></span></div>
         </div>
 
         <div className="my-3 border-t border-neutral-200" />

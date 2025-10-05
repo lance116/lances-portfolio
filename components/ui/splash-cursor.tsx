@@ -1107,7 +1107,7 @@ function SplashCursor({
       const saturation = 0.85; // rich but not neon
       const value = 0.1 + Math.random() * 0.2; // 0.3–0.5 keeps colors dark
       let c = HSVtoRGB(hue, saturation, value);
-      return c;
+      return c; 
     }
 
     function HSVtoRGB(h: number, s: number, v: number) {

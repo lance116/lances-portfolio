@@ -41,6 +41,7 @@ export default function About() {
           <div>↳ Grew up in <span className="inline-flex items-center align-middle gap-1"><Logo src="/caflag.webp" alt="Canada" /><Label>Vancouver</Label></span></div>
           <div>↳ Played the Cello since I was 6 - played for the Vancouver Youth Symphony Orchestra and was the Principal Cellist of VAMSO</div>
           <div>↳ Really enjoy photography</div>
+          <div>↳ Live in Vancouver, Waterloo, Toronto, and San Francisco</div>
           <div>↳ Favorite sport is hands down <span className="inline-flex items-center align-middle gap-1"><Logo src="/badminton.png" alt="Badminton" /><Label>badminton</Label></span></div>
         </div>
 

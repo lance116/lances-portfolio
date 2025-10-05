@@ -34,7 +34,10 @@ export default function Home() {
 
         {/* Header */}
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
-          <h1 className="underline underline-offset-[3px] font-extralight">◆ Lance Yan</h1>
+          <div className="flex items-center justify-between">
+            <h1 className="underline underline-offset-[3px] font-extralight">◆ Lance Yan</h1>
+            <a href="/about" className="underline underline-offset-[3px] font-extralight hover-underline-nudge">About me</a>
+          </div>
           <div>↳ CS @ <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span></div>
           <div>↳ Building in stealth.</div>
         </div>
@@ -43,13 +46,13 @@ export default function Home() {
 
         {/* Track Record */}
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
-          <div>◆ Track Record:</div>
+          <div>◆ What makes me different:</div>
           <div>↳ The <span className="font-semibold italic">fastest</span> ever in <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span>’s <span className="font-semibold italic">entire history</span> to get flown out to San Francisco.</div>
           <div>↳ Turned down full-time interest for:<span className="font-semibold italic">$300K</span>  engineering role and another at <span className="inline-flex items-center align-middle gap-1"><Logo src="/icon.jpg" alt="Icon" /><Label><a href="https://icon.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Icon</a></Label></span> ($12M domain) to build my startup.</div>
           <div>↳ Did 3 <span className="font-semibold italic">highschool</span> software engineering internships.</div>
           <div>↳ Software engineer in the <span className="font-semibold italic">most selective</span> team at UWaterloo’s AI org, <span className="inline-flex items-center align-middle gap-1"><Logo src="/wat.jpeg" alt="wat.ai" /><Label><a href="https://watai.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">wat.ai</a></Label></span>.</div>
           <div>↳ Programming since <span className="font-semibold italic">age 5</span>, entrepreneur since <span className="font-semibold italic">age 11</span>.</div>
-          <div className="leading-[1.4]">↳ Mentored by <span className="font-semibold italic">super cool </span>people. Including founders from <span className="inline-flex items-center align-middle gap-1"><Logo src="/YClogo.png" alt="YC" /><Label><a href="https://www.ycombinator.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Y Combinator</a></Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/speedrun.jpg" alt="speedrun" /><Label><a href="https://speedrun.a16z.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">speedrun</a></Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/zfellows.jpg" alt="Z Fellows" /><Label><a href="https://www.zfellows.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Z Fellows</a></Label></span> and <span className="inline-flex items-center align-middle gap-1"><Logo src="/thielfellow.png" alt="Thiel Fellows" /><Label><a href="https://thielfellowship.org/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Thiel Fellowship</a></Label></span>.</div>
+          <div className="leading-[1.4]">↳ Mentored by some <span className="font-semibold italic">amazing </span>people. Including founders from <span className="inline-flex items-center align-middle gap-1"><Logo src="/YClogo.png" alt="YC" /><Label><a href="https://www.ycombinator.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Y Combinator</a></Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/speedrun.jpg" alt="speedrun" /><Label><a href="https://speedrun.a16z.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">speedrun</a></Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/zfellows.jpg" alt="Z Fellows" /><Label><a href="https://www.zfellows.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Z Fellows</a></Label></span> and <span className="inline-flex items-center align-middle gap-1"><Logo src="/thielfellow.png" alt="Thiel Fellows" /><Label><a href="https://thielfellowship.org/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Thiel Fellowship</a></Label></span>.</div>
           <div>↳ <span className="font-semibold italic">1200+</span> followers on <span className="inline-flex items-center align-middle gap-1"><Logo src="/X.png" alt="X" /></span> with posts totaling <span className="font-semibold italic">600K+</span> views.</div>
         </div>
 

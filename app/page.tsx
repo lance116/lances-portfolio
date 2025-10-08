@@ -72,6 +72,7 @@ export default function Home() {
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div>◆ Please reach out if you’re:</div>
           <div>↳ A fellow founder.</div>
+          <div>↳ A staff engineer at a high growth startup (I want to learn from the best).</div>
           <div>↳ Someone who is curious about me or what I'm doing.</div>
         </div>
 

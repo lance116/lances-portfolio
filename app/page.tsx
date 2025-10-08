@@ -39,7 +39,7 @@ export default function Home() {
             <a href="/about" className="font-extralight hover-underline-nudge">About me</a>
           </div>
           <div>↳ CS @ <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span></div>
-          <div>↳ Building in stealth.</div>
+          <div>↳ Building Clice (In stealth).</div>
         </div>
 
         <div className="my-3 border-t border-neutral-200" />
@@ -48,8 +48,8 @@ export default function Home() {
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div>◆ What makes me different:</div>
           <div>↳ The <span className="font-semibold italic">fastest</span> ever in <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span>’s <span className="font-semibold italic">entire history</span> to get flown out to San Francisco to raise venture.</div>
-          <div className="ml-4">↳ Built Cursor for mortgage brokers, received offers at a $7M valuation, and turned them all down</div>
-          <div>↳ Turned down full-time interest for:<span className="font-semibold italic">$300K</span>  engineering role and another at <span className="inline-flex items-center align-middle gap-1"><Logo src="/icon.jpg" alt="Icon" /><Label><a href="https://icon.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Icon</a></Label></span> ($12M domain) to build my startup.</div>
+          <div className="ml-4">↳ Built Cursor for mortgage brokers, received offers at a <span className="font-semibold italic">$7M</span> valuation, and turned them all down.</div>
+          <div>↳ Turned down full-time interest for:<span className="font-semibold italic">$300K</span>  engineering role and another at <span className="inline-flex items-center align-middle gap-1"><Logo src="/icon.jpg" alt="Icon" /><Label><a href="https://icon.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Icon</a></Label></span> ($12M domain) to build Clice.</div>
           <div>↳ Did 3 <span className="font-semibold italic">highschool</span> software engineering internships.</div>
           <div>↳ Lead Software engineer for the <span className="font-semibold italic">most selective</span> team at <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span>’s AI org, <span className="inline-flex items-center align-middle gap-1"><Logo src="/wat.jpeg" alt="wat.ai" /><Label><a href="https://watai.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">wat.ai</a></Label></span>.</div>
           <div>↳ Programming since <span className="font-semibold italic">age 5</span>, entrepreneur since <span className="font-semibold italic">age 11</span>.</div>

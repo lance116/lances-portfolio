@@ -141,4 +141,10 @@
   .photo-hover:hover {
     transform: scale(1.08);
   }
+
+  /* Very slight italic for emphasis */
+  .slight-italic {
+    font-style: italic;
+    transform: skewX(-2deg);
+  }
 }

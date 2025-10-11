@@ -51,7 +51,7 @@ export default function PhotoPage({ params }: PhotoPageProps) {
               <Link href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed' : ''}`}>About me</Link>
             </div>
           </div>
-          <div>↳ Photo {photoIndex}: {photoData.caption}</div>
+          <div>↳ {photoData.caption}</div>
         </div>
 
         <div className="my-6 border-t border-neutral-200" />

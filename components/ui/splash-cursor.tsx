@@ -1087,6 +1087,15 @@ function SplashCursor({
 
     function updatePointerUpData(pointer: any) {
       pointer.down = false;
+      pointer.moved = false;
+    }
+
+    function clearCanvas() {
+      gl.clearColor(0.0, 0.0, 0.0, 1.0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      // Clear all framebuffers
+      blit(dye.read, true);
+      blit(velocity.read, true);
     }
 
     function correctDeltaX(delta: number) {
@@ -1272,7 +1281,38 @@ function SplashCursor({
       for (let i = 0; i < touches.length; i++) {
         updatePointerUpData(pointer);
       }
+      // Ensure animation continues after touch ends
+      if (!isAnimating) {
+        startAnimation();
+      }
     });
+
+    // Add touch cancel event handler for better mobile support
+    window.addEventListener("touchcancel", (e) => {
+      const touches = e.changedTouches;
+      let pointer = pointers[0];
+      for (let i = 0; i < touches.length; i++) {
+        updatePointerUpData(pointer);
+      }
+      // Ensure animation continues after touch cancel
+      if (!isAnimating) {
+        startAnimation();
+      }
+    });
+
+    // Add global touch handler to clear canvas when touching empty areas
+    document.addEventListener("touchstart", (e) => {
+      // Only clear if touching outside interactive elements
+      const target = e.target as HTMLElement;
+      if (target && !target.closest('a, button, input, textarea, select')) {
+        // Small delay to allow for proper touch handling
+        setTimeout(() => {
+          if (!pointers[0].down) {
+            clearCanvas();
+          }
+        }, 100);
+      }
+    }, { passive: true });
 
     // Cleanup function
     return () => {

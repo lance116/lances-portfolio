@@ -2,7 +2,25 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { Mail, Github } from "lucide-react";
 import { useNavigationBounce } from "../../lib/useNavigationBounce";
+
+function Logo({ src, alt, size = 18, className = "" }: { src: string; alt: string; size?: number; className?: string }) {
+  return (
+    <span className="inline-flex items-center align-middle relative -top-[1px]">
+      <Image
+        src={src}
+        alt={alt}
+        width={size}
+        height={size}
+        sizes={`${size}px`}
+        quality={100}
+        priority={false}
+        className={`h-[18px] w-[18px] object-contain align-middle ${className}`}
+      />
+    </span>
+  );
+}
 
 // Photography images with their actual dimensions
 const photographyImages = [
@@ -74,16 +92,30 @@ export default function Photography() {
           })}
         </div>
 
-        <div className="my-8 border-t border-neutral-200" />
+        <div className="my-6 border-t border-neutral-200" />
 
         {/* Back to Home */}
-        <div className="text-sm sm:text-[0.95rem] leading-tight">
+        <div className="text-sm sm:text-[0.95rem] leading-tight my-6">
           <a href="/" className="hover-underline-nudge font-extralight">
             ← Back to home
           </a>
         </div>
 
-        <div className="pt-16 sm:pt-24" />
+        <div className="my-6 border-t border-neutral-200" />
+
+        {/* Contact */}
+        <div className="text-sm sm:text-[0.95rem] leading-tight">
+          <div className="pt-4" />
+          <footer className="pb-16 sm:pb-24">
+            <div>◆ Contact:</div>
+            <div className="mt-2 flex items-center gap-3 text-neutral-700">
+              <a className="inline-flex items-center gap-1" href="mailto:lance.yan.business@gmail.com"><Mail size={14} /><span className="hover-underline-nudge">Email</span></a>
+              <a className="inline-flex items-center gap-1" href="https://github.com/lance116" target="_blank" rel="noreferrer"><Github size={14} /><span className="hover-underline-nudge">GitHub</span></a>
+              <a className="inline-flex items-center gap-1" href="https://x.com/cnnguan/" target="_blank" rel="noreferrer"><Logo src="/X.png" alt="X" /><span className="hover-underline-nudge">Twitter</span></a>
+              <a className="inline-flex items-center gap-1" href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer"><Logo src="/linkedin.webp" alt="LinkedIn" /><span className="hover-underline-nudge">LinkedIn</span></a>
+            </div>
+          </footer>
+        </div>
       </div>
     </main>
   );

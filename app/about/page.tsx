@@ -45,7 +45,7 @@ export default function About() {
           <div>↳ Grew up in <span className="inline-flex items-center align-middle gap-1"><Logo src="/caflag.webp" alt="Canada" /><Label>Vancouver</Label></span>, but also live in Waterloo, Toronto, and San Francisco.</div>
           <div>↳ Played the Cello since I was 6.</div>
           <div className="ml-4">↳ Played for the Vancouver Youth Symphony Orchestra and was Principal Cellist of VAMSO.</div>
-          <div>↳ My favorite hobby is photography, favorite sport is <span className="inline-flex items-center align-middle gap-1"><Logo src="/badminton.png" alt="Badminton" /><Label>badminton.</Label></span></div>
+          <div>↳ My favorite hobby is <a href="/photography" className="text-blue-600 hover:text-blue-800 hover-underline-nudge">photography</a>, favorite sport is <span className="inline-flex items-center align-middle gap-1"><Logo src="/badminton.png" alt="Badminton" /><Label>badminton.</Label></span></div>
         </div>
 
         <div className="my-3 border-t border-neutral-200" />

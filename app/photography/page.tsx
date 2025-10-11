@@ -5,7 +5,6 @@ import Link from "next/link";
 const photographyImages = [
   { filename: "pic1.png", width: 1530, height: 1018 },
   { filename: "pic2.png", width: 1526, height: 1014 },
-  { filename: "pic3.png", width: 2074, height: 1020 },
   { filename: "pic4.png", width: 1416, height: 1016 },
   { filename: "pic5.png", width: 1534, height: 1018 },
   { filename: "pic6.png", width: 1532, height: 1018 },
@@ -13,7 +12,8 @@ const photographyImages = [
   { filename: "pic8.png", width: 1530, height: 1022 },
   { filename: "pic9.png", width: 1526, height: 1014 },
   { filename: "pic10.png", width: 706, height: 1018 },
-  { filename: "pic11.png", width: 672, height: 1014 }
+  { filename: "pic11.png", width: 672, height: 1014 },
+  { filename: "pic3.png", width: 2074, height: 1020 } // Moved to bottom as the wide photo
 ];
 
 export default function Photography() {
@@ -32,22 +32,25 @@ export default function Photography() {
               <Link href="/about" className="hover-underline-nudge">About me</Link>
             </div>
           </div>
-          <div>↳ A collection of moments captured through screenshots</div>
+          <div>↳ A collection of my favorite photos.</div>
         </div>
 
         <div className="my-6 border-t border-neutral-200" />
 
         {/* Photo Grid */}
-        <div className="space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {photographyImages.map((image, index) => {
             const photoId = image.filename.replace('.png', '');
             const aspectRatio = image.width / image.height;
+            // For the last photo in a 2-column grid, center it
+            const isLastPhoto = index === photographyImages.length - 1;
+            const isOddTotal = photographyImages.length % 2 === 1;
             
             return (
               <Link 
                 key={index} 
                 href={`/photography/${photoId}`}
-                className="cursor-pointer block"
+                className={`cursor-pointer ${isLastPhoto && isOddTotal ? 'sm:col-span-2' : ''}`}
               >
                 <div className="relative overflow-hidden rounded-lg border border-neutral-200">
                   <div style={{ aspectRatio: aspectRatio }}>
@@ -57,7 +60,7 @@ export default function Photography() {
                       width={image.width}
                       height={image.height}
                       className="object-cover"
-                      sizes="100vw"
+                      sizes="(max-width: 640px) 100vw, 50vw"
                     />
                   </div>
                 </div>

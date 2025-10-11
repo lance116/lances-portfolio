@@ -72,7 +72,7 @@ export default function Home() {
         {/* Building */}
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div>◆ Building:</div>
-          <div>↳ In stealth (for now).</div>
+          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealthlogo.jpg" alt="Stealth" className="rounded-full" /><Label>Clice</Label></span>. In stealth (for now).</div>
           </div>
 
         <div className="my-3 border-t border-neutral-200" />

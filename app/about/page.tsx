@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { Mail, Github, Twitter, Linkedin } from "lucide-react";
 
-function Logo({ src, alt, size = 18 }: { src: string; alt: string; size?: number }) {
+function Logo({ src, alt, size = 18, className = "" }: { src: string; alt: string; size?: number; className?: string }) {
   return (
-    <span className="inline-flex items-center align-middle">
+    <span className="inline-flex items-center align-middle relative -top-[1px]">
       <Image
         src={src}
         alt={alt}
@@ -12,7 +12,7 @@ function Logo({ src, alt, size = 18 }: { src: string; alt: string; size?: number
         sizes={`${size}px`}
         quality={100}
         priority={false}
-        className="h-[18px] w-[18px] object-contain align-middle"
+        className={`h-[18px] w-[18px] object-contain align-middle ${className}`}
       />
     </span>
   );

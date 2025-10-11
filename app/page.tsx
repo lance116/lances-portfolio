@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { Mail, Github, Twitter, Linkedin } from "lucide-react";
 
-function Logo({ src, alt, size = 18 }: { src: string; alt: string; size?: number }) {
+function Logo({ src, alt, size = 18, className = "" }: { src: string; alt: string; size?: number; className?: string }) {
   return (
-    <span className="inline-flex items-center align-middle">
+    <span className="inline-flex items-center align-middle relative -top-[1px]">
       <Image
         src={src}
         alt={alt}
@@ -12,7 +12,7 @@ function Logo({ src, alt, size = 18 }: { src: string; alt: string; size?: number
         sizes={`${size}px`}
         quality={100}
         priority={false}
-        className="h-[18px] w-[18px] object-contain align-middle"
+        className={`h-[18px] w-[18px] object-contain align-middle ${className}`}
       />
     </span>
   );
@@ -43,7 +43,7 @@ export default function Home() {
             </div>
           </div>
           <div>↳ CS @ <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span></div>
-          <div>↳ Building Clice (In stealth).</div>
+          <div>↳ Building <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealthlogo.jpg" alt="Stealth" className="rounded-full" /><Label>Clice</Label></span> (In stealth).</div>
         </div>
 
         <div className="my-3 border-t border-neutral-200" />
@@ -52,8 +52,8 @@ export default function Home() {
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div>◆ What makes me different:</div>
           <div>↳ The <span className="font-semibold italic">fastest</span> in <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span>'s <span className="font-semibold italic">entire history</span> to get flown out to San Francisco to raise venture.</div>
-          <div className="ml-4">↳ Built Cursor for mortgage brokers, received offers at a <span className="font-semibold italic">$7M</span> valuation, and turned them all down to build Clice.</div>
-          <div>↳ Received full-time interest for: <span className="font-semibold italic">$300K</span> founding engineer role and another at <span className="inline-flex items-center align-middle gap-1"><Logo src="/icon.jpg" alt="Icon" /><Label><a href="https://icon.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Icon</a></Label></span>, but decided to stay in school and build Clice.</div>
+          <div className="ml-4">↳ Built Cursor for mortgage brokers, received offers at a <span className="font-semibold italic">$7M</span> valuation, and turned them all down to build <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealthlogo.jpg" alt="Stealth" className="rounded-full" /><Label>Clice</Label></span>.</div>
+          <div>↳ Received full-time interest for: <span className="font-semibold italic">$300K</span> founding engineer role and another at <span className="inline-flex items-center align-middle gap-1"><Logo src="/icon.jpg" alt="Icon" /><Label><a href="https://icon.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Icon</a></Label></span>, but decided to stay in school and build <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealthlogo.jpg" alt="Stealth" className="rounded-full" /><Label>Clice</Label></span>.</div>
           <div>↳ Did 3 <span className="font-semibold italic">highschool</span> software engineering internships.</div>
           <div>↳ Lead Software engineer at <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span>'s AI organization, <span className="inline-flex items-center align-middle gap-1"><Logo src="/wat.jpeg" alt="wat.ai" /><Label><a href="https://watai.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">wat.ai</a></Label></span>.</div>
           <div>↳ Programming since <span className="font-semibold italic">age 5</span>, entrepreneur since <span className="font-semibold italic">age 11</span>.</div>

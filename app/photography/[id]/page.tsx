@@ -46,9 +46,9 @@ export default function PhotoPage({ params }: PhotoPageProps) {
           <div className="flex items-center justify-between">
             <h1 className="underline underline-offset-[3px] font-extralight">◆ Photography</h1>
             <div className="flex items-center gap-2 font-extralight">
-              <Link href="/" className={`hover-underline-nudge ${shouldBounce('home') ? 'nav-bounce' : ''}`}>Home</Link>
+              <a href="/" className={`hover-underline-nudge ${shouldBounce('home') ? 'nav-bounce' : ''}`}>Home</a>
               <span className="text-neutral-400">|</span>
-              <Link href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed' : ''}`}>About me</Link>
+              <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed' : ''}`}>About me</a>
             </div>
           </div>
           <div>↳ {photoData.caption}</div>
@@ -78,13 +78,13 @@ export default function PhotoPage({ params }: PhotoPageProps) {
         {/* Navigation */}
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div className="flex items-center gap-4">
-            <Link href="/photography" className="hover-underline-nudge font-extralight">
+            <a href="/photography" className="hover-underline-nudge font-extralight">
               ← Back to gallery
-            </Link>
+            </a>
             <span className="text-neutral-400">|</span>
-            <Link href="/" className="hover-underline-nudge font-extralight">
+            <a href="/" className="hover-underline-nudge font-extralight">
               ← Back to home
-            </Link>
+            </a>
           </div>
         </div>
 

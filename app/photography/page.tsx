@@ -32,9 +32,9 @@ export default function Photography() {
           <div className="flex items-center justify-between">
             <h1 className="underline underline-offset-[3px] font-extralight">◆ Photography</h1>
             <div className="flex items-center gap-2 font-extralight">
-              <Link href="/" className={`hover-underline-nudge ${shouldBounce('home') ? 'nav-bounce' : ''}`}>Home</Link>
+              <a href="/" className={`hover-underline-nudge ${shouldBounce('home') ? 'nav-bounce' : ''}`}>Home</a>
               <span className="text-neutral-400">|</span>
-              <Link href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed' : ''}`}>About me</Link>
+              <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed' : ''}`}>About me</a>
             </div>
           </div>
           <div>↳ A collection of my favorite photos.</div>
@@ -78,9 +78,9 @@ export default function Photography() {
 
         {/* Back to Home */}
         <div className="text-sm sm:text-[0.95rem] leading-tight">
-          <Link href="/" className="hover-underline-nudge font-extralight">
+          <a href="/" className="hover-underline-nudge font-extralight">
             ← Back to home
-          </Link>
+          </a>
         </div>
 
         <div className="pt-16 sm:pt-24" />

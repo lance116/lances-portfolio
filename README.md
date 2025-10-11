@@ -1,4 +1,4 @@
 lances portfolio
 
-i spent 3 hours coding the cursor effect
+i spent 3 hours implementing the cursor effect
 

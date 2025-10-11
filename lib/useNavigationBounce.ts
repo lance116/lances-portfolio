@@ -23,7 +23,7 @@ export function useNavigationBounce(currentPage: string) {
         const newVisitedPages = new Set(prev);
         newVisitedPages.add(currentPage);
         // Save to localStorage
-        localStorage.setItem('visitedPages', JSON.stringify([...newVisitedPages]));
+        localStorage.setItem('visitedPages', JSON.stringify(Array.from(newVisitedPages)));
         return newVisitedPages;
       });
     }, 100);

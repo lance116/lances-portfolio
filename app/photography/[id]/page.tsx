@@ -5,19 +5,19 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useNavigationBounce } from "../../../lib/useNavigationBounce";
 
-// Map of photo IDs to actual filenames and dimensions
-const photoMap: Record<string, { filename: string; width: number; height: number }> = {
-  "pic1": { filename: "pic1.png", width: 1530, height: 1018 },
-  "pic2": { filename: "pic2.png", width: 1526, height: 1014 },
-  "pic3": { filename: "pic3.png", width: 2074, height: 1020 },
-  "pic4": { filename: "pic4.png", width: 1416, height: 1016 },
-  "pic5": { filename: "pic5.png", width: 1534, height: 1018 },
-  "pic6": { filename: "pic6.png", width: 1532, height: 1018 },
-  "pic7": { filename: "pic7.png", width: 1242, height: 1016 },
-  "pic8": { filename: "pic8.png", width: 1530, height: 1022 },
-  "pic9": { filename: "pic9.png", width: 1526, height: 1014 },
-  "pic10": { filename: "pic10.png", width: 706, height: 1018 },
-  "pic11": { filename: "pic11.png", width: 672, height: 1014 }
+// Map of photo IDs to actual filenames, dimensions, and captions
+const photoMap: Record<string, { filename: string; width: number; height: number; caption: string }> = {
+  "pic1": { filename: "pic1.png", width: 1530, height: 1018, caption: "Downtown Vancouver." },
+  "pic2": { filename: "pic2.png", width: 1526, height: 1014, caption: "Downtown Vancouver, Tiffany store." },
+  "pic3": { filename: "pic3.png", width: 2074, height: 1020, caption: "Downtown Vancouver." },
+  "pic4": { filename: "pic4.png", width: 1416, height: 1016, caption: "Vancouver skytrain." },
+  "pic5": { filename: "pic5.png", width: 1534, height: 1018, caption: "Toronto Museum." },
+  "pic6": { filename: "pic6.png", width: 1532, height: 1018, caption: "Yonge-Dundas Square in Toronto." },
+  "pic7": { filename: "pic7.png", width: 1242, height: 1016, caption: "Burnaby, BC, Canada." },
+  "pic8": { filename: "pic8.png", width: 1530, height: 1022, caption: "Langley, BC, Canada." },
+  "pic9": { filename: "pic9.png", width: 1526, height: 1014, caption: "Seawall, Vancouver." },
+  "pic10": { filename: "pic10.png", width: 706, height: 1018, caption: "Downtown Vancouver." },
+  "pic11": { filename: "pic11.png", width: 672, height: 1014, caption: "Downtown Vancouver." }
 };
 
 interface PhotoPageProps {
@@ -51,7 +51,7 @@ export default function PhotoPage({ params }: PhotoPageProps) {
               <Link href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed' : ''}`}>About me</Link>
             </div>
           </div>
-          <div>↳ Photo {photoIndex}</div>
+          <div>↳ Photo {photoIndex}: {photoData.caption}</div>
         </div>
 
         <div className="my-6 border-t border-neutral-200" />

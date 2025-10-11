@@ -132,4 +132,13 @@
       transform: translateY(-2px);
     }
   }
+
+  /* Photo hover effect */
+  .photo-hover {
+    transition: transform 0.3s ease;
+  }
+  
+  .photo-hover:hover {
+    transform: scale(1.08);
+  }
 }

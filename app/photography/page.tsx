@@ -57,7 +57,7 @@ export default function Photography() {
                 href={`/photography/${photoId}`}
                 className={`cursor-pointer ${isLastPhoto && isOddTotal ? 'sm:col-span-2' : ''}`}
               >
-                <div className="relative overflow-hidden rounded-lg border border-neutral-200">
+                <div className="relative overflow-hidden rounded-lg border border-neutral-200 photo-hover">
                   <div style={{ aspectRatio: aspectRatio }}>
                     <Image
                       src={`/${image.filename}`}

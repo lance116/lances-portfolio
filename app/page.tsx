@@ -36,7 +36,11 @@ export default function Home() {
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div className="flex items-center justify-between">
             <h1 className="underline underline-offset-[3px] font-extralight">◆ Lance Yan</h1>
-            <a href="/about" className="font-extralight hover-underline-nudge">About me</a>
+            <div className="flex items-center gap-2 font-extralight">
+              <a href="/about" className="hover-underline-nudge">About me</a>
+              <span className="text-neutral-400">|</span>
+              <a href="/photography" className="hover-underline-nudge">Photo</a>
+            </div>
           </div>
           <div>↳ CS @ <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span></div>
           <div>↳ Building Clice (In stealth).</div>

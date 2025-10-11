@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'], weight: ['200','300'] })
 
 export const metadata: Metadata = {
   title: "Lance's Portfolio",
-  description: 'Sparse, minimal online résumé',
+  description: 'Built by Lance Y.',
   icons: { icon: '/logo L.png' },
 }
 

@@ -36,7 +36,11 @@ export default function About() {
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div className="flex items-center justify-between">
             <h1 className="underline underline-offset-[3px] font-extralight">◆ Lance Yan</h1>
-            <a href="/" className="font-extralight hover-underline-nudge">Home</a>
+            <div className="flex items-center gap-2 font-extralight">
+              <a href="/" className="hover-underline-nudge">Home</a>
+              <span className="text-neutral-400">|</span>
+              <a href="/photography" className="hover-underline-nudge">Photo</a>
+            </div>
           </div>
           <div>↳ Grew up in <span className="inline-flex items-center align-middle gap-1"><Logo src="/caflag.webp" alt="Canada" /><Label>Vancouver</Label></span>, but also live in Waterloo, Toronto, and San Francisco.</div>
           <div>↳ Played the Cello since I was 6.</div>

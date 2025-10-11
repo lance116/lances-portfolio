@@ -4,10 +4,21 @@ import { useState, useEffect } from 'react';
 
 export function useNavigationBounce(currentPage: string) {
   const [visitedPages, setVisitedPages] = useState<Set<string>>(new Set());
+  const [sessionId, setSessionId] = useState<string>('');
 
   useEffect(() => {
-    // Load visited pages from localStorage
-    const stored = localStorage.getItem('visitedPages');
+    // Generate or retrieve session ID
+    const currentSessionId = sessionStorage.getItem('bounceSessionId') || 
+      Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    
+    if (!sessionStorage.getItem('bounceSessionId')) {
+      sessionStorage.setItem('bounceSessionId', currentSessionId);
+    }
+    
+    setSessionId(currentSessionId);
+
+    // Load visited pages for this session from localStorage
+    const stored = localStorage.getItem(`visitedPages_${currentSessionId}`);
     if (stored) {
       try {
         const parsedPages = JSON.parse(stored);
@@ -22,8 +33,8 @@ export function useNavigationBounce(currentPage: string) {
       setVisitedPages(prev => {
         const newVisitedPages = new Set(prev);
         newVisitedPages.add(currentPage);
-        // Save to localStorage
-        localStorage.setItem('visitedPages', JSON.stringify(Array.from(newVisitedPages)));
+        // Save to localStorage with session ID
+        localStorage.setItem(`visitedPages_${currentSessionId}`, JSON.stringify(Array.from(newVisitedPages)));
         return newVisitedPages;
       });
     }, 100);

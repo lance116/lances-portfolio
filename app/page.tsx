@@ -73,6 +73,7 @@ export default function Home() {
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div>◆ Building:</div>
           <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealthlogo.jpg" alt="Stealth" className="rounded-full" /><Label>Clice</Label></span>. In stealth (for now).</div>
+          <div>↳ Ratemyinternship. Ratemyprofessors but for tech internships (Coming soon).</div>
           </div>
 
         <div className="my-3 border-t border-neutral-200" />

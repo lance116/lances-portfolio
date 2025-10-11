@@ -110,4 +110,26 @@
   .hover-underline-nudge:hover::after {
     transform: scaleX(1);
   }
+
+  /* Bounce animation for navigation links */
+  .nav-bounce {
+    animation: bounce-gentle 2s infinite;
+  }
+
+  .nav-bounce-delayed {
+    animation: bounce-gentle 2s infinite;
+    animation-delay: 1s;
+  }
+
+  @keyframes bounce-gentle {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-4px);
+    }
+    60% {
+      transform: translateY(-2px);
+    }
+  }
 }

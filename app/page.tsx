@@ -1,5 +1,9 @@
+'use client';
+
 import Image from "next/image";
+import Link from "next/link";
 import { Mail, Github, Twitter, Linkedin } from "lucide-react";
+import { useNavigationBounce } from "../lib/useNavigationBounce";
 
 function Logo({ src, alt, size = 18, className = "" }: { src: string; alt: string; size?: number; className?: string }) {
   return (
@@ -27,6 +31,8 @@ const FallbackLogo = ({ alt }: { alt: string }) => (
 );
 
 export default function Home() {
+  const { shouldBounce } = useNavigationBounce('home');
+
   return (
     <main className="relative">
       <div className="relative z-10 mx-auto max-w-screen-sm px-4 sm:px-0">
@@ -37,9 +43,9 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <h1 className="underline underline-offset-[3px] font-extralight">◆ Lance Yan</h1>
             <div className="flex items-center gap-2 font-extralight">
-              <a href="/about" className="hover-underline-nudge">About me</a>
+              <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce' : ''}`}>About me</a>
               <span className="text-neutral-400">|</span>
-              <a href="/photography" className="hover-underline-nudge">Photo</a>
+              <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed' : ''}`}>Photo</a>
             </div>
           </div>
           <div>↳ CS @ <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span></div>

@@ -1,6 +1,9 @@
+'use client';
+
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { useNavigationBounce } from "../../../lib/useNavigationBounce";
 
 // Map of photo IDs to actual filenames and dimensions
 const photoMap: Record<string, { filename: string; width: number; height: number }> = {
@@ -24,8 +27,9 @@ interface PhotoPageProps {
 }
 
 export default function PhotoPage({ params }: PhotoPageProps) {
+  const { shouldBounce } = useNavigationBounce('photography');
   const photoData = photoMap[params.id];
-  
+
   if (!photoData) {
     notFound();
   }
@@ -42,9 +46,9 @@ export default function PhotoPage({ params }: PhotoPageProps) {
           <div className="flex items-center justify-between">
             <h1 className="underline underline-offset-[3px] font-extralight">◆ Photography</h1>
             <div className="flex items-center gap-2 font-extralight">
-              <Link href="/" className="hover-underline-nudge">Home</Link>
+              <Link href="/" className={`hover-underline-nudge ${shouldBounce('home') ? 'nav-bounce' : ''}`}>Home</Link>
               <span className="text-neutral-400">|</span>
-              <Link href="/about" className="hover-underline-nudge">About me</Link>
+              <Link href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed' : ''}`}>About me</Link>
             </div>
           </div>
           <div>↳ Photo {photoIndex}</div>

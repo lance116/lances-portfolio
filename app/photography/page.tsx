@@ -56,6 +56,7 @@ export default function Photography() {
             </div>
           </div>
           <div>↳ A collection of my favorite photos.</div>
+          <div className="ml-4">↳ Try clicking on one of them!</div>
         </div>
 
         <div className="my-6 border-t border-neutral-200" />

@@ -45,7 +45,7 @@ export default function About() {
             <div className="flex items-center gap-2 font-extralight">
               <a href="/" className={`hover-underline-nudge ${shouldBounce('home') ? 'nav-bounce' : ''}`}>Home</a>
               <span className="text-neutral-400">|</span>
-              <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed' : ''}`}>Photo</a>
+              <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed' : ''}`}>Photos</a>
             </div>
           </div>
           <div>↳ Based in <span className="inline-flex items-center align-middle gap-1"><Logo src="/ontario flag.png" alt="Ontario" /><Label>Waterloo</Label></span>, but also live in <span className="inline-flex items-center align-middle gap-1"><Logo src="/bc flag.png" alt="BC" /><Label>Vancouver</Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/ontario flag.png" alt="Ontario" /><Label>Toronto</Label></span> and <span className="inline-flex items-center align-middle gap-1"><Logo src="/cali flag.png" alt="California" /><Label>San Francisco</Label></span>.</div>

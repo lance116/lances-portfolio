@@ -62,35 +62,88 @@ export default function Photography() {
         <div className="my-6 border-t border-neutral-200" />
 
         {/* Photo Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {photographyImages.map((image, index) => {
-            const photoId = image.filename.replace('.png', '');
-            const aspectRatio = image.width / image.height;
-            // For the last photo in a 2-column grid, center it
-            const isLastPhoto = index === photographyImages.length - 1;
-            const isOddTotal = photographyImages.length % 2 === 1;
+        <div className="space-y-4 sm:space-y-6">
+          {/* Regular photos in rows */}
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+            {/* Left Column */}
+            <div className="flex-1">
+              {photographyImages.filter((_, index) => index % 2 === 0 && index < photographyImages.length - 1).map((image, index) => {
+                const photoId = image.filename.replace('.png', '');
+                const aspectRatio = image.width / image.height;
+                
+                return (
+                  <Link 
+                    key={index * 2} 
+                    href={`/photography/${photoId}`}
+                    className="cursor-pointer block mb-5 sm:mb-[2.27rem] last:mb-0"
+                  >
+                    <div className="relative overflow-hidden rounded-lg border border-neutral-200 photo-hover">
+                      <div style={{ aspectRatio: aspectRatio }}>
+                        <Image
+                          src={`/${image.filename}`}
+                          alt={`Photo ${index * 2 + 1}`}
+                          width={image.width}
+                          height={image.height}
+                          className="object-cover"
+                          sizes="(max-width: 640px) 100vw, 50vw"
+                        />
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
             
-            return (
-              <Link 
-                key={index} 
-                href={`/photography/${photoId}`}
-                className={`cursor-pointer ${isLastPhoto && isOddTotal ? 'sm:col-span-2' : ''}`}
-              >
-                <div className="relative overflow-hidden rounded-lg border border-neutral-200 photo-hover">
-                  <div style={{ aspectRatio: aspectRatio }}>
-                    <Image
-                      src={`/${image.filename}`}
-                      alt={`Photo ${index + 1}`}
-                      width={image.width}
-                      height={image.height}
-                      className="object-cover"
-                      sizes="(max-width: 640px) 100vw, 50vw"
-                    />
-                  </div>
+            {/* Right Column */}
+            <div className="flex-1">
+              {photographyImages.filter((_, index) => index % 2 === 1 && index < photographyImages.length - 1).map((image, index) => {
+                const photoId = image.filename.replace('.png', '');
+                const aspectRatio = image.width / image.height;
+                
+                return (
+                  <Link 
+                    key={index * 2 + 1} 
+                    href={`/photography/${photoId}`}
+                    className="cursor-pointer block mb-4 sm:mb-6 last:mb-0"
+                  >
+                    <div className="relative overflow-hidden rounded-lg border border-neutral-200 photo-hover">
+                      <div style={{ aspectRatio: aspectRatio }}>
+                        <Image
+                          src={`/${image.filename}`}
+                          alt={`Photo ${index * 2 + 2}`}
+                          width={image.width}
+                          height={image.height}
+                          className="object-cover"
+                          sizes="(max-width: 640px) 100vw, 50vw"
+                        />
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+          
+          {/* Last photo spanning both columns */}
+          {photographyImages.length > 0 && (
+            <Link 
+              href={`/photography/${photographyImages[photographyImages.length - 1].filename.replace('.png', '')}`}
+              className="cursor-pointer block"
+            >
+              <div className="relative overflow-hidden rounded-lg border border-neutral-200 photo-hover">
+                <div style={{ aspectRatio: photographyImages[photographyImages.length - 1].width / photographyImages[photographyImages.length - 1].height }}>
+                  <Image
+                    src={`/${photographyImages[photographyImages.length - 1].filename}`}
+                    alt={`Photo ${photographyImages.length}`}
+                    width={photographyImages[photographyImages.length - 1].width}
+                    height={photographyImages[photographyImages.length - 1].height}
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, 100vw"
+                  />
                 </div>
-              </Link>
-            );
-          })}
+              </div>
+            </Link>
+          )}
         </div>
 
         <div className="my-6 border-t border-neutral-200" />

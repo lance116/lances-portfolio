@@ -74,7 +74,7 @@ export default function Home() {
         {/* Building */}
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div>◆ Building:</div>
-          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice final logo.png" alt="Clice" className="" /><Label>Clice</Label></span>. Building AI agents for the lending industry.</div>
+          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice final logo.png" alt="Clice" className="" /><Label>Clice</Label></span>. AI agents for the lending industry.</div>
           <div>↳ Ratemyinternship. Ratemyprofessors but for tech internships (Coming soon).</div>
           </div>
 

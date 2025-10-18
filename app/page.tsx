@@ -48,8 +48,8 @@ export default function Home() {
               <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed' : ''}`}>Photos</a>
             </div>
           </div>
+          <div>↳ Founder <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice final logo.png" alt="Clice" className="" /><Label>Clice</Label></span></div>
           <div>↳ CS <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span></div>
-          <div>↳ Founder <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealthlogo.jpg" alt="Stealth" className="rounded-full" /><Label>Clice</Label></span> (In stealth)</div>
         </div>
 
         <div className="my-3 border-t border-neutral-200" />
@@ -58,8 +58,8 @@ export default function Home() {
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div>◆ What makes me different:</div>
           <div>↳ The <span className="font-bold slight-italic">fastest</span> in <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span>'s <span className="font-bold slight-italic">entire history</span> to get flown out to San Francisco to raise venture.</div>
-          <div className="ml-4">↳ Built Cursor for mortgage brokers, received offers at a <span className="font-bold slight-italic">$7M</span> valuation, and turned them all down to build <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealthlogo.jpg" alt="Stealth" className="rounded-full" /><Label>Clice</Label></span>.</div>
-          <div>↳ Received full-time interest for: <span className="font-bold slight-italic">$300K</span> founding engineer role and another at <span className="inline-flex items-center align-middle gap-1"><Logo src="/icon.jpg" alt="Icon" /><Label><a href="https://icon.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Icon</a></Label></span>, but decided to stay in school while building <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealthlogo.jpg" alt="Stealth" className="rounded-full" /><Label>Clice</Label></span>.</div>
+          <div className="ml-4">↳ More coming soon, raising an angel round for <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice final logo.png" alt="Clice" className="" /><Label>Clice</Label></span>.</div>
+          <div>↳ Received full-time interest for: <span className="font-bold slight-italic">$300K</span> founding engineer role and another at <span className="inline-flex items-center align-middle gap-1"><Logo src="/icon.jpg" alt="Icon" /><Label><a href="https://icon.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Icon</a></Label></span>, but decided to go all in on building <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice final logo.png" alt="Clice" className="" /><Label>Clice</Label></span>.</div>
           <div>↳ Programming since <span className="font-bold slight-italic">age 5</span>, entrepreneur since <span className="font-bold slight-italic">age 11</span>.</div>
           <div>↳ Did 3 <span className="font-bold slight-italic">highschool</span> software engineering internships.</div>
           <div>↳ Lead Software engineer at <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span>'s AI organization, <span className="inline-flex items-center align-middle gap-1"><Logo src="/wat.jpeg" alt="wat.ai" /><Label><a href="https://watai.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">wat.ai</a></Label></span>.</div>
@@ -74,7 +74,7 @@ export default function Home() {
         {/* Building */}
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div>◆ Building:</div>
-          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealthlogo.jpg" alt="Stealth" className="rounded-full" /><Label>Clice</Label></span>. In stealth (for now).</div>
+          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice final logo.png" alt="Clice" className="" /><Label>Clice</Label></span>. Building AI agents for the lending industry.</div>
           <div>↳ Ratemyinternship. Ratemyprofessors but for tech internships (Coming soon).</div>
           </div>
 
@@ -85,7 +85,6 @@ export default function Home() {
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div>◆ Please reach out if you’re:</div>
           <div>↳ A fellow founder.</div>
-          <div>↳ A staff engineer at a high growth startup (I want to learn from the best).</div>
           <div>↳ Someone who is curious about me or what I'm doing.</div>
         </div>
 

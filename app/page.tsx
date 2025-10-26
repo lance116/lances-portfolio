@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Mail, Github, Twitter, Linkedin } from "lucide-react";
 import { useNavigationBounce } from "../lib/useNavigationBounce";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 function Logo({ src, alt, size = 18, className = "" }: { src: string; alt: string; size?: number; className?: string }) {
   return (
@@ -44,7 +45,7 @@ export default function Home() {
             <h1 className="underline underline-offset-[3px] font-extralight">◆ Lance Yan</h1>
             <div className="flex items-center gap-2 font-extralight">
               <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce' : ''}`}>About me</a>
-              <span className="text-neutral-400">|</span>
+              <span className="text-neutral-400 dark:text-neutral-600">|</span>
               <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed' : ''}`}>Photos</a>
             </div>
           </div>
@@ -52,7 +53,7 @@ export default function Home() {
           <div>↳ CS <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span></div>
         </div>
 
-        <div className="my-3 border-t border-neutral-200" />
+        <div className="my-3 border-t border-neutral-200 dark:border-neutral-700" />
 
         {/* Track Record */}
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
@@ -63,7 +64,8 @@ export default function Home() {
           <div className="ml-4">↳ More coming soon, raising an angel round for <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice final logo.png" alt="Clice" className="" /><Label>Clice</Label></span>.</div>
           <div>↳ Received full-time interest for: <span className="font-bold slight-italic">$300K</span> founding engineer role and another at <span className="inline-flex items-center align-middle gap-1"><Logo src="/icon.jpg" alt="Icon" /><Label><a href="https://icon.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Icon</a></Label></span>, but decided to go all in on building <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice final logo.png" alt="Clice" className="" /><Label>Clice</Label></span>.</div>
           <div>↳ Programming since <span className="font-bold slight-italic">age 5</span>, entrepreneur since <span className="font-bold slight-italic">age 11</span>.</div>
-          <div>↳ Did 3 <span className="font-bold slight-italic">highschool</span> software engineering internships.</div>
+          <div>↳ Software Engineer/Builder at <span className="inline-flex items-center align-middle gap-1"><Logo src="/kalshi logo.png" alt="Kalshi" /><Label><a href="https://kalshi.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Kalshi</a></Label></span>.</div>
+          <div className="ml-4">↳ Project dropping soon!</div>
           <div>↳ Lead Software engineer at <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span>'s AI organization, <span className="inline-flex items-center align-middle gap-1"><Logo src="/wat.jpeg" alt="wat.ai" /><Label><a href="https://watai.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">wat.ai</a></Label></span>.</div>
           <div>↳ Growth at <span className="inline-flex items-center align-middle gap-1"><Logo src="/symbal_logo.jpeg" alt="Symbal" /><Label><a href="https://www.symbal.ai/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Symbal</a></Label></span>, backed by Peter Thiel and <span className="inline-flex items-center align-middle gap-1"><Logo src="/founders fund.jpeg" alt="Founders Fund" /><Label><a href="https://foundersfund.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Founders Fund</a></Label></span>.</div>
           <div>↳ Fellow at <span className="inline-flex items-center align-middle gap-1"><Logo src="/boardy_logo.jpeg" alt="Boardy" /><Label><a href="https://www.boardy.ai/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Boardy</a></Label></span>, Fall 2025 Cohort.</div>
@@ -71,17 +73,20 @@ export default function Home() {
           <div>↳ <span className="font-bold slight-italic">2800+</span> followers on <span className="inline-flex items-center align-middle gap-1"><Logo src="/linkedin.webp" alt="LinkedIn" /><Label><a href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer" className="hover-underline-nudge">LinkedIn</a></Label></span>, <span className="font-bold slight-italic">1300+</span> followers on <span className="inline-flex items-center align-middle gap-1"><span className="relative -top-[1px]"><Logo src="/X.png" alt="X" /></span></span>, with posts totaling <span className="font-bold slight-italic">1.3M+</span> views.</div>
         </div>
 
-        <div className="my-3 border-t border-neutral-200" />
+        <div className="my-3 border-t border-neutral-200 dark:border-neutral-700" />
 
         {/* Building */}
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
           <div>◆ Building:</div>
           <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice final logo.png" alt="Clice" className="" /><Label>Clice</Label></span>. AI agents for the lending industry.</div>
+          <div className="ml-4">↳ Backed by angels from <span className="inline-flex items-center align-middle gap-1"><Logo src="/YClogo.png" alt="Y Combinator" /><Label><a href="https://www.ycombinator.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Y Combinator</a></Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/a16z.jpg" alt="a16z" /><Label><a href="https://a16z.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">a16z</a></Label></span>, and <span className="inline-flex items-center align-middle gap-1"><Logo src="/soma logo.jpg" alt="Soma Capital" /><Label><a href="https://somacap.com/featured" target="_blank" rel="noreferrer" className="hover-underline-nudge">Soma Capital</a></Label></span>.</div>
+          <div className="ml-4">↳ Backed by my own school, <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span>'s fund <span className="inline-flex items-center align-middle gap-1"><Logo src="/velocity logo.png" alt="Velocity" /><Label><a href="https://velocity.fund/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Velocity</a></Label></span>.</div>
+          <div className="ml-8">↳ Invited to the <span className="inline-flex items-center align-middle gap-1"><Logo src="/velocity logo.png" alt="Velocity Incubator" /><Label><a href="https://www.velocityincubator.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Velocity Incubator</a></Label></span>'s Winter 2025 cohort.</div>
           <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/ratemycompany logo.png" alt="ratemycompany.ca" /><Label><a href="https://www.ratemycompany.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">ratemycompany.ca</a></Label></span>. Startups leaderboard coming soon. 👀</div>
           <div className="ml-4">↳ If you want your high-growth startup added please contact me!</div>
           </div>
 
-        <div className="my-3 border-t border-neutral-200" />
+        <div className="my-3 border-t border-neutral-200 dark:border-neutral-700" />
 
 
         {/* Reach out */}
@@ -91,18 +96,23 @@ export default function Home() {
           <div>↳ Someone who is curious about me or what I'm doing.</div>
         </div>
 
-        <div className="my-3 border-t border-neutral-200" />
+        <div className="my-3 border-t border-neutral-200 dark:border-neutral-700" />
 
         {/* Contact */}
         <div className="text-sm sm:text-[0.95rem] leading-tight">
           <div className="pt-4" />
           <footer className="pb-16 sm:pb-24">
-            <div>◆ Contact:</div>
-            <div className="mt-2 flex items-center gap-3 text-neutral-700">
-              <a className="inline-flex items-center gap-1" href="mailto:lance.yan.business@gmail.com"><Mail size={14} /><span className="hover-underline-nudge">Email</span></a>
-              <a className="inline-flex items-center gap-1" href="https://github.com/lance116" target="_blank" rel="noreferrer"><Github size={14} /><span className="hover-underline-nudge">GitHub</span></a>
-              <a className="inline-flex items-center gap-1" href="https://x.com/cnnguan/" target="_blank" rel="noreferrer"><Logo src="/X.png" alt="X" /><span className="hover-underline-nudge">Twitter</span></a>
-              <a className="inline-flex items-center gap-1" href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer"><Logo src="/linkedin.webp" alt="LinkedIn" /><span className="hover-underline-nudge">LinkedIn</span></a>
+            <div className="flex items-center justify-between flex-wrap">
+              <div className="flex items-center gap-3">
+                <div>◆ Contact:</div>
+                <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-300">
+                  <a className="inline-flex items-center gap-1" href="mailto:lance.yan.business@gmail.com"><Mail size={14} /><span className="hover-underline-nudge">Email</span></a>
+                  <a className="inline-flex items-center gap-1" href="https://github.com/lance116" target="_blank" rel="noreferrer"><Github size={14} /><span className="hover-underline-nudge">GitHub</span></a>
+                  <a className="inline-flex items-center gap-1" href="https://x.com/cnnguan/" target="_blank" rel="noreferrer"><Logo src="/X.png" alt="X" /><span className="hover-underline-nudge">Twitter</span></a>
+                  <a className="inline-flex items-center gap-1" href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer"><Logo src="/linkedin.webp" alt="LinkedIn" /><span className="hover-underline-nudge">LinkedIn</span></a>
+                </div>
+              </div>
+              <ThemeToggle />
             </div>
           </footer>
         </div>

@@ -47,18 +47,18 @@ export default function PhotoPage({ params }: PhotoPageProps) {
             <h1 className="underline underline-offset-[3px] font-extralight">◆ Photography</h1>
             <div className="flex items-center gap-2 font-extralight">
               <a href="/" className={`hover-underline-nudge ${shouldBounce('home') ? 'nav-bounce' : ''}`}>Home</a>
-              <span className="text-neutral-400">|</span>
+              <span className="text-neutral-400 dark:text-neutral-600">|</span>
               <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce' : ''}`}>About me</a>
             </div>
           </div>
           <div>↳ {photoData.caption}</div>
         </div>
 
-        <div className="my-6 border-t border-neutral-200" />
+        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
 
         {/* Photo Display */}
         <div className="relative">
-          <div className="relative overflow-hidden rounded-lg border border-neutral-200">
+          <div className="relative overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-700">
             <div style={{ aspectRatio: photoData.width / photoData.height }}>
               <Image
                 src={`/${photoData.filename}`}
@@ -73,7 +73,7 @@ export default function PhotoPage({ params }: PhotoPageProps) {
           </div>
         </div>
 
-        <div className="my-6 border-t border-neutral-200" />
+        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
 
         {/* Navigation */}
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Mail, Github, Twitter, Linkedin } from "lucide-react";
 import { useNavigationBounce } from "../../lib/useNavigationBounce";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 function Logo({ src, alt, size = 18, className = "" }: { src: string; alt: string; size?: number; className?: string }) {
   return (
@@ -44,7 +45,7 @@ export default function About() {
             <h1 className="underline underline-offset-[3px] font-extralight">◆ Lance Yan</h1>
             <div className="flex items-center gap-2 font-extralight">
               <a href="/" className={`hover-underline-nudge ${shouldBounce('home') ? 'nav-bounce' : ''}`}>Home</a>
-              <span className="text-neutral-400">|</span>
+              <span className="text-neutral-400 dark:text-neutral-600">|</span>
               <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed' : ''}`}>Photos</a>
             </div>
           </div>
@@ -58,18 +59,23 @@ export default function About() {
           <div>↳ My favorite hobby is 📷 <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce' : ''}`}>photography</a> and my favorite sport is <span className="inline-flex items-center align-middle gap-1"><Logo src="/badminton.png" alt="Badminton" /><Label>badminton.</Label></span></div>
         </div>
 
-        <div className="my-3 border-t border-neutral-200" />
+        <div className="my-3 border-t border-neutral-200 dark:border-neutral-700" />
 
         {/* Contact */}
         <div className="text-sm sm:text-[0.95rem] leading-tight">
           <div className="pt-4" />
           <footer className="pb-16 sm:pb-24">
-            <div>◆ Contact:</div>
-            <div className="mt-2 flex items-center gap-3 text-neutral-700">
-              <a className="inline-flex items-center gap-1" href="mailto:lance.yan.business@gmail.com"><Mail size={14} /><span className="hover-underline-nudge">Email</span></a>
-              <a className="inline-flex items-center gap-1" href="https://github.com/lance116" target="_blank" rel="noreferrer"><Github size={14} /><span className="hover-underline-nudge">GitHub</span></a>
-              <a className="inline-flex items-center gap-1" href="https://x.com/cnnguan/" target="_blank" rel="noreferrer"><Logo src="/X.png" alt="X" /><span className="hover-underline-nudge">Twitter</span></a>
-              <a className="inline-flex items-center gap-1" href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer"><Logo src="/linkedin.webp" alt="LinkedIn" /><span className="hover-underline-nudge">LinkedIn</span></a>
+            <div className="flex items-center justify-between flex-wrap">
+              <div className="flex items-center gap-3">
+                <div>◆ Contact:</div>
+                <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-300">
+                  <a className="inline-flex items-center gap-1" href="mailto:lance.yan.business@gmail.com"><Mail size={14} /><span className="hover-underline-nudge">Email</span></a>
+                  <a className="inline-flex items-center gap-1" href="https://github.com/lance116" target="_blank" rel="noreferrer"><Github size={14} /><span className="hover-underline-nudge">GitHub</span></a>
+                  <a className="inline-flex items-center gap-1" href="https://x.com/cnnguan/" target="_blank" rel="noreferrer"><Logo src="/X.png" alt="X" /><span className="hover-underline-nudge">Twitter</span></a>
+                  <a className="inline-flex items-center gap-1" href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer"><Logo src="/linkedin.webp" alt="LinkedIn" /><span className="hover-underline-nudge">LinkedIn</span></a>
+                </div>
+              </div>
+              <ThemeToggle />
             </div>
           </footer>
         </div>

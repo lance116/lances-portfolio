@@ -10,7 +10,7 @@ export function ThemeToggle() {
     <button
       onClick={toggleTheme}
       className="inline-flex items-center gap-1 text-sm sm:text-[0.95rem] text-neutral-700 dark:text-neutral-300 hover-underline-nudge whitespace-nowrap"
-      style={{ verticalAlign: 'middle' }}
+      style={{ verticalAlign: 'middle', position: 'relative', top: '-2px' }}
       aria-label="Toggle theme"
     >
       {theme === 'light' ? (

@@ -1,0 +1,210 @@
+'use client';
+
+import Image from "next/image";
+import Link from "next/link";
+import { Mail, Github, ExternalLink } from "lucide-react";
+import { useNavigationBounce } from "../../lib/useNavigationBounce";
+import { ThemeToggle } from "@/components/theme-toggle";
+
+function Logo({ src, alt, size = 18, className = "" }: { src: string; alt: string; size?: number; className?: string }) {
+  return (
+    <span className="inline-flex items-center align-middle relative -top-[1px]">
+      <Image
+        src={src}
+        alt={alt}
+        width={size}
+        height={size}
+        sizes={`${size}px`}
+        quality={100}
+        priority={false}
+        className={`h-[18px] w-[18px] object-contain align-middle ${className}`}
+      />
+    </span>
+  );
+}
+
+interface Project {
+  id: string;
+  name: string;
+  description: string;
+  techStack: string[];
+  githubUrl: string;
+  websiteUrl?: string;
+  screenshot: string;
+}
+
+const projects: Project[] = [
+  {
+    id: "ratemycompany",
+    name: "ratemycompany.ca",
+    description: "A platform where students can rate and review companies. Built to help students make informed decisions about their internships and full-time roles. Reached 40K+ users and 2.5M+ votes within 48 hours of launch.",
+    techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel", "PostgreSQL"],
+    githubUrl: "https://github.com/lance116/ratemycompany",
+    websiteUrl: "https://www.ratemycompany.ca/",
+    screenshot: "/ratemycompany-screenshot.png"
+  },
+  {
+    id: "perica",
+    name: "Perica - Period Tracker",
+    description: "A privacy-focused period tracking application designed with user data protection in mind. Built to provide a safe and secure alternative to mainstream period tracking apps.",
+    techStack: ["React", "TypeScript", "Local Storage", "Progressive Web App"],
+    githubUrl: "https://github.com/lance116/period-tracker",
+    screenshot: "/perica-screenshot.png"
+  },
+  {
+    id: "chess-neural-network",
+    name: "Chess Neural Network",
+    description: "A deep learning model trained to play chess. Built from scratch to understand the fundamentals of neural networks and reinforcement learning.",
+    techStack: ["Python", "TensorFlow", "NumPy", "Chess.js"],
+    githubUrl: "https://github.com/lance116/Chess-Neural-Network",
+    screenshot: "/chess-screenshot.png"
+  },
+  {
+    id: "portfolio",
+    name: "Portfolio Website",
+    description: "This website! Built with Next.js 14 and featuring a custom WebGL fluid dynamics cursor effect. Designed to showcase my work and provide a unique user experience.",
+    techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "WebGL", "Vercel"],
+    githubUrl: "https://github.com/lance116/lances-portfolio",
+    screenshot: "/portfolio-screenshot.png"
+  }
+];
+
+export default function Projects() {
+  const { shouldBounce } = useNavigationBounce('projects');
+
+  return (
+    <main className="relative">
+      <div className="relative z-10 mx-auto max-w-screen-sm px-4 sm:px-0">
+        <div className="pt-16 sm:pt-24" />
+
+        {/* Header */}
+        <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
+          <div className="flex items-center justify-between">
+            <h1 className="underline underline-offset-[3px] font-extralight">◆ Projects</h1>
+            <div className="flex items-center gap-2 font-extralight">
+              <a href="/" className={`hover-underline-nudge ${shouldBounce('home') ? 'nav-bounce' : ''}`}>Home</a>
+              <span className="text-neutral-400 dark:text-neutral-600">|</span>
+              <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed-1' : ''}`}>About me</a>
+              <span className="text-neutral-400 dark:text-neutral-600">|</span>
+              <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed-2' : ''}`}>Photos</a>
+            </div>
+          </div>
+          <div>↳ A collection of projects I've built.</div>
+        </div>
+
+        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
+
+        {/* Projects List */}
+        <div className="space-y-8 sm:space-y-10">
+          {projects.map((project, index) => (
+            <div
+              key={project.id}
+              className="project-card group"
+              style={{
+                animationDelay: `${index * 150}ms`,
+                opacity: 0,
+                animation: 'fadeInUp 0.6s ease-out forwards'
+              }}
+            >
+              {/* Card Container */}
+              <div className="border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden bg-white dark:bg-neutral-950 project-card-hover">
+                {/* Screenshot */}
+                <div className="relative overflow-hidden border-b border-neutral-200 dark:border-neutral-800">
+                  <div className="aspect-[16/10] bg-neutral-100 dark:bg-neutral-900">
+                    <Image
+                      src={project.screenshot}
+                      alt={`${project.name} screenshot`}
+                      width={1600}
+                      height={1000}
+                      className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, 640px"
+                    />
+                  </div>
+                </div>
+
+                {/* Project Info */}
+                <div className="p-5 sm:p-6 space-y-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <h2 className="font-extralight text-base sm:text-lg text-neutral-900 dark:text-neutral-50">
+                      {project.name}
+                    </h2>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+                      >
+                        <Github size={14} />
+                        <span>Code</span>
+                      </a>
+                      {project.websiteUrl && (
+                        <>
+                          <span className="text-neutral-300 dark:text-neutral-700">|</span>
+                          <a
+                            href={project.websiteUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+                          >
+                            <ExternalLink size={14} />
+                            <span>Live</span>
+                          </a>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  <p className="text-sm sm:text-[0.95rem] leading-relaxed text-neutral-600 dark:text-neutral-400">
+                    {project.description}
+                  </p>
+
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {project.techStack.map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-2.5 py-1 text-xs font-light bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 rounded-md border border-neutral-200 dark:border-neutral-800"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
+
+        {/* Back to Home */}
+        <div className="text-sm sm:text-[0.95rem] leading-tight my-6">
+          <a href="/" className="hover-underline-nudge font-extralight">
+            ← Back to home
+          </a>
+        </div>
+
+        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
+
+        {/* Contact */}
+        <div className="text-sm sm:text-[0.95rem] leading-tight">
+          <div className="pt-4" />
+          <footer className="pb-16 sm:pb-24">
+            <div className="flex items-center justify-between flex-wrap">
+              <div className="flex items-center gap-3">
+                <div>◆ Contact:</div>
+                <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-300">
+                  <a className="inline-flex items-center gap-1" href="mailto:lance.yan.business@gmail.com"><Mail size={14} /><span className="hover-underline-nudge">Email</span></a>
+                  <a className="inline-flex items-center gap-1" href="https://github.com/lance116" target="_blank" rel="noreferrer"><Github size={14} /><span className="hover-underline-nudge">GitHub</span></a>
+                  <a className="inline-flex items-center gap-1" href="https://x.com/cnnguan/" target="_blank" rel="noreferrer"><Logo src="/X.png" alt="X" /><span className="hover-underline-nudge">Twitter</span></a>
+                  <a className="inline-flex items-center gap-1" href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer"><Logo src="/linkedin.webp" alt="LinkedIn" /><span className="hover-underline-nudge">LinkedIn</span></a>
+                </div>
+              </div>
+              <ThemeToggle />
+            </div>
+          </footer>
+        </div>
+      </div>
+    </main>
+  );
+}

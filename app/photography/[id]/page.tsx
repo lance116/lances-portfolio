@@ -48,7 +48,9 @@ export default function PhotoPage({ params }: PhotoPageProps) {
             <div className="flex items-center gap-2 font-extralight">
               <a href="/" className={`hover-underline-nudge ${shouldBounce('home') ? 'nav-bounce' : ''}`}>Home</a>
               <span className="text-neutral-400 dark:text-neutral-600">|</span>
-              <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce' : ''}`}>About me</a>
+              <a href="/projects" className={`hover-underline-nudge ${shouldBounce('projects') ? 'nav-bounce-delayed-1' : ''}`}>Projects</a>
+              <span className="text-neutral-400 dark:text-neutral-600">|</span>
+              <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed-2' : ''}`}>About me</a>
             </div>
           </div>
           <div>↳ {photoData.caption}</div>

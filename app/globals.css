@@ -122,7 +122,12 @@
     animation: bounce-gentle 2s infinite;
   }
 
-  .nav-bounce-delayed {
+  .nav-bounce-delayed-1 {
+    animation: bounce-gentle 2s infinite;
+    animation-delay: 0.5s;
+  }
+
+  .nav-bounce-delayed-2 {
     animation: bounce-gentle 2s infinite;
     animation-delay: 1s;
   }
@@ -152,5 +157,31 @@
   .slight-italic {
     font-style: italic;
     transform: skewX(-2deg);
+  }
+
+  /* Project card animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .project-card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .project-card-hover:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: hsl(0 0% 70%);
+  }
+
+  .dark .project-card-hover:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border-color: hsl(0 0% 30%);
   }
 }

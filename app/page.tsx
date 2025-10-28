@@ -44,9 +44,11 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <h1 className="underline underline-offset-[3px] font-extralight">◆ Lance Yan</h1>
             <div className="flex items-center gap-2 font-extralight">
-              <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce' : ''}`}>About me</a>
+              <a href="/projects" className={`hover-underline-nudge ${shouldBounce('projects') ? 'nav-bounce' : ''}`}>Projects</a>
               <span className="text-neutral-400 dark:text-neutral-600">|</span>
-              <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed' : ''}`}>Photos</a>
+              <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed-1' : ''}`}>About me</a>
+              <span className="text-neutral-400 dark:text-neutral-600">|</span>
+              <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed-2' : ''}`}>Photos</a>
             </div>
           </div>
           <div>↳ Founder <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice final logo.png" alt="Clice" className="" /><Label>Clice</Label></span></div>

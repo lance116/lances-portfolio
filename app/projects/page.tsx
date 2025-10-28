@@ -5,6 +5,22 @@ import Link from "next/link";
 import { Mail, Github, ExternalLink } from "lucide-react";
 import { useNavigationBounce } from "../../lib/useNavigationBounce";
 import { ThemeToggle } from "@/components/theme-toggle";
+import {
+  SiNextdotjs,
+  SiTypescript,
+  SiTailwindcss,
+  SiVercel,
+  SiPostgresql,
+  SiReact,
+  SiPwa,
+  SiPython,
+  SiTensorflow,
+  SiNumpy,
+  SiWebgl,
+  SiJavascript
+} from "react-icons/si";
+import { FaDatabase, FaChessKnight } from "react-icons/fa";
+import { IconType } from "react-icons";
 
 function Logo({ src, alt, size = 18, className = "" }: { src: string; alt: string; size?: number; className?: string }) {
   return (
@@ -32,6 +48,24 @@ interface Project {
   websiteUrl?: string;
   screenshot: string;
 }
+
+// Map tech names to their icons
+const techIcons: Record<string, { icon: IconType; color: string }> = {
+  "Next.js": { icon: SiNextdotjs, color: "#000000" },
+  "Next.js 14": { icon: SiNextdotjs, color: "#000000" },
+  "TypeScript": { icon: SiTypescript, color: "#3178C6" },
+  "Tailwind CSS": { icon: SiTailwindcss, color: "#06B6D4" },
+  "Vercel": { icon: SiVercel, color: "#000000" },
+  "PostgreSQL": { icon: SiPostgresql, color: "#4169E1" },
+  "React": { icon: SiReact, color: "#61DAFB" },
+  "Progressive Web App": { icon: SiPwa, color: "#5A0FC8" },
+  "Python": { icon: SiPython, color: "#3776AB" },
+  "TensorFlow": { icon: SiTensorflow, color: "#FF6F00" },
+  "NumPy": { icon: SiNumpy, color: "#013243" },
+  "WebGL": { icon: SiWebgl, color: "#990000" },
+  "Local Storage": { icon: FaDatabase, color: "#FF9900" },
+  "Chess.js": { icon: FaChessKnight, color: "#000000" }
+};
 
 const projects: Project[] = [
   {
@@ -160,14 +194,26 @@ export default function Projects() {
                   </p>
 
                   <div className="flex flex-wrap gap-2 pt-2">
-                    {project.techStack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2.5 py-1 text-xs font-light bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 rounded-md border border-neutral-200 dark:border-neutral-800"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                    {project.techStack.map((tech) => {
+                      const techInfo = techIcons[tech];
+                      const Icon = techInfo?.icon;
+
+                      return (
+                        <span
+                          key={tech}
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-light bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 rounded-md border border-neutral-200 dark:border-neutral-800 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                        >
+                          {Icon && (
+                            <Icon
+                              size={14}
+                              className="shrink-0"
+                              style={{ color: techInfo.color }}
+                            />
+                          )}
+                          <span>{tech}</span>
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
               </div>

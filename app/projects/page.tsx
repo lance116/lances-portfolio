@@ -19,10 +19,9 @@ import {
   SiWebgl,
   SiJavascript,
   SiSupabase,
-  SiVite,
-  SiPygame
+  SiVite
 } from "react-icons/si";
-import { FaDatabase, FaChessKnight } from "react-icons/fa";
+import { FaDatabase, FaChessKnight, FaGamepad } from "react-icons/fa";
 import { IconType } from "react-icons";
 
 function Logo({ src, alt, size = 18, className = "" }: { src: string; alt: string; size?: number; className?: string }) {
@@ -70,7 +69,7 @@ const techIcons: Record<string, { icon: IconType; color: string }> = {
   "Chess.js": { icon: FaChessKnight, color: "#000000" },
   "Supabase": { icon: SiSupabase, color: "#3ECF8E" },
   "Vite": { icon: SiVite, color: "#646CFF" },
-  "Pygame": { icon: SiPygame, color: "#3776AB" },
+  "Pygame": { icon: FaGamepad, color: "#3776AB" },
   "python-chess": { icon: FaChessKnight, color: "#000000" }
 };
 

@@ -75,7 +75,7 @@ const projects: Project[] = [
     techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel", "PostgreSQL"],
     githubUrl: "https://github.com/lance116/ratemycompany",
     websiteUrl: "https://www.ratemycompany.ca/",
-    screenshot: "/ratemycompany-screenshot.png"
+    screenshot: "/ratemycompany.png"
   },
   {
     id: "perica",
@@ -83,7 +83,7 @@ const projects: Project[] = [
     description: "A privacy-focused period tracking application designed with user data protection in mind. Built to provide a safe and secure alternative to mainstream period tracking apps.",
     techStack: ["React", "TypeScript", "Local Storage", "Progressive Web App"],
     githubUrl: "https://github.com/lance116/period-tracker",
-    screenshot: "/perica-screenshot.png"
+    screenshot: "/perica.png"
   },
   {
     id: "chess-neural-network",
@@ -91,7 +91,7 @@ const projects: Project[] = [
     description: "A deep learning model trained to play chess. Built from scratch to understand the fundamentals of neural networks and reinforcement learning.",
     techStack: ["Python", "TensorFlow", "NumPy", "Chess.js"],
     githubUrl: "https://github.com/lance116/Chess-Neural-Network",
-    screenshot: "/chess-screenshot.png"
+    screenshot: "/chessscreens.png"
   },
   {
     id: "portfolio",
@@ -99,7 +99,7 @@ const projects: Project[] = [
     description: "This website! Built with Next.js 14 and featuring a custom WebGL fluid dynamics cursor effect. Designed to showcase my work and provide a unique user experience.",
     techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "WebGL", "Vercel"],
     githubUrl: "https://github.com/lance116/lances-portfolio",
-    screenshot: "/portfolio-screenshot.png"
+    screenshot: "/pic1.png"
   }
 ];
 

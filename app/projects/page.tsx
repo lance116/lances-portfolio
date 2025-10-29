@@ -17,7 +17,10 @@ import {
   SiTensorflow,
   SiNumpy,
   SiWebgl,
-  SiJavascript
+  SiJavascript,
+  SiSupabase,
+  SiVite,
+  SiPygame
 } from "react-icons/si";
 import { FaDatabase, FaChessKnight } from "react-icons/fa";
 import { IconType } from "react-icons";
@@ -64,42 +67,46 @@ const techIcons: Record<string, { icon: IconType; color: string }> = {
   "NumPy": { icon: SiNumpy, color: "#013243" },
   "WebGL": { icon: SiWebgl, color: "#990000" },
   "Local Storage": { icon: FaDatabase, color: "#FF9900" },
-  "Chess.js": { icon: FaChessKnight, color: "#000000" }
+  "Chess.js": { icon: FaChessKnight, color: "#000000" },
+  "Supabase": { icon: SiSupabase, color: "#3ECF8E" },
+  "Vite": { icon: SiVite, color: "#646CFF" },
+  "Pygame": { icon: SiPygame, color: "#3776AB" },
+  "python-chess": { icon: FaChessKnight, color: "#000000" }
 };
 
 const projects: Project[] = [
   {
     id: "ratemycompany",
     name: "ratemycompany.ca",
-    description: "A platform where students can rate and review companies. Built to help students make informed decisions about their internships and full-time roles. Reached 40K+ users and 2.5M+ votes within 48 hours of launch.",
-    techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel", "PostgreSQL"],
+    description: "A matchup voting platform applying 'hot or not' concept to tech companies. Users vote on company comparisons with hCaptcha-secured API, session management, and real-time leaderboards. Reached 40K+ users and 2.5M+ votes within 48 hours of launch.",
+    techStack: ["React", "TypeScript", "Vite", "Tailwind CSS", "Supabase", "Vercel"],
     githubUrl: "https://github.com/lance116/ratemycompany",
     websiteUrl: "https://www.ratemycompany.ca/",
     screenshot: "/ratemycompany.png"
   },
   {
-    id: "perica",
-    name: "Perica - Period Tracker",
-    description: "A privacy-focused period tracking application designed with user data protection in mind. Built to provide a safe and secure alternative to mainstream period tracking apps.",
-    techStack: ["React", "TypeScript", "Local Storage", "Progressive Web App"],
-    githubUrl: "https://github.com/lance116/period-tracker",
-    screenshot: "/perica.png"
-  },
-  {
     id: "chess-neural-network",
     name: "Chess Neural Network",
-    description: "A deep learning model trained to play chess. Built from scratch to understand the fundamentals of neural networks and reinforcement learning.",
-    techStack: ["Python", "TensorFlow", "NumPy", "Chess.js"],
+    description: "Interactive chess game with AI opponent powered by TensorFlow neural networks. Features complete rule validation (castling, en passant, promotion), move highlighting, and continuous improvement through self-play training mechanisms.",
+    techStack: ["Python", "TensorFlow", "NumPy", "Pygame", "python-chess"],
     githubUrl: "https://github.com/lance116/Chess-Neural-Network",
     screenshot: "/chessscreens.png"
   },
   {
     id: "portfolio",
     name: "Portfolio Website",
-    description: "This website! Built with Next.js 14 and featuring a custom WebGL fluid dynamics cursor effect. Designed to showcase my work and provide a unique user experience.",
+    description: "My personal portfolio featuring a custom WebGL fluid dynamics cursor effect (took 3 hours to build!). Modern, responsive design built with Next.js 14 to showcase my projects and experience with smooth animations.",
     techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "WebGL", "Vercel"],
     githubUrl: "https://github.com/lance116/lances-portfolio",
     screenshot: "/pic1.png"
+  },
+  {
+    id: "perica",
+    name: "Perica - Period Tracker",
+    description: "Privacy-focused menstrual cycle tracker with AI-powered health assistant. Features symptom and mood logging, pattern recognition, predictive capabilities, and health insights—all while keeping data secure and private.",
+    techStack: ["React", "TypeScript", "Vite", "Tailwind CSS", "Supabase"],
+    githubUrl: "https://github.com/lance116/period-tracker",
+    screenshot: "/perica.png"
   }
 ];
 

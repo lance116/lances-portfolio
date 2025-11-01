@@ -184,4 +184,28 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     border-color: hsl(0 0% 30%);
   }
+
+  /* Essay animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .essay-link {
+    display: block;
+    transition: opacity 0.2s ease;
+  }
+
+  .essay-content p {
+    line-height: 1.8;
+  }
+
+  .nav-bounce-delayed-3 {
+    animation: bounce-gentle 2s infinite;
+    animation-delay: 1.5s;
+  }
 }

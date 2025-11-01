@@ -48,7 +48,9 @@ export default function Home() {
               <span className="text-neutral-400 dark:text-neutral-600">|</span>
               <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed-1' : ''}`}>About me</a>
               <span className="text-neutral-400 dark:text-neutral-600">|</span>
-              <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed-2' : ''}`}>Photos</a>
+              <a href="/writing" className={`hover-underline-nudge ${shouldBounce('writing') ? 'nav-bounce-delayed-2' : ''}`}>Writing</a>
+              <span className="text-neutral-400 dark:text-neutral-600">|</span>
+              <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed-3' : ''}`}>Photos</a>
             </div>
           </div>
           <div>↳ Founder <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice final logo.png" alt="Clice" className="" /><Label>Clice</Label></span></div>

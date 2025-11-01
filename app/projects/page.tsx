@@ -94,7 +94,7 @@ const projects: Project[] = [
   {
     id: "portfolio",
     name: "Portfolio Website",
-    description: "My personal portfolio featuring a custom WebGL fluid dynamics cursor effect (took 3 hours to build!). Modern, responsive design built with Next.js 14 to showcase my projects and experience with smooth animations.",
+    description: "My personal portfolio featuring a fluid dynamic cursor effect. Modern, responsive design built with Next.js 14 to showcase my projects and experience with smooth animations.",
     techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "WebGL", "Vercel"],
     githubUrl: "https://github.com/lance116/lances-portfolio",
     screenshot: "/pic1.png"
@@ -102,7 +102,7 @@ const projects: Project[] = [
   {
     id: "perica",
     name: "Perica - Period Tracker",
-    description: "Privacy-focused menstrual cycle tracker with AI-powered health assistant. Features symptom and mood logging, pattern recognition, predictive capabilities, and health insights—all while keeping data secure and private.",
+    description: "Privacy-focused menstrual cycle tracker with AI-powered health assistant. Features symptom and mood logging, pattern recognition, predictive capabilities, and health insights.",
     techStack: ["React", "TypeScript", "Vite", "Tailwind CSS", "Supabase"],
     githubUrl: "https://github.com/lance116/period-tracker",
     screenshot: "/perica.png"
@@ -126,7 +126,9 @@ export default function Projects() {
               <span className="text-neutral-400 dark:text-neutral-600">|</span>
               <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed-1' : ''}`}>About me</a>
               <span className="text-neutral-400 dark:text-neutral-600">|</span>
-              <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed-2' : ''}`}>Photos</a>
+              <a href="/writing" className={`hover-underline-nudge ${shouldBounce('writing') ? 'nav-bounce-delayed-2' : ''}`}>Writing</a>
+              <span className="text-neutral-400 dark:text-neutral-600">|</span>
+              <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed-3' : ''}`}>Photos</a>
             </div>
           </div>
           <div>↳ A collection of projects I've built.</div>

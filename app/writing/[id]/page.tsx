@@ -45,13 +45,13 @@ I think this is why people quit too early. They say they want to do something im
 
 But the floor isn't about the path. It's about the standard. If your floor is "this has to matter" and you realize it doesn't matter, the floor forces you to stop. There's no internal debate. Continuing would violate the standard. The same floor that keeps you up two nights fixing bugs is what makes you kill the whole project when you realize it's solving the wrong problem.
 
-People also think high standards make you stubborn. It's the opposite. High standards make pivoting easier. If your floor is "this has to be excellent," you're not married to any specific approach. You're attached to the outcome. When something isn't working, the floor tells you immediately. Change it.
+People think high standards make you stubborn. It's the opposite. High standards make pivoting easier. If your floor is "this has to be excellent," you're not married to any specific approach. You're attached to the outcome. When something isn't working, the floor tells you immediately. Change it.
 
 Set standards for things you control. "This has to work correctly" is a floor you can enforce. "This has to make me rich" isn't. One is about output quality. The other is about outcomes that depend on factors beyond you. The useful floors are about standards, not results.
 
 The floor makes decisions easier. When something doesn't meet your standard, you know immediately. No internal debate. No agonizing over sunk costs. The answer is obvious. Either it clears the bar or it doesn't.
 
-High standards don't prevent failure. They prevent mediocrity. You can fail a hundred times with a high floor. Each time, you built something that met your standard. Failing is fine. What you can't do is lower the bar because you're tired of failing.
+But high standards don't prevent failure. They prevent mediocrity. You can fail a hundred times with a high floor. Each time, you built something that met your standard. Failing is fine. What you can't do is lower the bar because you're tired of failing.
 
 Set the bar high enough, and average becomes impossible. Mediocre becomes unthinkable. The heights you aim for don't matter if you're willing to settle for less. But if you make settling impossible, you'll find a way to clear the bar you set.`
   },

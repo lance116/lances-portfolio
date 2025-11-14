@@ -39,13 +39,11 @@ The floor doesn't come from discipline or motivation. It comes from identity. Fr
 
 If you see yourself as someone who builds things that matter, being mediocre violates your self-concept. That violation is what enforces the floor, it's automatic. Which means raising your floor isn't about willpower. It's about changing who you think you are. The floor follows from that.
 
-I saw this early. When I was eleven, I ran 300+ member Discord servers and a large Minecraft skyblock guild. Not any formal authority, only influence. But if I shipped something broken or handled a situation poorly, people left. The only thing that kept those communities running was maintaining a standard. That's where the floor started forming. Not from discipline. From understanding that if I accepted mediocre, mediocre is what I'd get.
+I saw this early. When I was eleven, I ran Discord servers and a Minecraft skyblock guild with hundreds of members. Not any formal authority, only influence. But if I shipped something broken or handled a situation poorly, people left. The only thing that kept those communities running was maintaining a standard. That's where the floor started forming. Not from discipline. From understanding that if I accepted mediocre, mediocre is what I'd get.
 
 I think this is why people quit too early. They say they want to do something important, but their floor is "I tried, I learned something." So when things get hard, they've already cleared their minimum standard. They can give up with a clear conscience. The people who succeed have a different floor. Not "I'll try to make this work." Just "this will work."
 
-But the floor isn't about the path. It's about the standard. If your floor is "this has to matter" and you realize it doesn't matter, the floor forces you to stop. There's no internal debate. Continuing would violate the standard. The same floor that keeps you up two nights fixing bugs is what makes you kill the whole project when you realize it's solving the wrong problem.
-
-People think high standards make you stubborn. It's the opposite. High standards make pivoting easier. If your floor is "this has to be excellent," you're not married to any specific approach. You're attached to the outcome. When something isn't working, the floor tells you immediately. Change it.
+People think high standards make you stubborn. It's the opposite. High standards make pivoting easier. If your floor is "this has to be excellent," you're not married to any specific approach. You're attached to the outcome. The same floor that keeps you up two nights fixing bugs is what makes you kill the whole project when you realize it's solving the wrong problem. When something isn't working, the floor tells you immediately. Change it.
 
 Set standards for things you control. "This has to work correctly" is a floor you can enforce. "This has to make me rich" isn't. One is about output quality. The other is about outcomes that depend on factors beyond you. The useful floors are about standards, not results.
 

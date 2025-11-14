@@ -22,6 +22,39 @@ function Logo({ src, alt, size = 18, className = "" }: { src: string; alt: strin
 
 // Map of essay IDs to content and metadata
 const essayMap: Record<string, { title: string; date: string; content: string }> = {
+  "floor-in-the-sky": {
+    title: "Floor in the Sky",
+    date: "2025-11-14T05:42:00",
+    content: `My high school yearbook quote was something like: "We're more defined by the bar we set at the bottom than the heights we aim to reach."
+
+Everyone has big dreams. Everyone wants to build something significant, make a lot of money, change the world. The dreams are cheap. What actually defines you is your bare minimum. The floor you refuse to go below.
+
+I got 99.2% in high school. Not because I aimed for 99.2%. I aimed for 100% and accepted nothing less. 99% was just what happened when I set the floor that high and hit a few obstacles along the way.
+
+Most people confuse goals with floors. "I want to be successful" isn't a standard. That's a direction. A floor is: what are you absolutely not willing to accept? Goals tell you where to aim. Floors tell you what happens when you're tired.
+
+When 20+ people botted ratemycompany.ca (thanks for the traffic), my floor wasn't "well, I built something." My floor was "this has to work correctly." So I stayed up for two nights fixing it. Not because I'm particularly disciplined. Because falling below my floor wasn't an option I'd given myself.
+
+The floor doesn't come from discipline or motivation. It comes from identity. From who you actually believe you are.
+
+If you see yourself as someone who builds things that matter, being mediocre violates your self-concept. That violation is what enforces the floor. It's automatic. Which means raising your floor isn't about willpower. It's about changing who you think you are. The floor follows from that.
+
+I saw this early. When I was eleven, I ran Discord servers and a Minecraft skyblock guild. Not any formal authority, just influence. But if I shipped something broken or handled a situation poorly, people left. The only thing that kept communities running was maintaining a standard. That's where the floor started forming. Not from discipline. From understanding that if I accepted mediocre, mediocre is what I'd get.
+
+This is why people quit too early. They say they want to build something important, but their floor is "I tried, I learned something." So when things get hard, they've already cleared their minimum standard. They can give up with a clear conscience. The people who succeed have a different floor. Not "I'll try to make this work." Just "this will work."
+
+But the floor isn't about the path. It's about the standard. If your floor is "this has to matter" and you realize it doesn't matter, the floor forces you to stop. There's no internal debate. Continuing would violate the standard. The same floor that keeps you up two nights fixing bugs is what makes you kill the whole project when you realize it's solving the wrong problem.
+
+People also think high standards make you stubborn. It's the opposite. High standards make pivoting easier. If your floor is "this has to be excellent," you're not married to any specific approach. You're attached to the outcome. When something isn't working, the floor tells you immediately. Change it.
+
+Set standards for things you control. "This has to work correctly" is a floor you can enforce. "This has to make me rich" isn't. One is about output quality. The other is about outcomes that depend on factors beyond you. The useful floors are about standards, not results.
+
+The floor makes decisions easier. When something doesn't meet your standard, you know immediately. No internal debate. No agonizing over sunk costs. The answer is obvious. Either it clears the bar or it doesn't.
+
+High standards don't prevent failure. They prevent mediocrity. You can fail a hundred times with a high floor. Each time, you built something that met your standard. The market just said no. That's fine. What you can't do is lower the bar because you're tired of failing.
+
+Set the bar high enough, and average becomes impossible. Mediocre becomes unthinkable. The heights you aim for don't matter if you're willing to settle for less. But if you make settling impossible, you'll find a way to clear the bar you set.`
+  },
   "the-window-between-nothing": {
     title: "The Window Between Nothing",
     date: "2025-11-14T04:26:00",

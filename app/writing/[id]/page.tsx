@@ -27,7 +27,7 @@ const essayMap: Record<string, { title: string; date: string; content: string }>
     date: "2025-11-14T05:42:00",
     content: `My high school yearbook quote was something like: "We're more defined by the bar we set at the bottom than the heights we aim to reach."
 
-Everyone has big dreams. Everyone wants to build something significant, make a lot of money, change the world. The dreams are cheap. What actually defines you is your bare minimum. The floor you refuse to go below.
+Everyone has big dreams. Everyone wants to do something significant, make a lot of money, change the world. The dreams are cheap. What actually defines you is your bare minimum. The floor you refuse to go below.
 
 I got 99.2% in high school. Not because I aimed for 99.2%. I aimed for 100% and accepted nothing less. 99% was just what happened when I set the floor that high and hit a few obstacles along the way.
 
@@ -51,7 +51,7 @@ Set standards for things you control. "This has to work correctly" is a floor yo
 
 The floor makes decisions easier. When something doesn't meet your standard, you know immediately. No internal debate. No agonizing over sunk costs. The answer is obvious. Either it clears the bar or it doesn't.
 
-But high standards don't prevent failure. They prevent mediocrity. You can fail a hundred times with a high floor. Each time, you built something that met your standard. Failing is fine. What you can't do is lower the bar because you're tired of failing.
+But high standards don't prevent failure. They only prevent mediocrity. You can fail a hundred times with a high floor. Each time, you built something that met your standard. Failing is fine. What you can't do is lower the bar because you're tired of failing.
 
 Set the bar high enough, and average becomes impossible. Mediocre becomes unthinkable. The heights you aim for don't matter if you're willing to settle for less. But if you make settling impossible, you'll find a way to clear the bar you set.`
   },

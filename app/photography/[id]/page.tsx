@@ -51,6 +51,8 @@ export default function PhotoPage({ params }: PhotoPageProps) {
               <a href="/projects" className={`hover-underline-nudge ${shouldBounce('projects') ? 'nav-bounce-delayed-1' : ''}`}>Projects</a>
               <span className="text-neutral-400 dark:text-neutral-600">|</span>
               <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed-2' : ''}`}>About me</a>
+              <span className="text-neutral-400 dark:text-neutral-600">|</span>
+              <a href="/writing" className={`hover-underline-nudge ${shouldBounce('writing') ? 'nav-bounce-delayed-3' : ''}`}>Writing</a>
             </div>
           </div>
           <div>↳ {photoData.caption}</div>

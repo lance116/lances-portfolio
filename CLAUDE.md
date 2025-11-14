@@ -73,16 +73,42 @@ All pages follow a consistent layout pattern:
 **Routes**:
 - `/` - Home page (`app/page.tsx`): Main bio, achievements, current projects
 - `/about` - About page (`app/about/page.tsx`): Personal background, hobbies, locations
+- `/projects` - Projects page (`app/projects/page.tsx`): Collection of built projects with tech stacks
+- `/writing` - Writing page (`app/writing/page.tsx`): List of essays and articles
+- `/writing/[id]` - Individual essay view (`app/writing/[id]/page.tsx`): Full essay with large title
 - `/photography` - Photo gallery (`app/photography/page.tsx`): Grid layout with hover effects
 - `/photography/[id]` - Individual photo view (`app/photography/[id]/page.tsx`): Full-size photo with caption
 
 **Common elements**:
-- Header with navigation (Home | About | Photos)
+- Header with navigation (Home | Projects | About me | Writing | Photos)
 - Footer with contact links and theme toggle
 - Logo component for inline brand/company icons
 - Consistent typography and spacing
 
-### 5. Styling System
+### 5. Writing Section
+
+Blog-style section for essays and long-form content.
+
+**Location**: `app/writing/page.tsx` and `app/writing/[id]/page.tsx`
+
+**How it works**:
+- List view displays essays with title, description, and date
+- Individual essay page features large title (text-3xl sm:text-5xl) for emphasis
+- Essays stored in `essayMap` object in `app/writing/[id]/page.tsx`
+- Content formatted as plain text with paragraph spacing
+- Dates formatted using `toLocaleDateString()` for consistency
+
+**Adding new essays**:
+1. Add essay metadata to `essays` array in `app/writing/page.tsx`:
+   - `id`: URL-friendly slug
+   - `title`: Essay title
+   - `description`: Short description for list view
+   - `date`: ISO date string (YYYY-MM-DD)
+2. Add essay content to `essayMap` in `app/writing/[id]/page.tsx`:
+   - Include full essay text with line breaks between paragraphs
+   - Paragraphs automatically split and rendered with proper spacing
+
+### 6. Styling System
 
 Built with Tailwind CSS using custom design tokens.
 

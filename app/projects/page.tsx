@@ -126,7 +126,9 @@ export default function Projects() {
               <span className="text-neutral-400 dark:text-neutral-600">|</span>
               <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed-1' : ''}`}>About me</a>
               <span className="text-neutral-400 dark:text-neutral-600">|</span>
-              <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed-2' : ''}`}>Photos</a>
+              <a href="/writing" className={`hover-underline-nudge ${shouldBounce('writing') ? 'nav-bounce-delayed-2' : ''}`}>Writing</a>
+              <span className="text-neutral-400 dark:text-neutral-600">|</span>
+              <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed-3' : ''}`}>Photos</a>
             </div>
           </div>
           <div>↳ A collection of projects I've built.</div>

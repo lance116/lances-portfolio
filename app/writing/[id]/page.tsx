@@ -24,7 +24,7 @@ function Logo({ src, alt, size = 18, className = "" }: { src: string; alt: strin
 const essayMap: Record<string, { title: string; date: string; content: string }> = {
   "the-window-between-nothing": {
     title: "The Window Between Nothing",
-    date: "2025-11-14",
+    date: "2025-11-14T04:26:00",
     content: `Most people avoid thinking about death. It's uncomfortable and too heavy for normal conversation.
 
 But avoiding it means avoiding the one question that actually matters: what are you doing with your life? And why?
@@ -108,6 +108,10 @@ export default function EssayPage({ params }: EssayPageProps) {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
+              })} at {new Date(essayData.date).toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
               })}
             </div>
           </div>

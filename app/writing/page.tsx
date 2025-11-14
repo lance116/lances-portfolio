@@ -24,13 +24,13 @@ const essays = [
   {
     id: "the-window-between-nothing",
     title: "The Window Between Nothing",
-    description: "A short essay about death and finding purpose in life.",
+    description: "An essay about death and finding purpose in life.",
     date: "2025-11-14T04:26:00"
   },
   {
     id: "floor-in-the-sky",
     title: "Floor in the Sky",
-    description: "An essay about standards.",
+    description: "A short essay about standards.",
     date: "2025-11-14T05:42:00"
   }
 ];

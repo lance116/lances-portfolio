@@ -51,7 +51,7 @@ Set standards for things you control. "This has to work correctly" is a floor yo
 
 The floor makes decisions easier. When something doesn't meet your standard, you know immediately. No internal debate. No agonizing over sunk costs. The answer is obvious. Either it clears the bar or it doesn't.
 
-High standards don't prevent failure. They prevent mediocrity. You can fail a hundred times with a high floor. Each time, you built something that met your standard. The market just said no. That's fine. What you can't do is lower the bar because you're tired of failing.
+High standards don't prevent failure. They prevent mediocrity. You can fail a hundred times with a high floor. Each time, you built something that met your standard. Failing is fine. What you can't do is lower the bar because you're tired of failing.
 
 Set the bar high enough, and average becomes impossible. Mediocre becomes unthinkable. The heights you aim for don't matter if you're willing to settle for less. But if you make settling impossible, you'll find a way to clear the bar you set.`
   },
@@ -155,11 +155,30 @@ export default function EssayPage({ params }: EssayPageProps) {
         {/* Essay Content */}
         <article className="prose prose-sm sm:prose-base dark:prose-invert max-w-none">
           <div className="text-sm sm:text-[0.95rem] leading-relaxed space-y-4 font-light">
-            {essayData.content.split('\n\n').map((paragraph, index) => (
-              <p key={index} className="text-neutral-900 dark:text-neutral-100">
-                {paragraph}
-              </p>
-            ))}
+            {essayData.content.split('\n\n').map((paragraph, index) => {
+              // Convert ratemycompany.ca to a link
+              const parts = paragraph.split('ratemycompany.ca');
+              return (
+                <p key={index} className="text-neutral-900 dark:text-neutral-100">
+                  {parts.length > 1 ? (
+                    <>
+                      {parts[0]}
+                      <a
+                        href="https://www.ratemycompany.ca/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="hover-underline-nudge text-neutral-900 dark:text-neutral-100"
+                      >
+                        ratemycompany.ca
+                      </a>
+                      {parts.slice(1).join('ratemycompany.ca')}
+                    </>
+                  ) : (
+                    paragraph
+                  )}
+                </p>
+              );
+            })}
           </div>
         </article>
 

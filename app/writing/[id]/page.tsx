@@ -29,9 +29,9 @@ const essayMap: Record<string, { title: string; date: string; content: string }>
 
 Everyone has big dreams. Everyone wants to do something significant, make a lot of money, change the world. The dreams are cheap. What actually defines you is your bare minimum. The floor you refuse to go below.
 
-I got 99.2% in high school. Not because I aimed for 99.2%. I aimed for 100% and accepted nothing less. 99% was just what happened when I set the floor that high and hit a few obstacles along the way.
+For example, I got 99.2% in high school. Not because I aimed for 99.2%. I aimed for 100% and accepted nothing less. 99% was just what happened when I set the floor that high and hit a few obstacles along the way.
 
-Most people confuse goals with floors. "I want to be successful" isn't a standard. That's a direction. A floor is: what are you absolutely not willing to accept? Goals tell you where to aim. Floors tell you what happens when you're tired.
+I think most people confuse goals with floors. "I want to be successful" isn't a standard. That's a direction. A floor is: what are you absolutely not willing to accept? Goals tell you where to aim. Floors tell you what happens when you're tired.
 
 When 20+ people botted ratemycompany.ca (thanks for the traffic), my floor wasn't "well, I built something." My floor was "this has to work correctly." So I stayed up for two nights fixing it. Not because I'm particularly disciplined. Because falling below my floor wasn't an option I'd given myself.
 

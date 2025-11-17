@@ -48,9 +48,7 @@ export default function Home() {
               <span className="text-neutral-400 dark:text-neutral-600">|</span>
               <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed-1' : ''}`}>About me</a>
               <span className="text-neutral-400 dark:text-neutral-600">|</span>
-              <a href="/writing" className={`hover-underline-nudge ${shouldBounce('writing') ? 'nav-bounce-delayed-2' : ''}`}>Writing</a>
-              <span className="text-neutral-400 dark:text-neutral-600">|</span>
-              <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed-3' : ''}`}>Photos</a>
+              <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed-2' : ''}`}>Photos</a>
             </div>
           </div>
           <div>↳ Co-founder & CEO <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice white logo.png" alt="Clice AI" className="border border-neutral-300 dark:border-neutral-600 rounded" /><Label>Clice AI</Label></span></div>

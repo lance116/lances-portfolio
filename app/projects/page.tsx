@@ -77,7 +77,7 @@ const projects: Project[] = [
   {
     id: "ratemycompany",
     name: "ratemycompany.ca",
-    description: "A matchup voting platform applying 'hot or not' concept to tech companies. Users vote on company comparisons with hCaptcha-secured API, session management, and real-time leaderboards. Reached 20K users and 2M votes in 24h.",
+    description: "A matchup voting platform applying 'hot or not' concept to tech companies. Users vote on company comparisons with hCaptcha-secured API, session management, and real-time leaderboards. Got 20K users and 2M votes in 24h. Implemented measures to prevent 1K bots from getting their fav company on the podium (6M edge requests).",
     techStack: ["React", "TypeScript", "Vite", "Tailwind CSS", "Supabase", "Vercel"],
     githubUrl: "https://github.com/lance116/ratemycompany",
     websiteUrl: "https://www.ratemycompany.ca/",

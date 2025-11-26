@@ -74,10 +74,6 @@ export default function Home() {
           <div>◆ Building:</div>
           <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice white logo.png" alt="Clice AI" className="border border-neutral-300 dark:border-neutral-600 rounded" /><Label><a href="https://www.clice.ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">Clice AI</a></Label></span><span className="relative top-0">. The communication OS for loan officers.</span></div>
           <div className="ml-4">↳ Backed by <span className="inline-flex items-center align-middle gap-1"><Logo src="/YClogo.png" alt="Y Combinator" /><Label><a href="https://www.ycombinator.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Y Combinator</a></Label></span> and visionaries at <span className="inline-flex items-center align-middle gap-1"><Logo src="/a16z.jpg" alt="a16z" /><Label><a href="https://a16z.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">a16z</a></Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/soma.png" alt="Soma Capital" /><Label><a href="https://somacap.com/featured" target="_blank" rel="noreferrer" className="hover-underline-nudge">Soma Capital</a></Label></span>.</div>
-          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/ratemycompany logo.png" alt="ratemycompany.ca" /><Label><a href="https://www.ratemycompany.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">ratemycompany.ca</a></Label></span>. Got <span className="font-bold slight-italic">20K</span> users and <span className="font-bold slight-italic">2M</span> votes in <span className="font-bold slight-italic">24h</span>.</div>
-          <div className="ml-4">↳ Implemented measures to prevent <span className="font-bold slight-italic">1K</span> bots from getting their fav company on the podium (<span className="font-bold slight-italic">6M</span> edge requests).</div>
-          <div className="ml-4">↳ Startups leaderboard coming soon. 👀</div>
-          <div className="ml-4">↳ If you want your high-growth startup added please contact me!</div>
           </div>
 
         <div className="my-3 border-t border-neutral-200 dark:border-neutral-700" />
@@ -85,9 +81,9 @@ export default function Home() {
 
         {/* Reach out */}
         <div className="text-sm sm:text-[0.95rem] leading-tight space-y-2">
-          <div>◆ Please reach out if you're</div>
+          <div>◆ Please reach out if you're:</div>
           <div>↳ A fellow founder.</div>
-          <div>↳ Someone who is curious about me or what I'm doing.</div>
+          <div>↳ Someone who is curious about what I'm building.</div>
         </div>
 
         <div className="my-3 border-t border-neutral-200 dark:border-neutral-700" />

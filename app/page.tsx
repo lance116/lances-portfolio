@@ -36,7 +36,7 @@ export default function Home() {
 
   return (
     <main className="relative">
-      <div className="relative z-10 mx-auto max-w-screen-sm px-4 sm:px-0">
+      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-0">
         <div className="pt-16 sm:pt-24" />
 
         {/* Header */}
@@ -71,7 +71,7 @@ export default function Home() {
         <div className="text-lg sm:text-xl leading-tight space-y-2">
           <div>◆ Building:</div>
           <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice white logo.png" alt="Clice AI" className="border border-neutral-300 dark:border-neutral-600 rounded" /><Label><a href="https://www.clice.ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">Clice AI</a></Label></span><span className="relative top-0">. The communication OS for loan officers.</span></div>
-          <div className="ml-4">↳ Backed by <span className="inline-flex items-center align-middle gap-1"><Logo src="/YClogo.png" alt="Y Combinator" /><Label><a href="https://www.ycombinator.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Y Combinator</a></Label></span> & angels at <span className="inline-flex items-center align-middle gap-1"><Logo src="/a16z.jpg" alt="a16z" /><Label><a href="https://a16z.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">a16z</a></Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/soma.png" alt="Soma Capital" /><Label><a href="https://somacap.com/featured" target="_blank" rel="noreferrer" className="hover-underline-nudge">Soma Capital</a></Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/conduit.avif" alt="Conduit" /><Label><a href="https://www.conduit.vc/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Conduit</a></Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span>.</div>
+          <div className="ml-4">↳ Backed by <span className="inline-flex items-center align-middle gap-1"><Logo src="/YClogo.png" alt="Y Combinator" /><Label><a href="https://www.ycombinator.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Y Combinator</a></Label></span> & angels at <span className="inline-flex items-center align-middle gap-1"><Logo src="/a16z.jpg" alt="a16z" /><Label><a href="https://a16z.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">a16z</a></Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/soma.png" alt="Soma Capital" /><Label><a href="https://somacap.com/featured" target="_blank" rel="noreferrer" className="hover-underline-nudge">Soma Capital</a></Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span>.</div>
           </div>
 
         <div className="my-3 border-t border-neutral-200 dark:border-neutral-700" />
@@ -90,7 +90,7 @@ export default function Home() {
         <div className="text-lg sm:text-xl leading-tight">
           <div className="pt-4" />
           <footer className="pb-16 sm:pb-24">
-            <div className="flex items-center justify-between flex-wrap">
+            <div className="flex items-center justify-between flex-wrap gap-y-3">
               <div className="flex items-center gap-3">
                 <div>◆ Contact:</div>
                 <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-300">

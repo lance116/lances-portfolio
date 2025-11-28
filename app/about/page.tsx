@@ -36,7 +36,7 @@ export default function About() {
 
   return (
     <main className="relative">
-      <div className="relative z-10 mx-auto max-w-screen-sm px-4 sm:px-0">
+      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-0">
         <div className="pt-16 sm:pt-24" />
 
         {/* Header */}
@@ -67,7 +67,7 @@ export default function About() {
         <div className="text-lg sm:text-xl leading-tight">
           <div className="pt-4" />
           <footer className="pb-16 sm:pb-24">
-            <div className="flex items-center justify-between flex-wrap">
+            <div className="flex items-center justify-between flex-wrap gap-y-3">
               <div className="flex items-center gap-3">
                 <div>◆ Contact:</div>
                 <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-300">

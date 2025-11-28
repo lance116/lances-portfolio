@@ -114,7 +114,7 @@ export default function Projects() {
 
   return (
     <main className="relative">
-      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-0">
+      <div className="relative z-10 mx-auto max-w-[820px] px-4 sm:px-0">
         <div className="pt-16 sm:pt-24" />
 
         {/* Header */}

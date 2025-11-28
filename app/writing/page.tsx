@@ -13,7 +13,7 @@ function Logo({ src, alt, size = 26, className = "" }: { src: string; alt: strin
         alt={alt}
         width={size}
         height={size}
-        className={`h-[26px] w-[26px] object-contain align-middle ${className}`}
+        className={`h-[18px] w-[18px] sm:h-[26px] sm:w-[26px] object-contain align-middle ${className}`}
       />
     </span>
   );
@@ -44,7 +44,7 @@ export default function Writing() {
         <div className="pt-16 sm:pt-24" />
 
         {/* Header */}
-        <div className="text-lg sm:text-xl leading-tight space-y-2">
+        <div className="text-sm sm:text-xl leading-tight space-y-2">
           <div className="flex items-center justify-between">
             <h1 className="underline underline-offset-[3px] font-extralight">◆ Writing</h1>
             <div className="flex items-center gap-2 font-extralight">
@@ -71,10 +71,10 @@ export default function Writing() {
               className="block group"
             >
               <div className="space-y-2">
-                <div className="text-lg sm:text-xl font-extralight hover-underline-nudge inline-block">
+                <div className="text-sm sm:text-xl font-extralight hover-underline-nudge inline-block">
                   {essay.title}
                 </div>
-                <div className="text-base sm:text-lg text-neutral-600 dark:text-neutral-400">
+                <div className="text-xs sm:text-lg text-neutral-600 dark:text-neutral-400">
                   {essay.description}
                 </div>
                 <div className="text-xs text-neutral-500 dark:text-neutral-500">
@@ -96,7 +96,7 @@ export default function Writing() {
         <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
 
         {/* Back to Home */}
-        <div className="text-lg sm:text-xl leading-tight my-6">
+        <div className="text-sm sm:text-xl leading-tight my-6">
           <a href="/" className="hover-underline-nudge font-extralight">
             ← Back to home
           </a>
@@ -105,15 +105,15 @@ export default function Writing() {
         <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
 
         {/* Contact */}
-        <div className="text-lg sm:text-xl leading-tight">
+        <div className="text-sm sm:text-xl leading-tight">
           <div className="pt-4" />
           <footer className="pb-16 sm:pb-24">
             <div className="flex items-center justify-between flex-wrap gap-y-3">
               <div className="flex items-center gap-3">
                 <div>◆ Contact:</div>
                 <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-300">
-                  <a className="inline-flex items-center gap-1" href="mailto:lance.yan.business@gmail.com"><Mail size={18} /><span className="hover-underline-nudge">Email</span></a>
-                  <a className="inline-flex items-center gap-1" href="https://github.com/lance116" target="_blank" rel="noreferrer"><Github size={18} /><span className="hover-underline-nudge">GitHub</span></a>
+                  <a className="inline-flex items-center gap-1" href="mailto:lance.yan.business@gmail.com"><Mail size={14} className="sm:w-[18px] sm:h-[18px]" /><span className="hover-underline-nudge">Email</span></a>
+                  <a className="inline-flex items-center gap-1" href="https://github.com/lance116" target="_blank" rel="noreferrer"><Github size={14} className="sm:w-[18px] sm:h-[18px]" /><span className="hover-underline-nudge">GitHub</span></a>
                   <a className="inline-flex items-center gap-1" href="https://x.com/lanceyyan/" target="_blank" rel="noreferrer"><Logo src="/X.png" alt="X" /><span className="hover-underline-nudge">Twitter</span></a>
                   <a className="inline-flex items-center gap-1" href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer"><Logo src="/linkedin.webp" alt="LinkedIn" /><span className="hover-underline-nudge">LinkedIn</span></a>
                 </div>

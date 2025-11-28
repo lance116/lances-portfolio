@@ -14,7 +14,7 @@ function Logo({ src, alt, size = 26, className = "" }: { src: string; alt: strin
         alt={alt}
         width={size}
         height={size}
-        className={`h-[26px] w-[26px] object-contain align-middle ${className}`}
+        className={`h-[18px] w-[18px] sm:h-[26px] sm:w-[26px] object-contain align-middle ${className}`}
       />
     </span>
   );
@@ -127,7 +127,7 @@ export default function EssayPage({ params }: EssayPageProps) {
 
         {/* Header */}
         <div className="space-y-6">
-          <div className="flex items-center justify-end gap-2 text-lg sm:text-xl font-extralight">
+          <div className="flex items-center justify-end gap-2 text-sm sm:text-xl font-extralight">
             <a href="/" className={`hover-underline-nudge ${shouldBounce('home') ? 'nav-bounce' : ''}`}>Home</a>
             <span className="text-neutral-400 dark:text-neutral-600">|</span>
             <a href="/writing" className={`hover-underline-nudge ${shouldBounce('writing') ? 'nav-bounce-delayed-1' : ''}`}>Writing</a>
@@ -152,7 +152,7 @@ export default function EssayPage({ params }: EssayPageProps) {
 
         {/* Essay Content */}
         <article className="prose prose-sm sm:prose-base dark:prose-invert max-w-none">
-          <div className="text-lg sm:text-xl leading-relaxed space-y-4 font-light">
+          <div className="text-sm sm:text-xl leading-relaxed space-y-4 font-light">
             {essayData.content.split('\n\n').map((paragraph, index) => {
               // Convert ratemycompany.ca to a link
               const parts = paragraph.split('ratemycompany.ca');
@@ -183,7 +183,7 @@ export default function EssayPage({ params }: EssayPageProps) {
         <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
 
         {/* Navigation */}
-        <div className="text-lg sm:text-xl leading-tight space-y-2">
+        <div className="text-sm sm:text-xl leading-tight space-y-2">
           <div className="flex items-center gap-4">
             <a href="/writing" className="hover-underline-nudge font-extralight">
               ← Back to writing
@@ -198,15 +198,15 @@ export default function EssayPage({ params }: EssayPageProps) {
         <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
 
         {/* Contact */}
-        <div className="text-lg sm:text-xl leading-tight">
+        <div className="text-sm sm:text-xl leading-tight">
           <div className="pt-4" />
           <footer className="pb-16 sm:pb-24">
             <div className="flex items-center justify-between flex-wrap gap-y-3">
               <div className="flex items-center gap-3">
                 <div>◆ Contact:</div>
                 <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-300">
-                  <a className="inline-flex items-center gap-1" href="mailto:lance.yan.business@gmail.com"><Mail size={18} /><span className="hover-underline-nudge">Email</span></a>
-                  <a className="inline-flex items-center gap-1" href="https://github.com/lance116" target="_blank" rel="noreferrer"><Github size={18} /><span className="hover-underline-nudge">GitHub</span></a>
+                  <a className="inline-flex items-center gap-1" href="mailto:lance.yan.business@gmail.com"><Mail size={14} className="sm:w-[18px] sm:h-[18px]" /><span className="hover-underline-nudge">Email</span></a>
+                  <a className="inline-flex items-center gap-1" href="https://github.com/lance116" target="_blank" rel="noreferrer"><Github size={14} className="sm:w-[18px] sm:h-[18px]" /><span className="hover-underline-nudge">GitHub</span></a>
                   <a className="inline-flex items-center gap-1" href="https://x.com/lanceyyan/" target="_blank" rel="noreferrer"><Logo src="/X.png" alt="X" /><span className="hover-underline-nudge">Twitter</span></a>
                   <a className="inline-flex items-center gap-1" href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer"><Logo src="/linkedin.webp" alt="LinkedIn" /><span className="hover-underline-nudge">LinkedIn</span></a>
                 </div>

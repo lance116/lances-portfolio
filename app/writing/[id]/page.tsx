@@ -183,7 +183,7 @@ export default function EssayPage({ params }: EssayPageProps) {
         <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
 
         {/* Navigation */}
-        <div className="text-sm sm:text-xl leading-tight space-y-2">
+        <div className="text-sm sm:text-xl leading-tight space-y-3">
           <div className="flex items-center gap-4">
             <a href="/writing" className="hover-underline-nudge font-extralight">
               ← Back to writing

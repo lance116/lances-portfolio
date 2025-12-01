@@ -47,7 +47,7 @@ export default function Photography() {
         <div className="pt-16 sm:pt-24" />
 
         {/* Header */}
-        <div className="text-sm sm:text-xl leading-tight space-y-2">
+        <div className="text-sm sm:text-xl leading-tight space-y-3">
           <div className="flex items-center justify-between">
             <h1 className="underline underline-offset-[3px] font-extralight">◆ Photography</h1>
             <div className="flex items-center gap-2 font-extralight">

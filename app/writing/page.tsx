@@ -44,7 +44,7 @@ export default function Writing() {
         <div className="pt-16 sm:pt-24" />
 
         {/* Header */}
-        <div className="text-sm sm:text-xl leading-tight space-y-2">
+        <div className="text-sm sm:text-xl leading-tight space-y-3">
           <div className="flex items-center justify-between">
             <h1 className="underline underline-offset-[3px] font-extralight">◆ Writing</h1>
             <div className="flex items-center gap-2 font-extralight">
@@ -70,7 +70,7 @@ export default function Writing() {
               href={`/writing/${essay.id}`}
               className="block group"
             >
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <div className="text-sm sm:text-xl font-extralight hover-underline-nudge inline-block">
                   {essay.title}
                 </div>

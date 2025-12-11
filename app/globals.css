@@ -68,14 +68,25 @@
   * {
     @apply border-border;
   }
+  html {
+    @apply bg-background;
+    min-height: 100%;
+  }
   body {
     @apply bg-background text-foreground;
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height for mobile */
   }
-  
+
   /* Smooth transitions only when theme-transitioning class is present */
   html.theme-transitioning,
   html.theme-transitioning * {
     transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
+  }
+
+  /* Prevent white flash during theme transitions */
+  html.theme-transitioning {
+    overflow-x: hidden;
   }
 }
 

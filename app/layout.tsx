@@ -4,6 +4,7 @@ import './globals.css'
 import { SplashCursor } from '@/components/ui/splash-cursor'
 import { Analytics } from '@vercel/analytics/react'
 import { ThemeProvider } from '@/components/theme-provider'
+import { MoreSpaceZoom } from '@/components/more-space-zoom'
 
 const inter = Inter({ subsets: ['latin'], weight: ['200','300'] })
 
@@ -29,6 +30,8 @@ export default function RootLayout({
                 if (theme === 'dark') {
                   document.documentElement.classList.add('dark');
                 }
+                // Ensure no white flash on page load
+                document.documentElement.style.backgroundColor = theme === 'dark' ? '#000' : '#fff';
               })();
             `,
           }}
@@ -36,6 +39,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} antialiased`}>
         <ThemeProvider>
+          <MoreSpaceZoom />
           <SplashCursor />
           {children}
           <Analytics />

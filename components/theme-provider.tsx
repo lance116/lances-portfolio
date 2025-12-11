@@ -35,14 +35,17 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
-    
+
     // Add transitioning class
     document.documentElement.classList.add('theme-transitioning');
-    
+
+    // Update inline background to prevent white line flash
+    document.documentElement.style.backgroundColor = newTheme === 'dark' ? '#000' : '#fff';
+
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
     document.documentElement.classList.toggle('dark', newTheme === 'dark');
-    
+
     // Remove transitioning class after transition completes
     setTimeout(() => {
       document.documentElement.classList.remove('theme-transitioning');

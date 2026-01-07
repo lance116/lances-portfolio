@@ -1188,10 +1188,12 @@ function SplashCursor({
     }
 
     function getCanvasRelativePosition(clientX: number, clientY: number) {
-      const rect = canvas!.getBoundingClientRect();
+      // Use window dimensions since canvas is fixed fullscreen
+      const scaleX = canvas!.width / window.innerWidth;
+      const scaleY = canvas!.height / window.innerHeight;
       return {
-        x: (clientX - rect.left) * (canvas!.width / rect.width),
-        y: (clientY - rect.top) * (canvas!.height / rect.height)
+        x: clientX * scaleX,
+        y: clientY * scaleY
       };
     }
 

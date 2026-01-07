@@ -15,13 +15,11 @@ export function ThemeToggle() {
   if (!mounted) {
     return (
       <button
-        className="inline-flex items-center gap-1 text-sm sm:text-xl text-neutral-700 dark:text-neutral-300 hover-underline-nudge whitespace-nowrap"
-        style={{ verticalAlign: 'middle', position: 'relative', top: '-2px' }}
+        className="hover:opacity-60 transition-opacity"
         aria-label="Toggle theme"
         disabled
       >
-        <div style={{ width: 14, height: 14, display: 'inline-block', verticalAlign: 'middle' }} />
-        <span style={{ display: 'inline-block', verticalAlign: 'middle', opacity: 0 }}>Loading</span>
+        <Sun size={22} />
       </button>
     );
   }
@@ -29,21 +27,10 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="inline-flex items-center gap-1 text-sm sm:text-xl text-neutral-700 dark:text-neutral-300 hover-underline-nudge whitespace-nowrap"
-      style={{ verticalAlign: 'middle', position: 'relative', top: '-2px' }}
+      className="hover:opacity-60 transition-opacity"
       aria-label="Toggle theme"
     >
-      {theme === 'light' ? (
-        <>
-          <Moon size={14} className="sm:w-[18px] sm:h-[18px]" style={{ display: 'inline-block', verticalAlign: 'middle' }} />
-          <span style={{ display: 'inline-block', verticalAlign: 'middle' }}>Dark mode</span>
-        </>
-      ) : (
-        <>
-          <Sun size={14} className="sm:w-[18px] sm:h-[18px]" style={{ display: 'inline-block', verticalAlign: 'middle' }} />
-          <span style={{ display: 'inline-block', verticalAlign: 'middle' }}>Light mode</span>
-        </>
-      )}
+      {theme === 'light' ? <Moon size={22} /> : <Sun size={22} />}
     </button>
   );
 }

@@ -1111,12 +1111,12 @@ function SplashCursor({
     }
 
     function generateColor() {
-      // Favor darker tones: moderate saturation, lower value
+      // Rich rainbow colors - not too bright, not too dark
       const hue = Math.random();
-      const saturation = 0.85; // rich but not neon
-      const value = 0.1 + Math.random() * 0.2; // 0.3–0.5 keeps colors dark
+      const saturation = 0.85 + Math.random() * 0.15; // 0.85-1.0 for rich colors
+      const value = 0.45 + Math.random() * 0.2; // 0.45-0.65 for medium brightness
       let c = HSVtoRGB(hue, saturation, value);
-      return c; 
+      return c;
     }
 
     function HSVtoRGB(h: number, s: number, v: number) {
@@ -1340,9 +1340,14 @@ function SplashCursor({
   ]);
 
   return (
-    <div className="fixed top-0 left-0 pointer-events-none" style={{ zIndex: -1 }}>
-      <canvas ref={canvasRef} id="fluid" className="w-screen h-screen" />
-    </div>
+    <>
+      {/* Background layer */}
+      <div className="fixed top-0 left-0 right-0 bottom-0 bg-background" style={{ zIndex: -2 }} />
+      {/* Fluid canvas layer */}
+      <div className="fixed top-0 left-0 right-0 bottom-0 pointer-events-none" style={{ zIndex: -1 }}>
+        <canvas ref={canvasRef} id="fluid" style={{ width: '100%', height: '100%', display: 'block' }} />
+      </div>
+    </>
   );
 }
 

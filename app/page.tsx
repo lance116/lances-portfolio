@@ -36,14 +36,36 @@ export default function Home() {
 
   return (
     <main className="relative">
-      <div className="relative z-10 mx-auto max-w-[820px] px-4 sm:px-0">
+      <div className="relative z-10 mx-auto max-w-[1400px] px-4 md:px-12 flex">
+        {/* Left Sidebar - Desktop only */}
+        <aside className="hidden md:block fixed w-[120px] pt-16 sm:pt-24 text-sm sm:text-xl text-neutral-900 dark:text-neutral-100 left-[max(48px,calc(50%-652px))]">
+          <nav className="space-y-12">
+            <a href="/about" className={`block hover:opacity-60 transition-opacity ${shouldBounce('about') ? 'nav-bounce' : ''}`}>About</a>
+            <a href="/projects" className={`block hover:opacity-60 transition-opacity ${shouldBounce('projects') ? 'nav-bounce-delayed-1' : ''}`}>Projects</a>
+            <a href="/photography" className={`block hover:opacity-60 transition-opacity ${shouldBounce('photography') ? 'nav-bounce-delayed-2' : ''}`}>Photos</a>
+          </nav>
+          {/* Contact icons */}
+          <div className="flex flex-col gap-[19px] mt-12 text-neutral-700 dark:text-neutral-300 pl-[14px]">
+            <a href="https://x.com/lanceyyan/" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity"><Logo src="/X.png" alt="X" /></a>
+            <a href="https://github.com/lance116" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity"><Github size={26} /></a>
+            <a href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity"><Logo src="/linkedin.webp" alt="LinkedIn" /></a>
+            <a href="mailto:lance.yan.business@gmail.com" className="hover:opacity-60 transition-opacity"><Mail size={26} /></a>
+          </div>
+        </aside>
+
+        <div className="flex-1 md:ml-[140px]">
         <div className="pt-16 sm:pt-24" />
 
         {/* Header */}
         <div className="text-sm sm:text-xl leading-tight space-y-3">
           <div className="flex items-center justify-between">
-            <h1 className="underline underline-offset-[3px] font-extralight">◆ Lance Yan</h1>
-            <div className="flex items-center gap-2 font-extralight">
+            <h1 className="underline underline-offset-[3px] font-extralight">Lance Yan</h1>
+            {/* Theme toggle - top right on desktop */}
+            <div className="hidden md:block">
+              <ThemeToggle />
+            </div>
+            {/* Mobile nav */}
+            <div className="flex md:hidden items-center gap-2 font-extralight">
               <a href="/projects" className={`hover-underline-nudge ${shouldBounce('projects') ? 'nav-bounce' : ''}`}>Projects</a>
               <span className="text-neutral-400 dark:text-neutral-600">|</span>
               <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed-1' : ''}`}>About me</a>
@@ -51,58 +73,41 @@ export default function Home() {
               <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed-2' : ''}`}>Photos</a>
             </div>
           </div>
-          <div>↳ Co-founder & CEO <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice white logo.png" alt="Clice AI" className="border border-neutral-300 dark:border-neutral-600 rounded" /><Label><a href="https://www.clice.ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">Clice AI</a></Label></span></div>
         </div>
 
-        <div className="my-3 border-t border-neutral-200 dark:border-neutral-700" />
+        {/* Currently */}
+        <div className="text-sm sm:text-xl leading-tight space-y-3 mt-6">
+          <div>◆ Currently:</div>
+          <div>↳ Co-Founder & CEO at <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice icon.png" alt="Clice AI" /><Label><a href="https://www.clice.ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">Clice AI</a></Label></span></div>
+          <div className="ml-4">↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/YClogo.png" alt="Y Combinator" /><Label><a href="https://www.ycombinator.com/companies/clice-ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">YC W26</a></Label></span></div>
+        </div>
+
+        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
 
         {/* Previously */}
         <div className="text-sm sm:text-xl leading-tight space-y-3">
           <div>◆ Previously:</div>
-          <div>↳ CS <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span></div>
-          <div>↳ Software Engineer/Builder at <span className="inline-flex items-center align-middle gap-1"><Logo src="/kalshi logo.png" alt="Kalshi" /><Label><a href="https://kalshi.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Kalshi</a></Label></span></div>
-          <div>↳ Lead Software engineer at <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span>'s AI organization, <span className="inline-flex items-center align-middle gap-1"><Logo src="/wat.jpeg" alt="wat.ai" /><Label><a href="https://watai.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">wat.ai</a></Label></span></div>
-          <div>↳ Software Engineer Intern at <span className="inline-flex items-center align-middle gap-1"><Logo src="/burnaby schools logo.jpeg" alt="Burnaby Schools" /><Label><a href="https://burnabyschools.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Burnaby Schools</a></Label></span> and <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealth logo.png" alt="Stealth Startups" /><Label>Stealth Startups</Label></span>.</div>
+          <div>↳ CS at <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label>UWaterloo</Label></span></div>
+          <div className="ml-4">↳ First semester dropout</div>
+          <div>↳ Software Engineer/Builder at <span className="inline-flex items-center align-middle gap-1"><Logo src="/kalshi logo.png" alt="Kalshi" /><Label>Kalshi</Label></span></div>
+          <div>↳ Lead Software engineer at <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label>UWaterloo</Label></span>'s AI organization, <span className="inline-flex items-center align-middle gap-1"><Logo src="/wat.jpeg" alt="wat.ai" /><Label>wat.ai</Label></span></div>
+          <div>↳ Software Engineer Intern at <span className="inline-flex items-center align-middle gap-1"><Logo src="/burnaby schools logo.jpeg" alt="Burnaby Schools" /><Label>Burnaby Schools</Label></span> and <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealth logo.png" alt="Stealth Startups" /><Label>Stealth Startups</Label></span>.</div>
         </div>
 
-        <div className="my-3 border-t border-neutral-200 dark:border-neutral-700" />
+        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
 
         {/* Building */}
-        <div className="text-sm sm:text-xl leading-tight space-y-3">
+        <div className="text-sm sm:text-xl leading-loose space-y-3">
           <div>◆ Building:</div>
-          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice white logo.png" alt="Clice AI" className="border border-neutral-300 dark:border-neutral-600 rounded" /><Label><a href="https://www.clice.ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">Clice AI</a></Label></span><span className="relative top-0">. The communication OS for loan officers.</span></div>
-          <div className="ml-4">↳ Backed by <span className="inline-flex items-center align-middle gap-1"><Logo src="/YClogo.png" alt="Y Combinator" /><Label><a href="https://www.ycombinator.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">Combinator</a></Label></span> & angels at <span className="inline-flex items-center align-middle gap-1"><Logo src="/a16z.jpg" alt="a16z" /><Label><a href="https://a16z.com/" target="_blank" rel="noreferrer" className="hover-underline-nudge">a16z</a></Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/soma.png" alt="Soma Capital" /><Label><a href="https://somacap.com/featured" target="_blank" rel="noreferrer" className="hover-underline-nudge">Soma Capital</a></Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label><a href="https://uwaterloo.ca/" target="_blank" rel="noreferrer" className="hover-underline-nudge">UWaterloo</a></Label></span>.</div>
-          </div>
-
-        <div className="my-3 border-t border-neutral-200 dark:border-neutral-700" />
-
-
-        {/* Reach out */}
-        <div className="text-sm sm:text-xl leading-tight space-y-3">
-          <div>◆ Please reach out if you're:</div>
-          <div>↳ A fellow founder.</div>
-          <div>↳ Someone who is curious about what I'm building.</div>
+          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice icon.png" alt="Clice AI" /><Label><a href="https://www.clice.ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">Clice AI</a></Label></span> - The AI infrastructure layer for all communication.</div>
+          <div>↳ What does that mean?</div>
+          <div className="ml-4">↳ You complain about a bug in <span className="inline-flex items-center align-middle gap-1"><Logo src="/slack logo.png" alt="Slack" /><Label>Slack</Label></span> and the system knows it's already fixed in a <span className="inline-flex items-center align-middle gap-1"><Logo src="/github logo.png" alt="GitHub" /><Label>GitHub</Label></span> PR, updates the <span className="inline-flex items-center align-middle gap-1"><Logo src="/linear logo.jpeg" alt="Linear" /><Label>Linear</Label></span> ticket, and replies with the commit link before anyone on your team can react.</div>
+          <div className="ml-4">↳ You mention "we should probably talk to Sarah about this before the product launch" in <span className="inline-flex items-center align-middle gap-1"><Logo src="/slack logo.png" alt="Slack" /><Label>Slack</Label></span>. An AI agent checks your <span className="inline-flex items-center align-middle gap-1"><Logo src="/google calendar logo.png" alt="Google Calendar" /><Label>calendar</Label></span>, sees you're both free Thursday 2pm, finds Sarah's email in <span className="inline-flex items-center align-middle gap-1"><Logo src="/gmail logo.png" alt="Gmail" /><Label>Gmail</Label></span> contacts, checks her <span className="inline-flex items-center align-middle gap-1"><Logo src="/linkedin logo.png" alt="LinkedIn" /><Label>LinkedIn</Label></span> to see she recently posted about product strategy, drafts a meeting invite with context from the current <span className="inline-flex items-center align-middle gap-1"><Logo src="/slack logo.png" alt="Slack" /><Label>Slack</Label></span> thread, and books it.</div>
+          <div className="ml-4">↳ Someone asks "what's the status on the landing page?" An AI agent knows they mean the dashboard redesign, pulls the <span className="inline-flex items-center align-middle gap-1"><Logo src="/github logo.png" alt="GitHub" /><Label>GitHub</Label></span> branch status, the latest <span className="inline-flex items-center align-middle gap-1"><Logo src="/notion logo.png" alt="Notion" /><Label>Notion</Label></span> spec, the <span className="inline-flex items-center align-middle gap-1"><Logo src="/linear logo.jpeg" alt="Linear" /><Label>Linear</Label></span> ticket progress, synthesizes it into one message with links to everything.</div>
+          <div>↳ If this sounds interesting, feel free to contact me!</div>
         </div>
 
-        <div className="my-3 border-t border-neutral-200 dark:border-neutral-700" />
-
-        {/* Contact */}
-        <div className="text-sm sm:text-xl leading-tight">
-          <div className="pt-4" />
-          <footer className="pb-16 sm:pb-24">
-            <div className="flex items-center justify-between flex-wrap gap-y-3">
-              <div className="flex items-center gap-3">
-                <div>◆ Contact:</div>
-                <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-300">
-                  <a className="inline-flex items-center gap-1" href="mailto:lance.yan.business@gmail.com"><Mail size={14} className="sm:w-[18px] sm:h-[18px]" /><span className="hover-underline-nudge">Email</span></a>
-                  <a className="inline-flex items-center gap-1" href="https://github.com/lance116" target="_blank" rel="noreferrer"><Github size={14} className="sm:w-[18px] sm:h-[18px]" /><span className="hover-underline-nudge">GitHub</span></a>
-                  <a className="inline-flex items-center gap-1" href="https://x.com/lanceyyan/" target="_blank" rel="noreferrer"><Logo src="/X.png" alt="X" /><span className="hover-underline-nudge">Twitter</span></a>
-                  <a className="inline-flex items-center gap-1" href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer"><Logo src="/linkedin.webp" alt="LinkedIn" /><span className="hover-underline-nudge">LinkedIn</span></a>
-                </div>
-              </div>
-              <ThemeToggle />
-            </div>
-          </footer>
+        <div className="pb-16 sm:pb-24" />
         </div>
       </div>
     </main>

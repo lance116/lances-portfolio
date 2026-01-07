@@ -69,13 +69,17 @@
     @apply border-border;
   }
   html {
-    @apply bg-background;
     min-height: 100%;
+    background: transparent;
+    zoom: 0.85;
+    -webkit-text-size-adjust: 70%;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
     min-height: 100vh;
     min-height: 100dvh; /* Dynamic viewport height for mobile */
+    background: transparent;
+    position: relative;
   }
 
   /* Smooth transitions only when theme-transitioning class is present */

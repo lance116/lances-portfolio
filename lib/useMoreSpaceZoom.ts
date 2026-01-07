@@ -30,8 +30,9 @@ export function useMoreSpaceZoom() {
 
     function applyZoom() {
       const isMoreSpace = detectMoreSpace();
-      // More Space users get normal zoom, others get 20% out
-      document.documentElement.style.zoom = isMoreSpace ? '1' : '0.8';
+      // More Space users already have OS scaling, so less zoom needed
+      // Default/Windows users need more zoom out to match the visual size
+      document.documentElement.style.zoom = isMoreSpace ? '0.85' : '0.70';
     }
 
     applyZoom();

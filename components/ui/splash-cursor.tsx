@@ -1187,6 +1187,14 @@ function SplashCursor({
       return Math.floor(input * pixelRatio);
     }
 
+    function getCanvasRelativePosition(clientX: number, clientY: number) {
+      const rect = canvas!.getBoundingClientRect();
+      return {
+        x: (clientX - rect.left) * (canvas!.width / rect.width),
+        y: (clientY - rect.top) * (canvas!.height / rect.height)
+      };
+    }
+
     function hashCode(s: string) {
       if (s.length === 0) return 0;
       let hash = 0;
@@ -1199,9 +1207,8 @@ function SplashCursor({
 
     window.addEventListener("mousedown", (e) => {
       let pointer = pointers[0];
-      let posX = scaleByPixelRatio(e.clientX);
-      let posY = scaleByPixelRatio(e.clientY);
-      updatePointerDownData(pointer, -1, posX, posY);
+      const pos = getCanvasRelativePosition(e.clientX, e.clientY);
+      updatePointerDownData(pointer, -1, pos.x, pos.y);
       clickSplat(pointer);
     });
 
@@ -1219,21 +1226,19 @@ function SplashCursor({
       "mousemove",
       function handleFirstMouseMove(e) {
         let pointer = pointers[0];
-        let posX = scaleByPixelRatio(e.clientX);
-        let posY = scaleByPixelRatio(e.clientY);
+        const pos = getCanvasRelativePosition(e.clientX, e.clientY);
         let color = generateColor();
         startAnimation(); // start animation loop
-        updatePointerMoveData(pointer, posX, posY, color);
+        updatePointerMoveData(pointer, pos.x, pos.y, color);
         document.body.removeEventListener("mousemove", handleFirstMouseMove);
       }
     );
 
     window.addEventListener("mousemove", (e) => {
       let pointer = pointers[0];
-      let posX = scaleByPixelRatio(e.clientX);
-      let posY = scaleByPixelRatio(e.clientY);
+      const pos = getCanvasRelativePosition(e.clientX, e.clientY);
       let color = pointer.color;
-      updatePointerMoveData(pointer, posX, posY, color);
+      updatePointerMoveData(pointer, pos.x, pos.y, color);
     });
 
     document.body.addEventListener(
@@ -1242,10 +1247,9 @@ function SplashCursor({
         const touches = e.targetTouches;
         let pointer = pointers[0];
         for (let i = 0; i < touches.length; i++) {
-          let posX = scaleByPixelRatio(touches[i].clientX);
-          let posY = scaleByPixelRatio(touches[i].clientY);
+          const pos = getCanvasRelativePosition(touches[i].clientX, touches[i].clientY);
           startAnimation(); // start animation loop
-          updatePointerDownData(pointer, touches[i].identifier, posX, posY);
+          updatePointerDownData(pointer, touches[i].identifier, pos.x, pos.y);
         }
         document.body.removeEventListener("touchstart", handleFirstTouchStart);
       }
@@ -1255,9 +1259,8 @@ function SplashCursor({
       const touches = e.targetTouches;
       let pointer = pointers[0];
       for (let i = 0; i < touches.length; i++) {
-        let posX = scaleByPixelRatio(touches[i].clientX);
-        let posY = scaleByPixelRatio(touches[i].clientY);
-        updatePointerDownData(pointer, touches[i].identifier, posX, posY);
+        const pos = getCanvasRelativePosition(touches[i].clientX, touches[i].clientY);
+        updatePointerDownData(pointer, touches[i].identifier, pos.x, pos.y);
       }
     });
 
@@ -1267,9 +1270,8 @@ function SplashCursor({
         const touches = e.targetTouches;
         let pointer = pointers[0];
         for (let i = 0; i < touches.length; i++) {
-          let posX = scaleByPixelRatio(touches[i].clientX);
-          let posY = scaleByPixelRatio(touches[i].clientY);
-          updatePointerMoveData(pointer, posX, posY, pointer.color);
+          const pos = getCanvasRelativePosition(touches[i].clientX, touches[i].clientY);
+          updatePointerMoveData(pointer, pos.x, pos.y, pointer.color);
         }
       },
       false

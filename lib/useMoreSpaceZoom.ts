@@ -12,6 +12,12 @@ const MORE_SPACE_WIDTH_THRESHOLD = 1700;
 
 export function useMoreSpaceZoom() {
   useEffect(() => {
+    function isMobile(): boolean {
+      if (typeof window === 'undefined') return false;
+      const userAgent = navigator.userAgent.toLowerCase();
+      return /iphone|ipad|ipod|android|webos|blackberry|windows phone/i.test(userAgent);
+    }
+
     function detectMoreSpace(): boolean {
       if (typeof window === 'undefined') return false;
 
@@ -29,6 +35,12 @@ export function useMoreSpaceZoom() {
     }
 
     function applyZoom() {
+      // Don't apply zoom on mobile devices
+      if (isMobile()) {
+        document.documentElement.style.zoom = '1';
+        return;
+      }
+
       const isMoreSpace = detectMoreSpace();
       // More Space users already have OS scaling, so less zoom needed
       // Default/Windows users need more zoom out to match the visual size

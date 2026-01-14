@@ -103,7 +103,7 @@ export default function Home() {
           <div className="ml-4">↳ <span className="font-semibold">Sales:</span></div>
           <div className="ml-8">↳ A teammate is out sick. A hot lead replies to their email. Six hours go by. Your clone notices, pulls the deal context from your teammate's notes, and loops you in with everything you need. You respond same-day. The prospect never knew anything was wrong.</div>
           <div className="ml-4">↳ <span className="font-semibold">Engineering:</span></div>
-          <div className="ml-8">↳ You're about to go on vacation. A teammate asks your clone "what's the status on the API integration?" Your clone knows the last PR you merged, knows there's a blocker waiting on the backend team, knows you left notes in Linear about next steps. It gives them the full picture so they can pick it up without a single meeting.</div>
+          <div className="ml-8">↳ You're about to go on vacation. A teammate asks your clone "what's the status on the API integration?" Your clone knows the last <span className="inline-flex items-center align-middle gap-1"><Logo src="/github logo.png" alt="GitHub" /><Label>PR</Label></span> you merged, knows there's a blocker waiting on the backend team, knows you left notes in <span className="inline-flex items-center align-middle gap-1"><Logo src="/linear logo.jpeg" alt="Linear" /><Label>Linear</Label></span> about next steps. It gives them the full picture so they can pick it up without a single meeting.</div>
           <div>↳ If this sounds interesting, feel free to contact me!</div>
         </div>
 

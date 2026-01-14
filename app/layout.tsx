@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ['latin'], weight: ['200','300'] })
 export const metadata: Metadata = {
   title: "Lance's Portfolio",
   description: 'Built by Lance Y.',
-  icons: { icon: '/logo L.png' },
+  icons: { icon: '/lance new logo.png' },
 }
 
 export default function RootLayout({

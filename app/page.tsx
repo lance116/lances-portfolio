@@ -99,7 +99,7 @@ export default function Home() {
         {/* Building */}
         <div className="text-sm sm:text-xl leading-loose space-y-3">
           <div>◆ <span className="font-semibold">Building:</span></div>
-          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice icon.png" alt="Clice AI" /><Label><a href="https://www.clice.ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">Clice AI</a></Label></span> - Building AI clones of people that can coordinate with each other.</div>
+          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice icon.png" alt="Clice AI" /><Label><a href="https://www.clice.ai" target="_blank" rel="noreferrer" className="hover-underline-nudge font-semibold">Clice AI</a></Label></span> - Building AI clones of people that can coordinate with each other.</div>
           <div className="ml-4">↳ <span className="font-semibold">Sales:</span></div>
           <div className="ml-8">↳ A teammate is out sick. A hot lead replies to their email. Six hours go by. Your clone notices, pulls the deal context from your teammate's notes, and loops you in with everything you need. You respond same-day. The prospect never knew anything was wrong.</div>
           <div className="ml-4">↳ <span className="font-semibold">Engineering:</span></div>

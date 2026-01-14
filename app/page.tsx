@@ -59,7 +59,7 @@ export default function Home() {
         {/* Header */}
         <div className="text-sm sm:text-xl leading-tight space-y-3">
           <div className="flex items-center justify-between">
-            <h1 className="underline underline-offset-[3px] font-extralight">Lance Yan</h1>
+            <h1 className="underline underline-offset-[3px] font-semibold">Lance Yan</h1>
             {/* Theme toggle - top right on desktop */}
             <div className="hidden md:block">
               <ThemeToggle />
@@ -77,7 +77,7 @@ export default function Home() {
 
         {/* Currently */}
         <div className="text-sm sm:text-xl leading-tight space-y-3 mt-6">
-          <div>◆ Currently:</div>
+          <div>◆ <span className="font-semibold">Currently:</span></div>
           <div>↳ Co-Founder & CEO at <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice icon.png" alt="Clice AI" /><Label><a href="https://www.clice.ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">Clice AI</a></Label></span></div>
           <div className="ml-4">↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/YClogo.png" alt="Y Combinator" /><Label><a href="https://www.ycombinator.com/companies/clice-ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">YC W26</a></Label></span></div>
         </div>
@@ -86,7 +86,7 @@ export default function Home() {
 
         {/* Previously */}
         <div className="text-sm sm:text-xl leading-tight space-y-3">
-          <div>◆ Previously:</div>
+          <div>◆ <span className="font-semibold">Previously:</span></div>
           <div>↳ CS at <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label>UWaterloo</Label></span></div>
           <div className="ml-4">↳ First semester dropout</div>
           <div>↳ Software Engineer/Builder at <span className="inline-flex items-center align-middle gap-1"><Logo src="/kalshi logo.png" alt="Kalshi" /><Label>Kalshi</Label></span></div>
@@ -98,11 +98,11 @@ export default function Home() {
 
         {/* Building */}
         <div className="text-sm sm:text-xl leading-loose space-y-3">
-          <div>◆ Building:</div>
+          <div>◆ <span className="font-semibold">Building:</span></div>
           <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice icon.png" alt="Clice AI" /><Label><a href="https://www.clice.ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">Clice AI</a></Label></span> - Building AI clones of people that can coordinate with each other.</div>
-          <div className="ml-4">↳ Sales:</div>
+          <div className="ml-4">↳ <span className="font-semibold">Sales:</span></div>
           <div className="ml-8">↳ A teammate is out sick. A hot lead replies to their email. Six hours go by. Your clone notices, pulls the deal context from your teammate's notes, and loops you in with everything you need. You respond same-day. The prospect never knew anything was wrong.</div>
-          <div className="ml-4">↳ Engineering:</div>
+          <div className="ml-4">↳ <span className="font-semibold">Engineering:</span></div>
           <div className="ml-8">↳ You're about to go on vacation. A teammate asks your clone "what's the status on the API integration?" Your clone knows the last PR you merged, knows there's a blocker waiting on the backend team, knows you left notes in Linear about next steps. It gives them the full picture so they can pick it up without a single meeting.</div>
           <div>↳ If this sounds interesting, feel free to contact me!</div>
         </div>

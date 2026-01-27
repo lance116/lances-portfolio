@@ -34,7 +34,7 @@ export default function Home() {
 
         {/* Header */}
         <div className="text-sm sm:text-xl leading-tight space-y-3">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center gap-[630px]">
             <h1 className="underline underline-offset-[3px] font-semibold">Lance Yan</h1>
             {/* Social icons and theme toggle */}
             <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-300">
@@ -53,7 +53,7 @@ export default function Home() {
           <div className="ml-4">↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/YClogo.png" alt="Y Combinator" /><Label><a href="https://www.ycombinator.com/companies/clice-ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">YC W26</a></Label></span></div>
         </div>
 
-        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
+        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700 max-w-[calc(100%-300px)]" />
 
         {/* Previously */}
         <div className="text-sm sm:text-xl leading-tight space-y-3">
@@ -65,7 +65,7 @@ export default function Home() {
           <div>↳ Software Engineer Intern at <span className="inline-flex items-center align-middle gap-1"><Logo src="/burnaby schools logo.jpeg" alt="Burnaby Schools" /><Label>Burnaby Schools</Label></span> and <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealth logo.png" alt="Stealth Startups" /><Label>Stealth Startups</Label></span>.</div>
         </div>
 
-        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
+        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700 max-w-[calc(100%-300px)]" />
 
         {/* Building */}
         <div className="text-sm sm:text-xl leading-loose space-y-3">

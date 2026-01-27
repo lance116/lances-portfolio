@@ -1,9 +1,7 @@
 'use client';
 
 import Image from "next/image";
-import Link from "next/link";
-import { Mail, Github, Twitter, Linkedin } from "lucide-react";
-import { useNavigationBounce } from "../lib/useNavigationBounce";
+import { Mail } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 function Logo({ src, alt, size = 26, className = "" }: { src: string; alt: string; size?: number; className?: string }) {
@@ -27,32 +25,10 @@ const Label = ({ children }: { children: React.ReactNode }) => (
   <span className="relative -top-[1px] leading-none align-middle">{children}</span>
 );
 
-const FallbackLogo = ({ alt }: { alt: string }) => (
-  <Logo src="/YClogo.png" alt={alt} />
-);
-
 export default function Home() {
-  const { shouldBounce } = useNavigationBounce('home');
-
   return (
     <main className="relative">
       <div className="relative z-10 mx-auto max-w-[1400px] px-4 md:px-12 flex">
-        {/* Left Sidebar - Desktop only */}
-        <aside className="hidden md:block fixed w-[120px] pt-16 sm:pt-24 text-sm sm:text-xl text-neutral-900 dark:text-neutral-100 left-[max(48px,calc(50%-652px))]">
-          <nav className="space-y-12">
-            <a href="/about" className={`block hover:opacity-60 transition-opacity ${shouldBounce('about') ? 'nav-bounce' : ''}`}>About</a>
-            <a href="/projects" className={`block hover:opacity-60 transition-opacity ${shouldBounce('projects') ? 'nav-bounce-delayed-1' : ''}`}>Projects</a>
-            <a href="/photography" className={`block hover:opacity-60 transition-opacity ${shouldBounce('photography') ? 'nav-bounce-delayed-2' : ''}`}>Photos</a>
-          </nav>
-          {/* Contact icons */}
-          <div className="flex flex-col gap-[19px] mt-12 text-neutral-700 dark:text-neutral-300 pl-[14px]">
-            <a href="https://x.com/lanceyyan/" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity"><Logo src="/X.png" alt="X" /></a>
-            <a href="https://github.com/lance116" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity"><Github size={26} /></a>
-            <a href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity"><Logo src="/linkedin.webp" alt="LinkedIn" /></a>
-            <a href="mailto:lance.yan.business@gmail.com" className="hover:opacity-60 transition-opacity"><Mail size={26} /></a>
-          </div>
-        </aside>
-
         <div className="flex-1 md:ml-[140px]">
         <div className="pt-16 sm:pt-24" />
 
@@ -60,17 +36,12 @@ export default function Home() {
         <div className="text-sm sm:text-xl leading-tight space-y-3">
           <div className="flex items-center justify-between">
             <h1 className="underline underline-offset-[3px] font-semibold">Lance Yan</h1>
-            {/* Theme toggle - top right on desktop */}
-            <div className="hidden md:block">
+            {/* Social icons and theme toggle */}
+            <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-300">
+              <a href="https://x.com/lanceyyan/" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity"><Logo src="/X.png" alt="X" size={20} /></a>
+              <a href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity"><Logo src="/linkedin.webp" alt="LinkedIn" size={20} /></a>
+              <a href="mailto:lance.yan.business@gmail.com" className="hover:opacity-60 transition-opacity"><Mail size={20} /></a>
               <ThemeToggle />
-            </div>
-            {/* Mobile nav */}
-            <div className="flex md:hidden items-center gap-2 font-extralight">
-              <a href="/projects" className={`hover-underline-nudge ${shouldBounce('projects') ? 'nav-bounce' : ''}`}>Projects</a>
-              <span className="text-neutral-400 dark:text-neutral-600">|</span>
-              <a href="/about" className={`hover-underline-nudge ${shouldBounce('about') ? 'nav-bounce-delayed-1' : ''}`}>About me</a>
-              <span className="text-neutral-400 dark:text-neutral-600">|</span>
-              <a href="/photography" className={`hover-underline-nudge ${shouldBounce('photography') ? 'nav-bounce-delayed-2' : ''}`}>Photos</a>
             </div>
           </div>
         </div>
@@ -99,12 +70,9 @@ export default function Home() {
         {/* Building */}
         <div className="text-sm sm:text-xl leading-loose space-y-3">
           <div>◆ <span className="font-semibold">Building:</span></div>
-          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice icon.png" alt="Clice AI" /><Label><a href="https://www.clice.ai" target="_blank" rel="noreferrer" className="hover-underline-nudge font-semibold">Clice AI</a></Label></span> - Building AI clones of people that can coordinate with each other.</div>
-          <div className="ml-4">↳ <span className="font-semibold">Sales:</span></div>
-          <div className="ml-8">↳ A teammate is out sick. A hot lead replies to their <span className="inline-flex items-center align-middle gap-1"><Logo src="/gmail logo.png" alt="Gmail" /><Label>email</Label></span>. Six hours go by. Your clone notices, pulls the deal context from your teammate's notes, and loops you in with everything you need. You respond same-day. The prospect never knew anything was wrong.</div>
-          <div className="ml-4">↳ <span className="font-semibold">Engineering:</span></div>
-          <div className="ml-8">↳ You're about to go on vacation. A teammate asks your clone "what's the status on the API integration?" Your clone knows the last <span className="inline-flex items-center align-middle gap-1"><Logo src="/github logo.png" alt="GitHub" /><Label>PR</Label></span> you merged, knows there's a blocker waiting on the backend team, knows you left notes in <span className="inline-flex items-center align-middle gap-1"><Logo src="/linear logo.jpeg" alt="Linear" /><Label>Linear</Label></span> about next steps. It gives them the full picture so they can pick it up without a single meeting.</div>
-          <div>↳ If this sounds interesting, feel free to contact me!</div>
+          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice icon.png" alt="Clice AI" /><Label><a href="https://www.clice.ai" target="_blank" rel="noreferrer" className="hover-underline-nudge font-semibold">Clice AI</a></Label></span> - RL environments for long-horizon software engineering.</div>
+          <div className="ml-4">↳ The next generation of agents will be trained on work itself, not static benchmarks.</div>
+          <div className="ml-4">↳ We're building the worlds they'll learn in.</div>
         </div>
 
         <div className="pb-16 sm:pb-24" />

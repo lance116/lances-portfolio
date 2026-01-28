@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Mail } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useNavigationBounce } from "@/lib/useNavigationBounce";
 
 function Logo({ src, alt, size = 26, className = "" }: { src: string; alt: string; size?: number; className?: string }) {
   return (
@@ -26,6 +27,8 @@ const Label = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function Home() {
+  const { shouldBounce, markAsVisited } = useNavigationBounce('home');
+
   return (
     <main className="relative">
       <div className="relative z-10 mx-auto max-w-[1400px] px-4 md:px-12 flex">
@@ -38,8 +41,8 @@ export default function Home() {
             <h1 className="underline underline-offset-[3px] font-semibold">Lance Yan</h1>
             {/* Social icons and theme toggle */}
             <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-300">
-              <a href="https://x.com/lanceyyan/" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity"><Logo src="/X.png" alt="X" size={20} /></a>
-              <a href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer" className="hover:opacity-60 transition-opacity"><Logo src="/linkedin.webp" alt="LinkedIn" size={20} /></a>
+              <a href="https://x.com/lanceyyan/" target="_blank" rel="noreferrer" className={`hover:opacity-60 transition-opacity ${shouldBounce('x') ? 'nav-bounce' : ''}`} onClick={() => markAsVisited('x')}><Logo src="/X.png" alt="X" size={20} /></a>
+              <a href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer" className={`hover:opacity-60 transition-opacity ${shouldBounce('linkedin') ? 'nav-bounce-delayed-1' : ''}`} onClick={() => markAsVisited('linkedin')}><Logo src="/linkedin.webp" alt="LinkedIn" size={20} /></a>
               <a href="mailto:lance.yan.business@gmail.com" className="hover:opacity-60 transition-opacity"><Mail size={20} /></a>
               <ThemeToggle />
             </div>
@@ -49,7 +52,7 @@ export default function Home() {
         {/* Currently */}
         <div className="text-sm sm:text-xl leading-tight space-y-3 mt-6">
           <div>◆ <span className="font-semibold">Currently:</span></div>
-          <div>↳ Co-Founder & CEO at <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice icon.png" alt="Clice AI" /><Label><a href="https://www.clice.ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">Clice AI</a></Label></span></div>
+          <div>↳ Co-Founder & CEO at <span className="inline-flex items-center align-middle gap-1"><Logo src="/traversing logo.png" alt="Traverse" /><Label><a href="https://traverse.so" target="_blank" rel="noreferrer" className="hover-underline-nudge font-semibold">Traverse</a></Label></span></div>
           <div className="ml-4">↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/YClogo.png" alt="Y Combinator" /><Label><a href="https://www.ycombinator.com/companies/clice-ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">YC W26</a></Label></span></div>
         </div>
 
@@ -61,8 +64,8 @@ export default function Home() {
           <div>↳ CS at <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label>UWaterloo</Label></span></div>
           <div className="ml-4">↳ First semester dropout</div>
           <div>↳ Software Engineer/Builder at <span className="inline-flex items-center align-middle gap-1"><Logo src="/kalshi logo.png" alt="Kalshi" /><Label>Kalshi</Label></span></div>
-          <div>↳ Lead Software engineer at <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label>UWaterloo</Label></span>'s AI organization, <span className="inline-flex items-center align-middle gap-1"><Logo src="/wat.jpeg" alt="wat.ai" /><Label>wat.ai</Label></span></div>
-          <div>↳ Software Engineer Intern at <span className="inline-flex items-center align-middle gap-1"><Logo src="/burnaby schools logo.jpeg" alt="Burnaby Schools" /><Label>Burnaby Schools</Label></span> and <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealth logo.png" alt="Stealth Startups" /><Label>Stealth Startups</Label></span>.</div>
+          <div>↳ Lead Machine Learning Engineer at <span className="inline-flex items-center align-middle gap-1"><Logo src="/wat.jpeg" alt="wat.ai" /><Label>wat.ai</Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label>UWaterloo</Label></span>'s AI organization</div>
+          <div>↳ Software Engineer Intern at various <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealth logo.png" alt="Stealth Startups" /><Label>Stealth Startups</Label></span></div>
         </div>
 
         <div className="my-6 border-t border-neutral-200 dark:border-neutral-700 max-w-[calc(100%-300px)]" />
@@ -70,9 +73,9 @@ export default function Home() {
         {/* Building */}
         <div className="text-sm sm:text-xl leading-loose space-y-3">
           <div>◆ <span className="font-semibold">Building:</span></div>
-          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/clice icon.png" alt="Clice AI" /><Label><a href="https://www.clice.ai" target="_blank" rel="noreferrer" className="hover-underline-nudge font-semibold">Clice AI</a></Label></span> - RL environments for long-horizon software engineering.</div>
-          <div className="ml-4">↳ The next generation of agents will be trained on work itself, not static benchmarks.</div>
-          <div className="ml-4">↳ We're building the worlds they'll learn in.</div>
+          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/traversing logo.png" alt="Traverse" /><Label><a href="https://traverse.so" target="_blank" rel="noreferrer" className="hover-underline-nudge font-semibold">Traverse</a></Label></span> - Reinforcement learning environments for long-horizon agent journeys.</div>
+          <div className="ml-4">↳ Enabling the automation of all economically valuable work, starting with software engineering.</div>
+          <div className="ml-4">↳ The path to general intelligence is to <span className="inline-flex items-center align-middle gap-1"><Logo src="/traversing logo.png" alt="Traverse" /><Label><a href="https://traverse.so" target="_blank" rel="noreferrer" className="hover-underline-nudge font-semibold">traverse</a></Label></span> through every domain where work happens.</div>
         </div>
 
         <div className="pb-16 sm:pb-24" />

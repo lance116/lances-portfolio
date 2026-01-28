@@ -45,9 +45,20 @@ export function useNavigationBounce(currentPage: string) {
   const shouldBounce = (page: string) => {
     // Home page never bounces since users land there first
     if (page === 'home') return false;
-    
+
     return !visitedPages.has(page);
   };
 
-  return { shouldBounce };
+  const markAsVisited = (page: string) => {
+    setVisitedPages(prev => {
+      const newVisitedPages = new Set(prev);
+      newVisitedPages.add(page);
+      if (sessionId) {
+        localStorage.setItem(`visitedPages_${sessionId}`, JSON.stringify(Array.from(newVisitedPages)));
+      }
+      return newVisitedPages;
+    });
+  };
+
+  return { shouldBounce, markAsVisited };
 }

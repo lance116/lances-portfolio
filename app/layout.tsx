@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ['latin'], weight: ['200','300'] })
 
 export const metadata: Metadata = {
   title: "Lance's Portfolio",
-  description: 'Built by Lance Y, Co-Founder and CEO of Clice AI (YC W26)',
+  description: 'Built by Lance Y, Co-Founder and CEO of Traverse (YC W26)',
   icons: { icon: '/lance new logo.png' },
 }
 

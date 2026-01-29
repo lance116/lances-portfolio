@@ -31,13 +31,12 @@ export default function Home() {
 
   return (
     <main className="relative">
-      <div className="relative z-10 mx-auto max-w-[1400px] px-4 md:px-12 flex">
-        <div className="flex-1 md:ml-[140px]">
+      <div className="relative z-10 mx-auto max-w-[1030px] px-4 md:px-12">
         <div className="pt-16 sm:pt-24" />
 
         {/* Header */}
         <div className="text-sm sm:text-xl leading-tight space-y-3">
-          <div className="flex items-center gap-[630px]">
+          <div className="flex items-center justify-between">
             <h1 className="underline underline-offset-[3px] font-semibold">Lance Yan</h1>
             {/* Social icons and theme toggle */}
             <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-300">
@@ -56,7 +55,7 @@ export default function Home() {
           <div className="ml-4">↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/YClogo.png" alt="Y Combinator" /><Label><a href="https://www.ycombinator.com/companies/clice-ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">YC W26</a></Label></span></div>
         </div>
 
-        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700 max-w-[calc(100%-300px)]" />
+        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
 
         {/* Previously */}
         <div className="text-sm sm:text-xl leading-tight space-y-3">
@@ -68,7 +67,7 @@ export default function Home() {
           <div>↳ Software Engineer Intern at various <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealth logo.png" alt="Stealth Startups" /><Label>Stealth Startups</Label></span></div>
         </div>
 
-        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700 max-w-[calc(100%-300px)]" />
+        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
 
         {/* Building */}
         <div className="text-sm sm:text-xl leading-loose space-y-3">
@@ -79,7 +78,6 @@ export default function Home() {
         </div>
 
         <div className="pb-16 sm:pb-24" />
-        </div>
       </div>
     </main>
   );

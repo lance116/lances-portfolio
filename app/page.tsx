@@ -63,8 +63,8 @@ export default function Home() {
           <div>↳ CS at <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label>UWaterloo</Label></span></div>
           <div className="ml-4">↳ First semester dropout</div>
           <div>↳ Software Engineer/Builder at <span className="inline-flex items-center align-middle gap-1"><Logo src="/kalshi logo.png" alt="Kalshi" /><Label>Kalshi</Label></span></div>
+          <div>↳ Founding Engineer at <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealth logo.png" alt="Stealth Startup" /><Label>Stealth Startup</Label></span></div>
           <div>↳ Lead Machine Learning Engineer at <span className="inline-flex items-center align-middle gap-1"><Logo src="/wat.jpeg" alt="wat.ai" /><Label>wat.ai</Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label>UWaterloo</Label></span>'s AI organization</div>
-          <div>↳ Software Engineer Intern at various <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealth logo.png" alt="Stealth Startups" /><Label>Stealth Startups</Label></span></div>
         </div>
 
         <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />

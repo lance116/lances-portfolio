@@ -72,9 +72,8 @@ export default function Home() {
         {/* Building */}
         <div className="text-sm sm:text-xl leading-loose space-y-3">
           <div>◆ <span className="font-semibold">Building:</span></div>
-          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/traversing logo.png" alt="Traverse" /><Label><a href="https://traverse.so" target="_blank" rel="noreferrer" className="hover-underline-nudge font-semibold">Traverse</a></Label></span> - Reinforcement learning environments for long-horizon agent journeys.</div>
-          <div className="ml-4">↳ Enabling the automation of all economically valuable work, starting with software engineering.</div>
-          <div className="ml-4">↳ The path to general intelligence is to <span className="inline-flex items-center align-middle gap-1"><Logo src="/traversing logo.png" alt="Traverse" /><Label><a href="https://traverse.so" target="_blank" rel="noreferrer" className="hover-underline-nudge font-semibold">traverse</a></Label></span> through every domain where work happens.</div>
+          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/traversing logo.png" alt="Traverse" /><Label><a href="https://traverse.so" target="_blank" rel="noreferrer" className="hover-underline-nudge font-semibold">Traverse</a></Label></span> - Data research company that sells reinforcement learning environments to frontier AI labs.</div>
+          <div className="ml-4">↳ Our goal is to accelerate humanity to AGI as soon as possible. We are particularly interested in non-deterministic, taste-dependent work.</div>
         </div>
 
         <div className="pb-16 sm:pb-24" />

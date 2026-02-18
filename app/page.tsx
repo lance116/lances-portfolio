@@ -31,7 +31,7 @@ export default function Home() {
 
   return (
     <main className="relative">
-      <div className="relative z-10 mx-auto max-w-[1030px] px-4 md:px-12">
+      <div className="relative z-10 mx-auto max-w-[960px] px-4 md:px-12">
         <div className="pt-16 sm:pt-24" />
 
         {/* Header */}

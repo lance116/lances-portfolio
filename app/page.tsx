@@ -52,7 +52,7 @@ export default function Home() {
         <div className="text-sm sm:text-xl leading-tight space-y-3 mt-6">
           <div>◆ <span className="font-semibold">Currently:</span></div>
           <div>↳ Co-Founder & CEO at <span className="inline-flex items-center align-middle gap-1"><Logo src="/traversing logo.png" alt="Traverse" /><Label><a href="https://traverse.so" target="_blank" rel="noreferrer" className="hover-underline-nudge font-semibold">Traverse</a></Label></span></div>
-          <div className="ml-4">↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/YClogo.png" alt="Y Combinator" /><Label><a href="https://www.ycombinator.com/companies/clice-ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">YC W26</a></Label></span></div>
+          <div className="ml-4">↳ Backed by <span className="inline-flex items-center align-middle gap-1"><Logo src="/YClogo.png" alt="Y Combinator" /><Label><a href="https://www.ycombinator.com/companies/clice-ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">Y Combinator</a></Label></span> with angels from <span className="inline-flex items-center align-middle gap-1"><Logo src="/OAI.webp" alt="OpenAI" /><Label>OpenAI</Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/GDM.png" alt="Google DeepMind" /><Label>Google DeepMind</Label></span>, and <span className="inline-flex items-center align-middle gap-1"><Logo src="/AN.png" alt="Anthropic" /><Label>Anthropic</Label></span></div>
         </div>
 
         <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
@@ -72,8 +72,8 @@ export default function Home() {
         {/* Building */}
         <div className="text-sm sm:text-xl leading-loose space-y-3">
           <div>◆ <span className="font-semibold">Building:</span></div>
-          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/traversing logo.png" alt="Traverse" /><Label><a href="https://traverse.so" target="_blank" rel="noreferrer" className="hover-underline-nudge font-semibold">Traverse</a></Label></span> - Data research company that sells reinforcement learning environments to frontier AI labs.</div>
-          <div className="ml-4">↳ Our goal is to accelerate humanity to AGI as soon as possible. We are particularly interested in non-deterministic, taste-dependent work.</div>
+          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/traversing logo.png" alt="Traverse" /><Label><a href="https://traverse.so" target="_blank" rel="noreferrer" className="hover-underline-nudge font-semibold">Traverse</a></Label></span> - Applied data research lab that partners with frontier AI labs to produce the training data required for models to develop taste and judgment.</div>
+          <div className="ml-4">↳ Our long-term goal is to give frontier models the foundations needed to perform and eventually surpass human white-collar work, accelerating the path toward artificial superintelligence.</div>
         </div>
 
         <div className="pb-16 sm:pb-24" />

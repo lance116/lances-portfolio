@@ -92,7 +92,7 @@ export default function Home() {
 
   useEffect(() => {
     document.documentElement.classList.add('dark');
-    const check = () => setIsNarrow(window.innerWidth < 768);
+    const check = () => setIsNarrow(window.innerWidth < 1024 || window.innerWidth < window.innerHeight);
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
@@ -119,7 +119,7 @@ export default function Home() {
           <div className="px-6 pt-12 pb-8" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
             <BioContent dark onSwitch={handleSwitch} />
           </div>
-          <div className="w-full" style={{ height: '70vh' }}>
+          <div className="w-full" style={{ aspectRatio: '16 / 9' }}>
             <AsciiDither
               key="fish"
               src={['/fish3.mp4', '/fish4.mp4', '/fish2.mp4']}
@@ -172,7 +172,7 @@ export default function Home() {
           <div className="px-6 pt-12 pb-8" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
             <BioContent dark onSwitch={handleSwitch} />
           </div>
-          <div className="w-full" style={{ height: '70vh' }}>
+          <div className="w-full" style={{ aspectRatio: '16 / 9' }}>
             <AsciiDither
               key="orchids"
               src="/orchids.mp4"
@@ -225,18 +225,19 @@ export default function Home() {
   if (isNarrow) {
     return (
       <main className="min-h-screen bg-white text-neutral-800 transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
-        <div className="px-6 pt-12 pb-8" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
+        <div className="mx-auto px-6 sm:px-8 pt-12 pb-8 max-w-[640px] lg:max-w-[820px]" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
           <BioContent dark={false} onSwitch={handleSwitch} />
         </div>
-        <div className="w-full" style={{ height: '70vh' }}>
+        <div className="w-full overflow-hidden" style={{ aspectRatio: '9 / 16' }}>
           <AsciiDither
             src="/butterfly.mp4"
-            cols={120}
+            cols={140}
             color="source"
             threshold={0.22}
             fill
             cover
             loopPauseMs={400}
+            offsetYSchedule={[[0, '-20%'], [4.2014, '0%'], [9.4918, '-20%']]}
             className="w-full h-full"
           />
         </div>
@@ -262,8 +263,8 @@ export default function Home() {
         </div>
 
         {/* Text right */}
-        <div className="w-[42%] flex items-center relative z-10">
-          <div className="px-8 sm:px-12 lg:px-16 py-16 sm:py-24 w-[820px] max-w-[820px] flex-shrink-0 -translate-x-[245px] bg-white">
+        <div className="w-[42%] flex items-center justify-center relative z-10">
+          <div className="px-6 py-16 sm:py-24 w-full max-w-[440px]">
             <BioContent dark={false} onSwitch={handleSwitch} />
           </div>
         </div>

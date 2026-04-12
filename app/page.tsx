@@ -122,7 +122,7 @@ export default function Home() {
   if (mode === 'fish') {
     if (isNarrow) {
       return (
-        <main className="min-h-screen bg-black text-white flex flex-col justify-center transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
+        <main className="h-[100dvh] overflow-hidden bg-black text-white flex flex-col justify-center transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
           <div className="w-full overflow-hidden" style={{ aspectRatio: '16 / 9' }}>
             <AsciiDither
               key="fish"
@@ -180,7 +180,7 @@ export default function Home() {
   if (mode === 'orchids') {
     if (isNarrow) {
       return (
-        <main className="min-h-screen bg-black text-white flex flex-col justify-center transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
+        <main className="h-[100dvh] overflow-hidden bg-black text-white flex flex-col justify-center transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
           <div className="px-6 pb-6 mx-auto w-full max-w-[480px]" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
             <BioContent dark onSwitch={handleSwitch} />
           </div>

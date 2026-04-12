@@ -52,6 +52,10 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     let alive = true;
     const dpr = window.devicePixelRatio || 1;
     let pendingPaintCallback: (() => void) | null = null;
+    // Reused across frames: groups cells by quantized color+alpha so we can
+    // emit one fill() per group instead of one per cell. Keys are packed
+    // numbers to avoid per-cell string allocation (qr<<15 | qg<<10 | qb<<5 | aQ).
+    const colorBuckets = new Map<number, Path2D>();
 
     // After seek/src-swap, give the draw loop two RAFs so it samples the new
     // frame at least once before we reveal it. Avoids relying on rVFC, which
@@ -179,50 +183,31 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       const halfY = cellY / 2;
       const cell = cellX;
 
-      ctx.lineWidth = Math.max(0.5, cell * 0.08);
-      ctx.lineCap = 'round';
-
-      // Pre-build a unit diamond Path2D once per frame for the binarySize case
-      let fixedDiamond: Path2D | null = null;
-      if (binarySize) {
-        const r = cell * binarySizeScale;
-        fixedDiamond = new Path2D();
-        fixedDiamond.moveTo(0, -r);
-        fixedDiamond.lineTo(r, 0);
-        fixedDiamond.lineTo(0, r);
-        fixedDiamond.lineTo(-r, 0);
-        fixedDiamond.closePath();
-      }
-
-      // Cache last fillStyle/alpha to skip redundant style mutations
-      let lastFr = -1, lastFg = -1, lastFb = -1, lastAlpha = -1;
+      colorBuckets.clear();
+      const binR = binarySize ? cell * binarySizeScale : 0;
+      const fadeInv = 16 / 0.12; // const alpha multiplier (alpha = (darkness-threshold) * fadeInv)
 
       for (let row = 0; row < sampleRows; row++) {
+        const rowBase = row * sampleCols;
         for (let col = 0; col < sampleCols; col++) {
-          const i = (row * sampleCols + col) * 4;
+          const i = (rowBase + col) * 4;
           const r = pixels[i], g = pixels[i + 1], b = pixels[i + 2];
 
           let lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
           if (invert) lum = 1 - lum;
 
-          const isGreen = filterGreen && g - Math.max(r, b) > 0;
-          const isBlue = filterBlue && b > 80 && b > r * 1.8 && b > g * 1.4;
           const darkness = 1 - lum;
-          if (darkness < threshold || isGreen || isBlue) continue;
-          const fade = 0.12;
-          // Quantize alpha to 16 levels so adjacent cells share values and reuse cached fillStyle
-          const alpha = Math.min(1, Math.round((darkness - threshold) / fade * 16) / 16);
+          if (darkness < threshold) continue;
+          if (filterGreen && g - Math.max(r, b) > 0) continue;
+          if (filterBlue && b > 80 && b > r * 1.8 && b > g * 1.4) continue;
 
-          const cx = (col + colOffset) * cellX + halfX;
-          const cy = (row + rowOffset) * cellY + halfY;
-          const max = Math.max(r, g, b);
-          const min = Math.min(r, g, b);
-          const range = max - min;
+          let alphaQ = Math.round((darkness - threshold) * fadeInv);
+          if (alphaQ <= 0) continue;
+          if (alphaQ > 16) alphaQ = 16;
+
           let fr = r, fg = g, fb = b;
           if (rawColor) {
-            fr = r;
-            fg = filterGreen ? Math.min(g, Math.max(r, b)) : g;
-            fb = b;
+            if (filterGreen) fg = Math.min(g, Math.max(r, b));
           } else if (greyscale) {
             const intensity = darkMode ? darkness : 1 - darkness;
             if (tintRGB) {
@@ -234,61 +219,76 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
               fr = fg = fb = grey;
             }
           } else if (pureColor) {
-            // Mild vibrancy: small saturation + brightness boost while preserving hue
-            // Slight pink shift (lift R and B, drop G a touch) to counter yellow cast
             const avg = (r + g + b) / 3;
             const sat = saturation;
             fr = Math.max(0, Math.min(255, (avg + (r - avg) * sat) * 1.32));
             fg = Math.max(0, Math.min(255, (avg + (g - avg) * sat) * 1.10));
             fb = Math.max(0, Math.min(255, (avg + (b - avg) * sat) * 1.35));
-          } else if (range > 15) {
-            const avg = (r + g + b) / 3;
-            const sat = saturation;
-            fr = Math.max(0, Math.min(255, avg + (r - avg) * sat));
-            fg = Math.max(0, Math.min(255, avg + (g - avg) * sat));
-            fb = Math.max(0, Math.min(255, avg + (b - avg) * sat));
-            const targetLum = darkMode
-              ? Math.max(150, darkness * 280)
-              : Math.min(170, (1 - darkness) * 250);
-            const curLum = (fr + fg + fb) / 3;
-            if (curLum > 0) {
-              const scale = targetLum / curLum;
-              fr = Math.floor(Math.max(0, Math.min(255, fr * scale)));
-              fg = Math.floor(Math.max(0, Math.min(255, fg * scale)));
-              fb = Math.floor(Math.max(0, Math.min(255, fb * scale)));
-            }
           } else {
-            const grey = darkMode
-              ? Math.floor(Math.max(0, darkness * 220))
-              : Math.floor(Math.max(0, (1 - darkness) * 140));
-            fr = fg = fb = grey;
-          }
-          if (fr !== lastFr || fg !== lastFg || fb !== lastFb) {
-            ctx.fillStyle = `rgb(${fr},${fg},${fb})`;
-            lastFr = fr; lastFg = fg; lastFb = fb;
-          }
-          if (alpha !== lastAlpha) {
-            ctx.globalAlpha = alpha;
-            lastAlpha = alpha;
+            const max = r > g ? (r > b ? r : b) : (g > b ? g : b);
+            const min = r < g ? (r < b ? r : b) : (g < b ? g : b);
+            if (max - min > 15) {
+              const avg = (r + g + b) / 3;
+              const sat = saturation;
+              fr = Math.max(0, Math.min(255, avg + (r - avg) * sat));
+              fg = Math.max(0, Math.min(255, avg + (g - avg) * sat));
+              fb = Math.max(0, Math.min(255, avg + (b - avg) * sat));
+              const targetLum = darkMode
+                ? Math.max(150, darkness * 280)
+                : Math.min(170, (1 - darkness) * 250);
+              const curLum = (fr + fg + fb) / 3;
+              if (curLum > 0) {
+                const scale = targetLum / curLum;
+                fr = Math.floor(Math.max(0, Math.min(255, fr * scale)));
+                fg = Math.floor(Math.max(0, Math.min(255, fg * scale)));
+                fb = Math.floor(Math.max(0, Math.min(255, fb * scale)));
+              }
+            } else {
+              const grey = darkMode
+                ? Math.floor(Math.max(0, darkness * 220))
+                : Math.floor(Math.max(0, (1 - darkness) * 140));
+              fr = fg = fb = grey;
+            }
           }
 
-          // Halftone — diamond shapes (45° squares) scale with darkness
-          if (fixedDiamond) {
-            ctx.translate(cx, cy);
-            ctx.fill(fixedDiamond);
-            ctx.translate(-cx, -cy);
-          } else {
-            const rad = Math.sqrt(darkness) * cell * 0.85;
-            ctx.beginPath();
-            ctx.moveTo(cx, cy - rad);
-            ctx.lineTo(cx + rad, cy);
-            ctx.lineTo(cx, cy + rad);
-            ctx.lineTo(cx - rad, cy);
-            ctx.closePath();
-            ctx.fill();
+          // Quantize to 5 bits per channel and pack with alpha into a numeric key
+          const qr = fr >> 3;
+          const qg = fg >> 3;
+          const qb = fb >> 3;
+          const key = (qr << 15) | (qg << 10) | (qb << 5) | alphaQ;
+
+          let path = colorBuckets.get(key);
+          if (path === undefined) {
+            path = new Path2D();
+            colorBuckets.set(key, path);
           }
+
+          const cx = (col + colOffset) * cellX + halfX;
+          const cy = (row + rowOffset) * cellY + halfY;
+          const rad = binarySize ? binR : Math.sqrt(darkness) * cell * 0.85;
+          path.moveTo(cx, cy - rad);
+          path.lineTo(cx + rad, cy);
+          path.lineTo(cx, cy + rad);
+          path.lineTo(cx - rad, cy);
+          path.closePath();
         }
       }
+
+      // Single fill per (color, alpha) bucket — collapses thousands of fill()
+      // calls per frame into one per unique quantized color.
+      ctx.globalAlpha = 1;
+      colorBuckets.forEach((path, key) => {
+        const qr = (key >> 15) & 31;
+        const qg = (key >> 10) & 31;
+        const qb = (key >> 5) & 31;
+        const aQ = key & 31;
+        // Reconstruct ~original 0-255 channel from 5-bit quantized value
+        const r8 = (qr << 3) | (qr >> 2);
+        const g8 = (qg << 3) | (qg >> 2);
+        const b8 = (qb << 3) | (qb >> 2);
+        ctx.fillStyle = `rgba(${r8},${g8},${b8},${aQ / 16})`;
+        ctx.fill(path);
+      });
 
       if (fill && !darkMode && video.currentTime > 9.5) {
         ctx.globalAlpha = 1;

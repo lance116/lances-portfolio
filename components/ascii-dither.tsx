@@ -353,10 +353,14 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
             }
           }
           if (batched) {
-            const qr = fr >> 3;
-            const qg = fg >> 3;
-            const qb = fb >> 3;
-            const key = (qr << 15) | (qg << 10) | (qb << 5) | alphaQ;
+            // 4 bits per channel — 16 levels each gives 4096 unique colors,
+            // visually indistinguishable for a dither but compresses the
+            // bucket count enough to keep iOS smooth in high-color scenes
+            // (e.g. the butterfly's wing reveal).
+            const qr = fr >> 4;
+            const qg = fg >> 4;
+            const qb = fb >> 4;
+            const key = (qr << 12) | (qg << 8) | (qb << 4) | alphaQ;
             let path = colorBuckets.get(key);
             if (path === undefined) {
               path = new Path2D();
@@ -399,13 +403,14 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       if (batched) {
         ctx.globalAlpha = 1;
         colorBuckets.forEach((path, key) => {
-          const qr = (key >> 15) & 31;
-          const qg = (key >> 10) & 31;
-          const qb = (key >> 5) & 31;
-          const aQ = key & 31;
-          const r8 = (qr << 3) | (qr >> 2);
-          const g8 = (qg << 3) | (qg >> 2);
-          const b8 = (qb << 3) | (qb >> 2);
+          const qr = (key >> 12) & 15;
+          const qg = (key >> 8) & 15;
+          const qb = (key >> 4) & 15;
+          const aQ = key & 15;
+          // Map 0..15 → 0..255 by replicating the nibble (qr * 17).
+          const r8 = (qr << 4) | qr;
+          const g8 = (qg << 4) | qg;
+          const b8 = (qb << 4) | qb;
           ctx.fillStyle = `rgba(${r8},${g8},${b8},${aQ / 16})`;
           ctx.fill(path);
         });

@@ -56,29 +56,15 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     const dpr = window.devicePixelRatio || 1;
     let pendingPaintCallback: (() => void) | null = null;
 
-    // Wait until the video element has actually presented a fresh frame.
-    // Uses requestVideoFrameCallback when available; falls back to polling currentTime.
+    // After seek/src-swap, give the draw loop two RAFs so it samples the new
+    // frame at least once before we reveal it. Avoids relying on rVFC, which
+    // can be delayed by hundreds of ms after a seek and looks like a freeze.
     const waitForFreshFrame = (cb: () => void) => {
-      const v = video as HTMLVideoElement & {
-        requestVideoFrameCallback?: (cb: () => void) => number;
-      };
-      if (typeof v.requestVideoFrameCallback === 'function') {
-        v.requestVideoFrameCallback(() => {
-          if (!alive) return;
-          cb();
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (alive) cb();
         });
-        return;
-      }
-      const start = video.currentTime;
-      const check = () => {
-        if (!alive) return;
-        if (video.currentTime > start + 0.001 || video.currentTime > 0.05) {
-          cb();
-        } else {
-          requestAnimationFrame(check);
-        }
-      };
-      requestAnimationFrame(check);
+      });
     };
 
     function getSize() {

@@ -56,6 +56,31 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     const dpr = window.devicePixelRatio || 1;
     let pendingPaintCallback: (() => void) | null = null;
 
+    // Wait until the video element has actually presented a fresh frame.
+    // Uses requestVideoFrameCallback when available; falls back to polling currentTime.
+    const waitForFreshFrame = (cb: () => void) => {
+      const v = video as HTMLVideoElement & {
+        requestVideoFrameCallback?: (cb: () => void) => number;
+      };
+      if (typeof v.requestVideoFrameCallback === 'function') {
+        v.requestVideoFrameCallback(() => {
+          if (!alive) return;
+          cb();
+        });
+        return;
+      }
+      const start = video.currentTime;
+      const check = () => {
+        if (!alive) return;
+        if (video.currentTime > start + 0.001 || video.currentTime > 0.05) {
+          cb();
+        } else {
+          requestAnimationFrame(check);
+        }
+      };
+      requestAnimationFrame(check);
+    };
+
     function getSize() {
       const container = cvs.parentElement;
       return container ? container.clientWidth : 600;
@@ -374,9 +399,11 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         const restart = () => {
           const onSeeked = () => {
             video.removeEventListener('seeked', onSeeked);
-            pendingPaintCallback = () => {
-              cvs.style.opacity = '1';
-            };
+            waitForFreshFrame(() => {
+              pendingPaintCallback = () => {
+                cvs.style.opacity = '1';
+              };
+            });
           };
           video.addEventListener('seeked', onSeeked);
           video.currentTime = 0;
@@ -411,7 +438,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       onNextPlaying = () => {
         if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
         onNextPlaying = null;
-        startFade();
+        waitForFreshFrame(startFade);
       };
       video.addEventListener('playing', onNextPlaying);
 

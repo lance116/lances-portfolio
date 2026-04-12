@@ -461,7 +461,10 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
 
     // Brief play+pause to force iOS to decode the standby video's frame 0
     // into its display buffer, so the swap-time play() doesn't pay the same
-    // decode-from-seek latency we're trying to avoid.
+    // decode-from-seek latency we're trying to avoid. iOS will purge that
+    // buffer if the video stays idle too long, so we re-prime right before
+    // each swap (see onTimeUpdate) — a single prime at setup degrades by
+    // the third/fourth loop.
     const primeStandby = (v: HTMLVideoElement) => {
       v.pause();
       try { v.currentTime = 0; } catch {}
@@ -470,7 +473,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           if (!alive) return;
           v.pause();
           try { v.currentTime = 0; } catch {}
-        }, 40);
+        }, 80);
       }).catch(() => {});
     };
 
@@ -494,6 +497,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     const HOLD_MS = 200;
 
     let earlyEndFired = false;
+    let standbyReprimed = false;
     let onNextPlaying: (() => void) | null = null;
 
     const onLoaded = (e: Event) => {
@@ -554,6 +558,15 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         if (remaining < 0.5 && cvs.style.opacity === '1') {
           cvs.style.opacity = '0';
         }
+        // Re-prime the standby video while the active is in its last
+        // ~2 seconds, so frame 0 is freshly decoded when the swap fires.
+        // iOS purges the buffered frame from idle videos within seconds, so
+        // priming once at setup isn't enough — degradation showed up by
+        // the third loop without this.
+        if (useDualVideo && remaining < 2 && !standbyReprimed) {
+          standbyReprimed = true;
+          primeStandby(standbyVideo);
+        }
       } else if (remaining < 0.4 && !earlyEndFired) {
         // Multi-source: trigger early so we can swap src under cover of fade.
         earlyEndFired = true;
@@ -564,6 +577,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       if (useDualVideo && e.target !== activeVideo) return;
       earlyEndFired = false;
       endedFired = false;
+      standbyReprimed = false;
     };
     const onEndedHandler = (e: Event) => {
       if (useDualVideo && e.target !== activeVideo) return;

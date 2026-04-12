@@ -70,6 +70,13 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       ctx.restore();
     };
 
+    // Set after clearCanvas so draw() doesn't immediately overwrite the cleared
+    // pixels by sampling whatever stale frame iOS Safari still has buffered for
+    // the video element. Held until currentTime advances past the seek point or
+    // the safety deadline expires.
+    let suppressSampleUntilT = -1;
+    let suppressDeadlineMs = 0;
+
     function getSize() {
       const container = cvs.parentElement;
       return container ? container.clientWidth : 600;
@@ -85,9 +92,26 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       const vh = video.videoHeight;
       if (!vw || !vh || video.readyState < 2) return;
 
+      const curT = video.currentTime;
+
+      // After a clear+restart, hold off sampling until the video has produced
+      // a fresh frame past the seek point — otherwise drawImage would pull the
+      // stale buffered last-frame and overwrite the cleared canvas.
+      if (suppressSampleUntilT >= 0) {
+        if (curT > suppressSampleUntilT + 0.001 || performance.now() > suppressDeadlineMs) {
+          suppressSampleUntilT = -1;
+        } else {
+          if (pendingPaintCallback) {
+            const cb = pendingPaintCallback;
+            pendingPaintCallback = null;
+            cb();
+          }
+          return;
+        }
+      }
+
       // Skip the heavy resample/render if the video frame hasn't advanced.
       // 60fps RAF on 25fps video would otherwise repeat identical work.
-      const curT = video.currentTime;
       if (curT === lastDrawnVideoTime) {
         if (pendingPaintCallback) {
           const cb = pendingPaintCallback;
@@ -435,6 +459,8 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         const restart = () => {
           clearCanvas();
           lastDrawnVideoTime = -1;
+          suppressSampleUntilT = 0;
+          suppressDeadlineMs = performance.now() + 1000;
           video.currentTime = 0;
           video.play().catch(() => {});
           requestAnimationFrame(() => {
@@ -465,6 +491,8 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           if (fadeTimer) clearTimeout(fadeTimer);
           clearCanvas();
           lastDrawnVideoTime = -1;
+          suppressSampleUntilT = video.currentTime;
+          suppressDeadlineMs = performance.now() + 1000;
           cvs.style.opacity = '1';
         };
         video.addEventListener('playing', onNextPlaying);

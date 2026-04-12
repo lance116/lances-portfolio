@@ -416,15 +416,19 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         }
         return;
       }
-      currentIdx = (currentIdx + 1) % sources.length;
-      // Snapshot current main canvas to overlay so it covers the swap
+      // Snapshot current main canvas + its transform to overlay so it covers
+      // the swap even after applyOffset jumps the canvas to the next clip's
+      // per-source offset/scale on the next draw.
       overlay.width = cvs.width;
       overlay.height = cvs.height;
       overlay.style.width = cvs.style.width;
       overlay.style.height = cvs.style.height;
       overlayCtx.drawImage(cvs, 0, 0);
       overlay.style.transition = 'none';
+      overlay.style.transform = cvs.style.transform;
       overlay.style.opacity = '1';
+
+      currentIdx = (currentIdx + 1) % sources.length;
 
       // Wait until the next clip is actually playing AND a fresh frame is painted before fading the overlay
       if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);

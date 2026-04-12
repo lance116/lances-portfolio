@@ -85,13 +85,20 @@ canvas stayed cleared/hidden the whole time.
   CSS fade duration from 0.4s to 0.25s. Cuts the perceived pause window
   significantly. None of this attacks the actual iOS decode latency, just
   the surrounding fluff.
-- **Final fix: dual-video swap on iOS.** Render a second `<video>`
-  element kept paused at `currentTime=0` with frame 0 forcibly decoded
-  via a 40ms play+pause prime. When the active video ends, swap to the
-  standby and play it — playback resumes from a pre-decoded frame so iOS
-  skips the decode-from-seek latency entirely. The just-finished video
-  gets reset and re-primed for the next swap. iOS-only — Mac/non-iOS
-  keeps the simpler native loop path.
+- Dual-video swap on iOS. Render a second `<video>` element kept paused
+  at `currentTime=0` with frame 0 forcibly decoded via a play+pause
+  prime. When the active video ends, swap to the standby and play it —
+  playback resumes from a pre-decoded frame so iOS skips the
+  decode-from-seek latency entirely. iOS-only — Mac/non-iOS keeps the
+  simpler native loop path. First swap was smooth, but every subsequent
+  one degraded.
+- **Final fix: re-prime the standby just before each swap.** iOS Safari
+  purges the pre-decoded frame from a video element that's been idle
+  for several seconds, so a one-shot prime at setup decayed by the
+  third or fourth loop. Watch the active clip's `remaining` time in
+  `timeupdate` and run `primeStandby(standbyVideo)` again when it drops
+  below ~2s, so frame 0 is freshly decoded right when we need it. With
+  this in place the cocoon comes back smoothly indefinitely.
 
 ### 3. Video stops playing entirely after 3-4 cycles (iOS Safari)
 
@@ -160,6 +167,25 @@ paint, so there's nothing to flash through.
 See issue 6 — the unconditional batching exploded the bucket count in
 high-color scenes and the bookkeeping outweighed the savings. Reverted to
 per-cell loop on desktop, kept batching for mobile only.
+
+### 8. (Open) iOS dithers laggy when the butterfly spreads its wings
+
+**Symptom:** On iOS specifically, when the butterfly opens its wings (the
+high-color, high-motion peak of the clip), the dither rendering chugs.
+Mac is smooth, mobile elsewhere is fine.
+
+**Why (suspected):** Same root cause as issue 7's desktop regression but
+inverted — when the scene has hundreds of unique colors, the batched
+Path2D-bucket render path either explodes its bucket count or pays
+disproportionate per-cell `Map.get/set` cost. iOS's canvas2D is
+slower than desktop in absolute terms, so the cost lands harder.
+
+**Not yet fixed.** Possible levers:
+- Quantize colors more aggressively (4 bits/channel instead of 5),
+  collapsing the bucket count.
+- Drop mobile `cols` for butterfly during this scene, or globally.
+- Move the dither rendering to WebGL, where per-pixel work is cheap
+  and color count doesn't matter.
 
 ---
 

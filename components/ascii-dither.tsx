@@ -70,6 +70,14 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       ctx.restore();
     };
 
+    // Snapshot of the rendered first frame from the initial playthrough.
+    // Painted onto the canvas at every native loop boundary so the fade-in
+    // shows real content instantly — no waiting for iOS Safari to decode
+    // frame 0 after the loop, which is what produced the cocoon glitch.
+    const frame0Canvas = document.createElement('canvas');
+    let frame0Captured = false;
+    let frame0Dims = { w: 0, h: 0 };
+
     // Set after clearCanvas so draw() doesn't immediately overwrite the cleared
     // pixels by sampling whatever stale frame iOS Safari still has buffered for
     // the video element. Held until currentTime advances past the seek point or
@@ -94,30 +102,33 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
 
       const curT = video.currentTime;
 
-      // Detect a native loop boundary on the RAF tick (~60Hz), instead of
-      // waiting for the next timeupdate (~4Hz). Clear the canvas, suppress
-      // sampling until the video genuinely advances past the loop point, and
-      // — critically — leave opacity at 0. We hold the fade-in until the
-      // video is actually playing so the fade never reveals the cleared bg
-      // (which iOS reaches mid-fade because its decode-after-loop latency
-      // varies wildly, looking like a white flash).
+      // Detect a native loop boundary on the RAF tick (~60Hz). Paint the
+      // cached frame-0 onto the canvas (instead of clearing) so the fade-in
+      // can reveal a real frame immediately — iOS's decode-after-loop
+      // latency no longer matters because we're not waiting on drawImage.
+      // Suppress sampling briefly so the live drawImage doesn't overwrite
+      // our cached frame with whatever stale buffer iOS has until it catches
+      // up; once currentTime advances past the loop point, live sampling
+      // takes over and the fade is already running on real content.
       if (sources.length <= 1 && lastDrawnVideoTime > 0 && curT < lastDrawnVideoTime - 1) {
-        clearCanvas();
+        if (frame0Captured && frame0Dims.w === cvs.width && frame0Dims.h === cvs.height) {
+          ctx.save();
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.globalAlpha = 1;
+          ctx.drawImage(frame0Canvas, 0, 0);
+          ctx.restore();
+        } else {
+          clearCanvas();
+        }
         suppressSampleUntilT = curT;
-        suppressDeadlineMs = performance.now() + 800;
+        suppressDeadlineMs = performance.now() + 500;
+        if (cvs.style.opacity !== '1') cvs.style.opacity = '1';
         lastDrawnVideoTime = -1;
       }
 
       if (suppressSampleUntilT >= 0) {
         if (curT > suppressSampleUntilT + 0.001 || performance.now() > suppressDeadlineMs) {
           suppressSampleUntilT = -1;
-          // Video has a fresh frame ready — start the fade-in after this
-          // draw renders it, so the transition only ever shows the video.
-          if (sources.length <= 1 && cvs.style.opacity === '0') {
-            pendingPaintCallback = () => {
-              cvs.style.opacity = '1';
-            };
-          }
         } else {
           if (pendingPaintCallback) {
             const cb = pendingPaintCallback;
@@ -385,6 +396,23 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
 
       ctx.restore();
 
+      // Cache the rendered first frame so the next loop boundary can paint
+      // it immediately, instead of waiting on iOS to decode video frame 0.
+      if (sources.length <= 1 && !frame0Captured && curT > 0.05 && curT < 0.4) {
+        if (frame0Canvas.width !== cvs.width || frame0Canvas.height !== cvs.height) {
+          frame0Canvas.width = cvs.width;
+          frame0Canvas.height = cvs.height;
+        }
+        const f0 = frame0Canvas.getContext('2d');
+        if (f0) {
+          f0.setTransform(1, 0, 0, 1, 0, 0);
+          f0.clearRect(0, 0, frame0Canvas.width, frame0Canvas.height);
+          f0.drawImage(cvs, 0, 0);
+          frame0Dims = { w: cvs.width, h: cvs.height };
+          frame0Captured = true;
+        }
+      }
+
       if (pendingPaintCallback) {
         const cb = pendingPaintCallback;
         pendingPaintCallback = null;
@@ -533,7 +561,11 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
 
     draw();
 
-    const onResize = () => draw();
+    const onResize = () => {
+      // Cached frame-0 dims won't match the new canvas size; let it re-capture.
+      frame0Captured = false;
+      draw();
+    };
     window.addEventListener('resize', onResize);
     return () => {
       alive = false;

@@ -378,8 +378,12 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     const sources = Array.isArray(src) ? src : [src];
     let currentIdx = 0;
     video.src = sources[currentIdx];
+    // Single-source uses the browser's native loop instead of manual
+    // seek+play (which iOS Safari starts dropping after a few cycles).
+    video.loop = sources.length === 1 && !onEnded;
     cvs.style.transition = 'opacity 0.4s ease';
     cvs.style.opacity = onEnded ? '1' : '0';
+    let prevTime = 0;
     let fadeTimer: number | null = null;
     let started = false;
     let endedFired = false;
@@ -433,14 +437,25 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     const onTimeUpdate = () => {
       if (onEnded) return;
       if (!video.duration || isNaN(video.duration)) return;
-      const remaining = video.duration - video.currentTime;
-      if (sources.length <= 1 && remaining < 1.2 && cvs.style.opacity === '1') {
-        cvs.style.opacity = '0';
-      }
-      if (remaining < 0.4 && !earlyEndFired) {
+      const t = video.currentTime;
+      const remaining = video.duration - t;
+
+      if (sources.length <= 1) {
+        // Native loop just looped — currentTime jumped from near-end back to
+        // near-start. Reveal the canvas again for the new playthrough.
+        if (t < prevTime - 1 && cvs.style.opacity === '0') {
+          cvs.style.opacity = '1';
+        }
+        if (remaining < 1.2 && cvs.style.opacity === '1') {
+          cvs.style.opacity = '0';
+        }
+      } else if (remaining < 0.4 && !earlyEndFired) {
+        // Multi-source: trigger early so we can swap src under cover of fade.
         earlyEndFired = true;
         video.dispatchEvent(new Event('ended'));
       }
+
+      prevTime = t;
     };
     const onPlay = () => {
       earlyEndFired = false;
@@ -455,35 +470,9 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         setTimeout(() => onEnded(), HOLD_MS);
         return;
       }
-      if (sources.length <= 1) {
-        const restart = () => {
-          clearCanvas();
-          lastDrawnVideoTime = -1;
-          suppressSampleUntilT = 0;
-          suppressDeadlineMs = performance.now() + 1500;
-          video.currentTime = 0;
-          video.play().catch(() => {});
-          // iOS Safari starts dropping rapid seek+play after a few cycles —
-          // currentTime gets stuck at 0 and play() resolves without actually
-          // playing. If the seek+play didn't take, force a hard reload.
-          window.setTimeout(() => {
-            if (!alive) return;
-            if (video.currentTime < 0.05) {
-              video.load();
-              video.play().catch(() => {});
-            }
-          }, 700);
-          requestAnimationFrame(() => {
-            cvs.style.opacity = '1';
-          });
-        };
-        if (loopPauseMs > 0) {
-          setTimeout(restart, loopPauseMs);
-        } else {
-          restart();
-        }
-        return;
-      }
+      // Single-source loops natively via the video element's loop attribute;
+      // the timeupdate handler manages the fade across the loop boundary.
+      if (sources.length <= 1) return;
       // Sequential fade: hide current clip fully, then swap src, then reveal
       // new clip — guarantees no frame where both clips are visible.
       const FADE_OUT_MS = 400;

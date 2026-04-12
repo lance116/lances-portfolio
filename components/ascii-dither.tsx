@@ -153,6 +153,18 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       ctx.lineWidth = Math.max(0.5, cell * 0.08);
       ctx.lineCap = 'round';
 
+      // Pre-build a unit diamond Path2D once per frame for the binarySize case
+      let fixedDiamond: Path2D | null = null;
+      if (binarySize) {
+        const r = cell * binarySizeScale;
+        fixedDiamond = new Path2D();
+        fixedDiamond.moveTo(0, -r);
+        fixedDiamond.lineTo(r, 0);
+        fixedDiamond.lineTo(0, r);
+        fixedDiamond.lineTo(-r, 0);
+        fixedDiamond.closePath();
+      }
+
       for (let row = 0; row < sampleRows; row++) {
         for (let col = 0; col < sampleCols; col++) {
           const i = (row * sampleCols + col) * 4;
@@ -222,14 +234,20 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           ctx.globalAlpha = alpha;
 
           // Halftone — diamond shapes (45° squares) scale with darkness
-          const rad = binarySize ? cell * binarySizeScale : Math.sqrt(darkness) * cell * 0.85;
-          ctx.beginPath();
-          ctx.moveTo(cx, cy - rad);
-          ctx.lineTo(cx + rad, cy);
-          ctx.lineTo(cx, cy + rad);
-          ctx.lineTo(cx - rad, cy);
-          ctx.closePath();
-          ctx.fill();
+          if (fixedDiamond) {
+            ctx.translate(cx, cy);
+            ctx.fill(fixedDiamond);
+            ctx.translate(-cx, -cy);
+          } else {
+            const rad = Math.sqrt(darkness) * cell * 0.85;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - rad);
+            ctx.lineTo(cx + rad, cy);
+            ctx.lineTo(cx, cy + rad);
+            ctx.lineTo(cx - rad, cy);
+            ctx.closePath();
+            ctx.fill();
+          }
         }
       }
 

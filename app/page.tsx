@@ -231,7 +231,7 @@ export default function Home() {
         <div className="w-full overflow-hidden" style={{ aspectRatio: '9 / 16' }}>
           <AsciiDither
             src="/butterfly.mp4"
-            cols={140}
+            cols={100}
             color="source"
             threshold={0.22}
             fill
@@ -263,8 +263,8 @@ export default function Home() {
         </div>
 
         {/* Text right */}
-        <div className="w-[42%] flex items-center justify-center relative z-10">
-          <div className="px-6 py-16 sm:py-24 w-full max-w-[440px]">
+        <div className="w-[42%] flex items-center justify-start relative z-10">
+          <div className="pl-2 pr-6 py-16 sm:py-24 w-full max-w-[440px]">
             <BioContent dark={false} onSwitch={handleSwitch} />
           </div>
         </div>

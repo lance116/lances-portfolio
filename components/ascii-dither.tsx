@@ -57,30 +57,15 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     // numbers to avoid per-cell string allocation (qr<<15 | qg<<10 | qb<<5 | aQ).
     const colorBuckets = new Map<number, Path2D>();
 
-    // After seek/src-swap, wait until the video has actually advanced past the
-    // seek point — that's the only reliable signal that iOS Safari has
-    // presented a fresh frame (rather than the stale end-of-clip frame still
-    // sitting in its decode buffer). Then one extra RAF so the draw loop has
-    // sampled it before we reveal the canvas. 800ms safety cap so a stalled
-    // play() never leaves the canvas hidden forever.
-    const waitForFreshFrame = (cb: () => void) => {
-      const startT = video.currentTime;
-      const startMs = performance.now();
-      const check = () => {
-        if (!alive) return;
-        if (video.currentTime > startT + 0.001) {
-          requestAnimationFrame(() => { if (alive) cb(); });
-          return;
-        }
-        if (performance.now() - startMs > 800) {
-          // Video stalled — try to kick it and reveal anyway.
-          video.play().catch(() => {});
-          cb();
-          return;
-        }
-        requestAnimationFrame(check);
-      };
-      requestAnimationFrame(check);
+    // Wipe the canvas to bg color. Used before re-revealing on a seek/swap so
+    // a stale frame held in the iOS Safari decode buffer can't flash through
+    // when opacity returns to 1.
+    const clearCanvas = () => {
+      ctx.save();
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.fillStyle = darkMode ? '#000' : '#fff';
+      ctx.fillRect(0, 0, cvs.width / dpr, cvs.height / dpr);
+      ctx.restore();
     };
 
     function getSize() {
@@ -411,17 +396,13 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       }
       if (sources.length <= 1) {
         const restart = () => {
-          const onSeeked = () => {
-            video.removeEventListener('seeked', onSeeked);
-            waitForFreshFrame(() => {
-              pendingPaintCallback = () => {
-                cvs.style.opacity = '1';
-              };
-            });
-          };
-          video.addEventListener('seeked', onSeeked);
+          clearCanvas();
+          lastDrawnVideoTime = -1;
           video.currentTime = 0;
           video.play().catch(() => {});
+          requestAnimationFrame(() => {
+            cvs.style.opacity = '1';
+          });
         };
         if (loopPauseMs > 0) {
           setTimeout(restart, loopPauseMs);
@@ -441,16 +422,13 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         currentIdx = (currentIdx + 1) % sources.length;
 
         if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
-        const reveal = () => {
-          pendingPaintCallback = () => {
-            cvs.style.opacity = '1';
-          };
-        };
         onNextPlaying = () => {
           if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
           onNextPlaying = null;
           if (fadeTimer) clearTimeout(fadeTimer);
-          waitForFreshFrame(reveal);
+          clearCanvas();
+          lastDrawnVideoTime = -1;
+          cvs.style.opacity = '1';
         };
         video.addEventListener('playing', onNextPlaying);
 

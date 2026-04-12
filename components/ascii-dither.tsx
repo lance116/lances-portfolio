@@ -165,6 +165,9 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         fixedDiamond.closePath();
       }
 
+      // Cache last fillStyle/alpha to skip redundant style mutations
+      let lastFr = -1, lastFg = -1, lastFb = -1, lastAlpha = -1;
+
       for (let row = 0; row < sampleRows; row++) {
         for (let col = 0; col < sampleCols; col++) {
           const i = (row * sampleCols + col) * 4;
@@ -178,7 +181,8 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           const darkness = 1 - lum;
           if (darkness < threshold || isGreen || isBlue) continue;
           const fade = 0.12;
-          const alpha = Math.min(1, (darkness - threshold) / fade);
+          // Quantize alpha to 16 levels so adjacent cells share values and reuse cached fillStyle
+          const alpha = Math.min(1, Math.round((darkness - threshold) / fade * 16) / 16);
 
           const cx = (col + colOffset) * cellX + halfX;
           const cy = (row + rowOffset) * cellY + halfY;
@@ -230,8 +234,14 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
               : Math.floor(Math.max(0, (1 - darkness) * 140));
             fr = fg = fb = grey;
           }
-          ctx.fillStyle = `rgb(${fr},${fg},${fb})`;
-          ctx.globalAlpha = alpha;
+          if (fr !== lastFr || fg !== lastFg || fb !== lastFb) {
+            ctx.fillStyle = `rgb(${fr},${fg},${fb})`;
+            lastFr = fr; lastFg = fg; lastFb = fb;
+          }
+          if (alpha !== lastAlpha) {
+            ctx.globalAlpha = alpha;
+            lastAlpha = alpha;
+          }
 
           // Halftone — diamond shapes (45° squares) scale with darkness
           if (fixedDiamond) {
@@ -423,8 +433,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         muted
         playsInline
         preload="auto"
-        crossOrigin="anonymous"
-        style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 1, height: 1 }}
+        style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: '100%', height: '100%', top: 0, left: 0 }}
       />
       <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover', position: 'relative', zIndex: 1 }} />
       <canvas ref={overlayRef} style={{ display: 'block', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none', opacity: 0, zIndex: 2 }} />

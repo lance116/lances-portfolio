@@ -113,6 +113,31 @@ export default function Home() {
   };
 
   if (mode === 'fish') {
+    if (isNarrow) {
+      return (
+        <main className="min-h-screen bg-black text-white transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
+          <div className="px-6 pt-12 pb-8" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
+            <BioContent dark onSwitch={handleSwitch} />
+          </div>
+          <div className="w-full" style={{ height: '70vh' }}>
+            <AsciiDither
+              key="fish"
+              src={['/fish3.mp4', '/fish4.mp4', '/fish2.mp4']}
+              cols={160}
+              color="source"
+              threshold={0.08}
+              saturation={2}
+              fill
+              cover
+              invert
+              darkMode
+              binarySize
+              className="w-full h-full"
+            />
+          </div>
+        </main>
+      );
+    }
     return (
       <main className="fixed inset-0 bg-black text-white overflow-hidden transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
         <div className="absolute inset-0 z-0">
@@ -141,6 +166,33 @@ export default function Home() {
   }
 
   if (mode === 'orchids') {
+    if (isNarrow) {
+      return (
+        <main className="min-h-screen bg-black text-white transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
+          <div className="px-6 pt-12 pb-8" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
+            <BioContent dark onSwitch={handleSwitch} />
+          </div>
+          <div className="w-full" style={{ height: '70vh' }}>
+            <AsciiDither
+              key="orchids"
+              src="/orchids.mp4"
+              cols={180}
+              color="source"
+              threshold={0.2}
+              saturation={2}
+              fill
+              cover
+              invert
+              darkMode
+              binarySize
+              pureColor
+              loopPauseMs={400}
+              className="w-full h-full"
+            />
+          </div>
+        </main>
+      );
+    }
     return (
       <main className="fixed inset-0 bg-black text-white overflow-hidden transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
         <div className="absolute inset-0 z-0" style={{ transform: 'translateY(120px)' }}>
@@ -172,11 +224,14 @@ export default function Home() {
 
   if (isNarrow) {
     return (
-      <main className="fixed inset-0 bg-white text-neutral-800 overflow-hidden transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
-        <div className="absolute inset-0 z-0">
+      <main className="min-h-screen bg-white text-neutral-800 transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
+        <div className="px-6 pt-12 pb-8" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
+          <BioContent dark={false} onSwitch={handleSwitch} />
+        </div>
+        <div className="w-full" style={{ height: '70vh' }}>
           <AsciiDither
             src="/butterfly.mp4"
-            cols={140}
+            cols={120}
             color="source"
             threshold={0.22}
             fill
@@ -184,11 +239,6 @@ export default function Home() {
             loopPauseMs={400}
             className="w-full h-full"
           />
-        </div>
-        <div className="absolute inset-0 z-10 flex items-center justify-center px-6 overflow-y-auto" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
-          <div className="max-w-[560px] py-12 bg-white/85 backdrop-blur-sm rounded-lg p-6 my-8">
-            <BioContent dark={false} onSwitch={handleSwitch} />
-          </div>
         </div>
       </main>
     );

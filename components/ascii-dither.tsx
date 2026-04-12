@@ -26,12 +26,13 @@ interface Props {
   tintRGB?: [number, number, number];
   cropTop?: boolean;
   offsetYSchedule?: Array<[number, string]>;
+  playbackRateSchedule?: Array<[number, number]>;
   onEnded?: () => void;
   playbackRate?: number;
   className?: string;
 }
 
-export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, tintRGB, cropTop = false, offsetYSchedule, onEnded, playbackRate = 1, className = '' }: Props) {
+export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, tintRGB, cropTop = false, offsetYSchedule, playbackRateSchedule, onEnded, playbackRate = 1, className = '' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -313,13 +314,21 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       cvs.style.opacity = '1';
     };
     const applyOffset = () => {
-      if (!offsetYSchedule || offsetYSchedule.length === 0) return;
       const t = video.currentTime;
-      let active = '0%';
-      for (const [start, y] of offsetYSchedule) {
-        if (t >= start) active = y;
+      if (offsetYSchedule && offsetYSchedule.length > 0) {
+        let active = '0%';
+        for (const [start, y] of offsetYSchedule) {
+          if (t >= start) active = y;
+        }
+        cvs.style.transform = `translateY(${active})`;
       }
-      cvs.style.transform = `translateY(${active})`;
+      if (playbackRateSchedule && playbackRateSchedule.length > 0) {
+        let activeRate = playbackRate;
+        for (const [start, rate] of playbackRateSchedule) {
+          if (t >= start) activeRate = rate;
+        }
+        if (video.playbackRate !== activeRate) video.playbackRate = activeRate;
+      }
     };
     const onTimeUpdate = () => {
       if (onEnded) return;
@@ -423,7 +432,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
       if (fadeTimer) clearTimeout(fadeTimer);
     };
-  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize, binarySizeScale, filterGreen, filterBlue, pureColor, greyscale, rawColor, tintRGB, cropTop, offsetYSchedule]);
+  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize, binarySizeScale, filterGreen, filterBlue, pureColor, greyscale, rawColor, tintRGB, cropTop, offsetYSchedule, playbackRateSchedule]);
 
   return (
     <div className={className} style={{ width: '100%', height: '100%', position: 'relative' }}>

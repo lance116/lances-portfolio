@@ -98,6 +98,13 @@ export default function Home() {
     return () => window.removeEventListener('resize', check);
   }, []);
 
+  useEffect(() => {
+    const dark = mode === 'fish' || mode === 'orchids';
+    const color = dark ? '#000' : '#fff';
+    document.documentElement.style.backgroundColor = color;
+    document.body.style.backgroundColor = color;
+  }, [mode]);
+
   const handleSwitch = () => {
     if (mode === 'orchids') {
       setFading(true);
@@ -210,6 +217,7 @@ export default function Home() {
             binarySize
             pureColor
             loopPauseMs={400}
+            playbackRateSchedule={[[0, 1], [25, 0.4]]}
             className="w-full h-full"
           />
         </div>
@@ -263,8 +271,8 @@ export default function Home() {
         </div>
 
         {/* Text right */}
-        <div className="w-[42%] flex items-center justify-start relative z-10">
-          <div className="pl-2 pr-6 py-16 sm:py-24 w-full max-w-[440px]">
+        <div className="w-[42%] flex items-center justify-center relative z-10">
+          <div className="px-6 py-16 sm:py-24 w-full max-w-[580px]">
             <BioContent dark={false} onSwitch={handleSwitch} />
           </div>
         </div>

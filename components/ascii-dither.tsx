@@ -12,10 +12,17 @@ interface Props {
   invert?: boolean;
   fill?: boolean;
   borderRight?: boolean;
+  darkMode?: boolean;
+  cover?: boolean;
+  saturation?: number;
+  loopPauseMs?: number;
+  binarySize?: boolean;
+  onEnded?: () => void;
+  playbackRate?: number;
   className?: string;
 }
 
-export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, className = '' }: Props) {
+export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, onEnded, playbackRate = 1, className = '' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [dimensions, setDimensions] = useState({ w: 600, h: 400 });
@@ -75,8 +82,24 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       const gridAspect = containerW / totalH;
 
       let sampleCols: number, sampleRows: number, colOffset: number, rowOffset: number;
+      let cropSX = 0, cropSY = 0, cropSW = vw, cropSH = vh;
 
-      if (fill) {
+      if (fill && (darkMode || cover)) {
+        // Cover-fit: video fills entire grid, crop excess
+        sampleCols = cols;
+        sampleRows = rows;
+        colOffset = 0;
+        rowOffset = 0;
+        if (gridAspect > videoAspect) {
+          // Grid wider than video — crop top/bottom
+          cropSH = vw / gridAspect;
+          cropSY = (vh - cropSH) / 2;
+        } else {
+          // Grid taller than video — crop left/right
+          cropSW = vh * gridAspect;
+          cropSX = (vw - cropSW) / 2;
+        }
+      } else if (fill) {
         if (gridAspect > videoAspect) {
           // Grid wider than video — fit to height, left-aligned
           sampleRows = rows;
@@ -97,15 +120,17 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         rowOffset = 0;
       }
 
+      sampleCols = Math.max(1, Math.floor(sampleCols) || 1);
+      sampleRows = Math.max(1, Math.floor(sampleRows) || 1);
       sampler.width = sampleCols;
       sampler.height = sampleRows;
-      samplerCtx.drawImage(video, 0, 0, vw, vh, 0, 0, sampleCols, sampleRows);
+      samplerCtx.drawImage(video, cropSX, cropSY, cropSW, cropSH, 0, 0, sampleCols, sampleRows);
       const pixels = samplerCtx.getImageData(0, 0, sampleCols, sampleRows).data;
 
       // Render
       ctx.save();
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.fillStyle = '#fff';
+      ctx.fillStyle = darkMode ? '#000' : '#fff';
       ctx.fillRect(0, 0, containerW, totalH);
 
       const halfX = cellX / 2;
@@ -135,13 +160,15 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           const min = Math.min(r, g, b);
           const range = max - min;
           let fr = r, fg = g, fb = b;
-          if (range > 25) {
+          if (range > 15) {
             const avg = (r + g + b) / 3;
-            const sat = 3;
+            const sat = saturation;
             fr = Math.max(0, Math.min(255, avg + (r - avg) * sat));
             fg = Math.max(0, Math.min(255, avg + (g - avg) * sat));
             fb = Math.max(0, Math.min(255, avg + (b - avg) * sat));
-            const targetLum = Math.min(170, (1 - darkness) * 250);
+            const targetLum = darkMode
+              ? Math.max(120, darkness * 255)
+              : Math.min(170, (1 - darkness) * 250);
             const curLum = (fr + fg + fb) / 3;
             if (curLum > 0) {
               const scale = targetLum / curLum;
@@ -150,14 +177,16 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
               fb = Math.floor(Math.max(0, Math.min(255, fb * scale)));
             }
           } else {
-            const grey = Math.floor(Math.max(0, (1 - darkness) * 140));
+            const grey = darkMode
+              ? Math.floor(Math.max(0, darkness * 220))
+              : Math.floor(Math.max(0, (1 - darkness) * 140));
             fr = fg = fb = grey;
           }
           ctx.fillStyle = `rgb(${fr},${fg},${fb})`;
           ctx.globalAlpha = alpha;
 
           // Halftone — diamond shapes (45° squares) scale with darkness
-          const rad = Math.sqrt(darkness) * cell * 0.85;
+          const rad = binarySize ? cell * 0.85 : Math.sqrt(darkness) * cell * 0.85;
           ctx.beginPath();
           ctx.moveTo(cx, cy - rad);
           ctx.lineTo(cx + rad, cy);
@@ -168,7 +197,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         }
       }
 
-      if (fill && video.currentTime > 9.5) {
+      if (fill && !darkMode && video.currentTime > 9.5) {
         ctx.globalAlpha = 1;
         ctx.fillStyle = '#fff';
         ctx.fillRect(0, 0, containerW, totalH * 0.17);
@@ -176,7 +205,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       }
 
       if (borderRight && fill) {
-        ctx.globalAlpha = 0.25;
+        ctx.globalAlpha = 0.1;
         ctx.fillStyle = '#000';
         const borderX = (sampleCols + colOffset) * cellX;
         ctx.fillRect(borderX, 0, 1, totalH);
@@ -185,19 +214,90 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       ctx.restore();
     }
 
-    // Playlist support
+    // Playlist support with fade transitions
     const sources = Array.isArray(src) ? src : [src];
     let currentIdx = 0;
     video.src = sources[currentIdx];
+    cvs.style.transition = 'opacity 0.4s ease';
+    cvs.style.opacity = onEnded ? '1' : '0';
+    let fadeTimer: number | null = null;
+    let started = false;
+    let endedFired = false;
+    const HOLD_MS = 200;
+
+    video.addEventListener('loadeddata', () => {
+      if (onEnded && !started) {
+        // Transition mode: hold on first frame briefly, then play
+        video.pause();
+        setTimeout(() => {
+          if (started) return;
+          started = true;
+          video.playbackRate = playbackRate;
+          video.play().catch(() => {});
+          cvs.style.opacity = '1';
+        }, HOLD_MS);
+      }
+    });
 
     video.addEventListener('canplay', () => {
-      video.play().catch(() => {});
+      if (!onEnded && !started) {
+        started = true;
+        video.playbackRate = playbackRate;
+        video.play().catch(() => {});
+      }
+      cvs.style.opacity = '1';
+    });
+
+    let earlyEndFired = false;
+    video.addEventListener('timeupdate', () => {
+      if (onEnded) return;
+      if (!video.duration || isNaN(video.duration)) return;
+      const remaining = video.duration - video.currentTime;
+      // Start fading out 0.8s before the cut point (0.4s before actual end)
+      if (remaining < 1.2 && cvs.style.opacity === '1') {
+        cvs.style.opacity = '0';
+      }
+      // Trigger swap/loop 0.4s before actual end
+      if (remaining < 0.4 && !earlyEndFired) {
+        earlyEndFired = true;
+        video.dispatchEvent(new Event('ended'));
+      }
+    });
+
+    video.addEventListener('play', () => {
+      earlyEndFired = false;
     });
 
     video.addEventListener('ended', () => {
+      if (onEnded) {
+        if (endedFired) return;
+        endedFired = true;
+        // Hold last frame briefly before signaling end
+        video.pause();
+        setTimeout(() => onEnded(), HOLD_MS);
+        return;
+      }
+      if (sources.length <= 1) {
+        const restart = () => {
+          video.currentTime = 0;
+          video.play().catch(() => {});
+          requestAnimationFrame(() => {
+            cvs.style.opacity = '1';
+          });
+        };
+        if (loopPauseMs > 0) {
+          setTimeout(restart, loopPauseMs);
+        } else {
+          restart();
+        }
+        return;
+      }
       currentIdx = (currentIdx + 1) % sources.length;
-      video.src = sources[currentIdx];
-      video.load();
+      if (fadeTimer) clearTimeout(fadeTimer);
+      fadeTimer = window.setTimeout(() => {
+        video.src = sources[currentIdx];
+        video.load();
+      }, 100);
     });
 
     draw();
@@ -205,15 +305,16 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     const onResize = () => draw();
     window.addEventListener('resize', onResize);
     return () => { alive = false; window.removeEventListener('resize', onResize); };
-  }, [src, cols, color]);
+  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize]);
 
   return (
-    <div className={className} style={{ width: '100%', height: '100%', position: 'relative' }}>
+    <div className={className} style={{ width: '100%', height: '100%', position: 'relative', backgroundColor: '#fff' }}>
       <video
         ref={videoRef}
-        autoPlay
+        autoPlay={!onEnded}
         muted
         playsInline
+        preload="auto"
         crossOrigin="anonymous"
         style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 1, height: 1 }}
       />

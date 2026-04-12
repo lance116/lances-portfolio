@@ -23,6 +23,8 @@ export default function RootLayout({
   return (
     <html lang="en" style={{ backgroundColor: '#fff' }}>
       <head>
+        <link rel="preload" as="video" href="/white-to-black.mp4" type="video/mp4" />
+        <link rel="preload" as="video" href="/black-to-white.mp4" type="video/mp4" />
       </head>
       <body className={`${inter.className} ${playfair.variable} antialiased`}>
         <ThemeProvider>

@@ -124,6 +124,7 @@ export default function Home() {
             threshold={0.08}
             saturation={2}
             fill
+            cover
             invert
             darkMode
             binarySize

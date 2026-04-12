@@ -19,13 +19,18 @@ interface Props {
   binarySize?: boolean;
   binarySizeScale?: number;
   filterGreen?: boolean;
+  filterBlue?: boolean;
   pureColor?: boolean;
+  greyscale?: boolean;
+  rawColor?: boolean;
+  tintRGB?: [number, number, number];
+  cropTop?: boolean;
   onEnded?: () => void;
   playbackRate?: number;
   className?: string;
 }
 
-export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, pureColor = false, onEnded, playbackRate = 1, className = '' }: Props) {
+export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, tintRGB, cropTop = false, onEnded, playbackRate = 1, className = '' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -90,7 +95,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       let sampleCols: number, sampleRows: number, colOffset: number, rowOffset: number;
       let cropSX = 0, cropSY = 0, cropSW = vw, cropSH = vh;
 
-      if (fill && (darkMode || cover)) {
+      if (fill && cover) {
         // Cover-fit: video fills entire grid, crop excess
         sampleCols = cols;
         sampleRows = rows;
@@ -99,7 +104,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         if (gridAspect > videoAspect) {
           // Grid wider than video — crop top/bottom
           cropSH = vw / gridAspect;
-          cropSY = (vh - cropSH) / 2;
+          cropSY = cropTop ? 0 : (vh - cropSH) / 2;
         } else {
           // Grid taller than video — crop left/right
           cropSW = vh * gridAspect;
@@ -154,9 +159,10 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           let lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
           if (invert) lum = 1 - lum;
 
-          const isGreen = filterGreen && g > 50 && g > r * 1.1 && g > b * 1.1;
+          const isGreen = filterGreen && g - Math.max(r, b) > 0;
+          const isBlue = filterBlue && b > 80 && b > r * 1.8 && b > g * 1.4;
           const darkness = 1 - lum;
-          if (darkness < threshold || isGreen) continue;
+          if (darkness < threshold || isGreen || isBlue) continue;
           const fade = 0.12;
           const alpha = Math.min(1, (darkness - threshold) / fade);
 
@@ -166,7 +172,21 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           const min = Math.min(r, g, b);
           const range = max - min;
           let fr = r, fg = g, fb = b;
-          if (pureColor) {
+          if (rawColor) {
+            fr = r;
+            fg = filterGreen ? Math.min(g, Math.max(r, b)) : g;
+            fb = b;
+          } else if (greyscale) {
+            const intensity = darkMode ? darkness : 1 - darkness;
+            if (tintRGB) {
+              fr = Math.floor(Math.max(0, Math.min(255, tintRGB[0] * intensity)));
+              fg = Math.floor(Math.max(0, Math.min(255, tintRGB[1] * intensity)));
+              fb = Math.floor(Math.max(0, Math.min(255, tintRGB[2] * intensity)));
+            } else {
+              const grey = Math.floor(Math.max(0, (darkMode ? intensity * 255 : intensity * 140)));
+              fr = fg = fb = grey;
+            }
+          } else if (pureColor) {
             // Mild vibrancy: small saturation + brightness boost while preserving hue
             // Slight pink shift (lift R and B, drop G a touch) to counter yellow cast
             const avg = (r + g + b) / 3;
@@ -364,7 +384,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
       if (fadeTimer) clearTimeout(fadeTimer);
     };
-  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize, binarySizeScale, filterGreen, pureColor]);
+  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize, binarySizeScale, filterGreen, filterBlue, pureColor, greyscale, rawColor, tintRGB, cropTop]);
 
   return (
     <div className={className} style={{ width: '100%', height: '100%', position: 'relative' }}>

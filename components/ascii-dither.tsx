@@ -427,7 +427,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     // Single-source uses the browser's native loop instead of manual
     // seek+play (which iOS Safari starts dropping after a few cycles).
     video.loop = sources.length === 1 && !onEnded;
-    cvs.style.transition = 'opacity 0.4s ease';
+    cvs.style.transition = 'opacity 0.25s ease';
     cvs.style.opacity = onEnded ? '1' : '0';
     let fadeTimer: number | null = null;
     let started = false;
@@ -486,9 +486,10 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       const remaining = video.duration - t;
 
       if (sources.length <= 1) {
-        // Loop boundary is now caught in the draw RAF — timeupdate just
-        // handles the fade-out trigger near the end of each pass.
-        if (remaining < 1.2 && cvs.style.opacity === '1') {
+        // Loop boundary is caught in the draw RAF; timeupdate just handles
+        // the fade-out trigger near the end of each pass. Trigger as late as
+        // safely possible so the invisible tail before the loop is short.
+        if (remaining < 0.5 && cvs.style.opacity === '1') {
           cvs.style.opacity = '0';
         }
       } else if (remaining < 0.4 && !earlyEndFired) {

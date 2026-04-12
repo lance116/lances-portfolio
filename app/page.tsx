@@ -89,11 +89,13 @@ export default function Home() {
   const [mode, setMode] = useState<'butterfly' | 'fish' | 'orchids'>('butterfly');
   const [fading, setFading] = useState(false);
   const [isNarrow, setIsNarrow] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     document.documentElement.classList.add('dark');
     const check = () => setIsNarrow(window.innerWidth < 1024 || window.innerWidth < window.innerHeight);
     check();
+    setMounted(true);
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
   }, []);
@@ -118,6 +120,11 @@ export default function Home() {
       setFading(false);
     }, 400);
   };
+
+  if (!mounted) {
+    const dark = mode === 'fish' || mode === 'orchids';
+    return <main className={`min-h-screen ${dark ? 'bg-black' : 'bg-white'}`} />;
+  }
 
   if (mode === 'fish') {
     if (isNarrow) {

@@ -146,6 +146,7 @@ export default function Home() {
               xOffsetBySrc={['-35%', '40%', '0%']}
               yOffsetBySrc={['15%', '10%', '15%']}
               scale={1.4}
+              batched
               className="w-full h-full"
             />
           </div>
@@ -207,6 +208,7 @@ export default function Home() {
               pureColor
               loopPauseMs={400}
               scale={1.3}
+              batched
               className="w-full h-full"
             />
           </div>
@@ -259,6 +261,7 @@ export default function Home() {
             cover
             loopPauseMs={400}
             offsetYSchedule={[[0, '-20%'], [4.2014, '0%'], [9.4918, '-20%']]}
+            batched
             className="w-full h-full"
           />
         </div>

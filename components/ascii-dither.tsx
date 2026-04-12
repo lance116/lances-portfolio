@@ -32,10 +32,11 @@ interface Props {
   scale?: number;
   onEnded?: () => void;
   playbackRate?: number;
+  batched?: boolean;
   className?: string;
 }
 
-export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, tintRGB, cropTop = false, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale = 1, onEnded, playbackRate = 1, className = '' }: Props) {
+export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, tintRGB, cropTop = false, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale = 1, onEnded, playbackRate = 1, batched = false, className = '' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [dimensions, setDimensions] = useState({ w: 600, h: 400 });
@@ -52,6 +53,11 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     let alive = true;
     const dpr = window.devicePixelRatio || 1;
     let pendingPaintCallback: (() => void) | null = null;
+    // Reused across frames when `batched` is on: groups cells by quantized
+    // (color, alpha) so we can emit one fill() per bucket. Big win on iOS
+    // Safari where per-cell fill() dominates; turn off on desktop where the
+    // bookkeeping costs more than the saved fills in high-color scenes.
+    const colorBuckets = new Map<number, Path2D>();
 
     // Wipe the canvas to bg color. Used before re-revealing on a seek/swap so
     // a stale frame held in the iOS Safari decode buffer can't flash through
@@ -181,19 +187,20 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
 
       // Pre-build a unit diamond Path2D once per frame for the binarySize case
       let fixedDiamond: Path2D | null = null;
-      if (binarySize) {
-        const r = cell * binarySizeScale;
+      const binR = binarySize ? cell * binarySizeScale : 0;
+      if (binarySize && !batched) {
         fixedDiamond = new Path2D();
-        fixedDiamond.moveTo(0, -r);
-        fixedDiamond.lineTo(r, 0);
-        fixedDiamond.lineTo(0, r);
-        fixedDiamond.lineTo(-r, 0);
+        fixedDiamond.moveTo(0, -binR);
+        fixedDiamond.lineTo(binR, 0);
+        fixedDiamond.lineTo(0, binR);
+        fixedDiamond.lineTo(-binR, 0);
         fixedDiamond.closePath();
       }
 
       // Cache last fillStyle/alpha to skip redundant style mutations
       let lastFr = -1, lastFg = -1, lastFb = -1, lastAlpha = -1;
       const fadeInv = 16 / 0.12;
+      if (batched) colorBuckets.clear();
 
       for (let row = 0; row < sampleRows; row++) {
         const rowBase = row * sampleCols;
@@ -261,30 +268,63 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
               fr = fg = fb = grey;
             }
           }
-          if (fr !== lastFr || fg !== lastFg || fb !== lastFb) {
-            ctx.fillStyle = `rgb(${fr},${fg},${fb})`;
-            lastFr = fr; lastFg = fg; lastFb = fb;
-          }
-          if (alpha !== lastAlpha) {
-            ctx.globalAlpha = alpha;
-            lastAlpha = alpha;
-          }
-
-          if (fixedDiamond) {
-            ctx.translate(cx, cy);
-            ctx.fill(fixedDiamond);
-            ctx.translate(-cx, -cy);
+          if (batched) {
+            const qr = fr >> 3;
+            const qg = fg >> 3;
+            const qb = fb >> 3;
+            const key = (qr << 15) | (qg << 10) | (qb << 5) | alphaQ;
+            let path = colorBuckets.get(key);
+            if (path === undefined) {
+              path = new Path2D();
+              colorBuckets.set(key, path);
+            }
+            const rad = binarySize ? binR : Math.sqrt(darkness) * cell * 0.85;
+            path.moveTo(cx, cy - rad);
+            path.lineTo(cx + rad, cy);
+            path.lineTo(cx, cy + rad);
+            path.lineTo(cx - rad, cy);
+            path.closePath();
           } else {
-            const rad = Math.sqrt(darkness) * cell * 0.85;
-            ctx.beginPath();
-            ctx.moveTo(cx, cy - rad);
-            ctx.lineTo(cx + rad, cy);
-            ctx.lineTo(cx, cy + rad);
-            ctx.lineTo(cx - rad, cy);
-            ctx.closePath();
-            ctx.fill();
+            if (fr !== lastFr || fg !== lastFg || fb !== lastFb) {
+              ctx.fillStyle = `rgb(${fr},${fg},${fb})`;
+              lastFr = fr; lastFg = fg; lastFb = fb;
+            }
+            if (alpha !== lastAlpha) {
+              ctx.globalAlpha = alpha;
+              lastAlpha = alpha;
+            }
+
+            if (fixedDiamond) {
+              ctx.translate(cx, cy);
+              ctx.fill(fixedDiamond);
+              ctx.translate(-cx, -cy);
+            } else {
+              const rad = Math.sqrt(darkness) * cell * 0.85;
+              ctx.beginPath();
+              ctx.moveTo(cx, cy - rad);
+              ctx.lineTo(cx + rad, cy);
+              ctx.lineTo(cx, cy + rad);
+              ctx.lineTo(cx - rad, cy);
+              ctx.closePath();
+              ctx.fill();
+            }
           }
         }
+      }
+
+      if (batched) {
+        ctx.globalAlpha = 1;
+        colorBuckets.forEach((path, key) => {
+          const qr = (key >> 15) & 31;
+          const qg = (key >> 10) & 31;
+          const qb = (key >> 5) & 31;
+          const aQ = key & 31;
+          const r8 = (qr << 3) | (qr >> 2);
+          const g8 = (qg << 3) | (qg >> 2);
+          const b8 = (qb << 3) | (qb >> 2);
+          ctx.fillStyle = `rgba(${r8},${g8},${b8},${aQ / 16})`;
+          ctx.fill(path);
+        });
       }
 
       if (fill && !darkMode && video.currentTime > 9.5) {
@@ -467,7 +507,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
       if (fadeTimer) clearTimeout(fadeTimer);
     };
-  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize, binarySizeScale, filterGreen, filterBlue, pureColor, greyscale, rawColor, tintRGB, cropTop, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale]);
+  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize, binarySizeScale, filterGreen, filterBlue, pureColor, greyscale, rawColor, tintRGB, cropTop, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale, batched]);
 
   return (
     <div className={className} style={{ width: '100%', height: '100%', position: 'relative', backgroundColor: darkMode ? '#000' : '#fff' }}>

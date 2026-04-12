@@ -14,7 +14,6 @@ function Logo({ src, alt, invert = false }: { src: string; alt: string; invert?:
         width={20}
         height={20}
         sizes="20px"
-        quality={100}
         style={invert ? { filter: 'invert(1)' } : undefined}
         className="h-[16px] w-[16px] sm:h-[18px] sm:w-[18px] object-contain align-middle"
       />
@@ -39,7 +38,7 @@ function BioContent({ dark, onSwitch }: { dark: boolean; onSwitch: () => void })
         <span className="leading-none">Lance Yan</span>
         <button
           onClick={onSwitch}
-          className={`p-1 transition-colors flex items-center ${dark ? 'text-white/50 hover:text-white' : 'text-neutral-400 hover:text-neutral-800'}`}
+          className={`p-1 transition-colors flex items-center relative top-[5px] ${dark ? 'text-white/50 hover:text-white' : 'text-neutral-400 hover:text-neutral-800'}`}
           aria-label="Switch background"
         >
           <RefreshCw size={26} />

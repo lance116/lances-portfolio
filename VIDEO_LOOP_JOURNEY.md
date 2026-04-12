@@ -69,15 +69,29 @@ canvas stayed cleared/hidden the whole time.
 - Reduce the `waitForFreshFrame` cap from 800ms to 200ms — still felt frozen.
 - Skip `waitForFreshFrame` entirely + pre-clear canvas — fixed the freeze
   but the stale frame came back (see issue 1).
-- **Switch single-source playback to the native `<video loop>` attribute.**
+- Switch single-source playback to the native `<video loop>` attribute.
   Browser handles the loop seamlessly with no `play()` call needed, so iOS
   has no rate-limit / decode-after-seek delay to introduce. Detect the loop
   boundary via `currentTime` jumping backwards and run the same
   clear+suppress dance to handle any remaining stale-buffer lag.
 - Initially detected the loop in `timeupdate` (~4Hz on iOS), which left a
   ~250ms gap between the actual loop boundary and the fade-in trigger.
-  **Moved loop detection into the draw RAF (~60Hz)** so the fade-in starts
+  Moved loop detection into the draw RAF (~60Hz) so the fade-in starts
   within ~16ms of the loop.
+- Cache the rendered first frame to an offscreen canvas during the initial
+  playthrough; paint it onto the visible canvas at every loop boundary so
+  the fade-in reveals real content immediately instead of cleared bg.
+- Tighten timings: fade-out trigger from `remaining < 1.2` to `< 0.5`,
+  CSS fade duration from 0.4s to 0.25s. Cuts the perceived pause window
+  significantly. None of this attacks the actual iOS decode latency, just
+  the surrounding fluff.
+- **Final fix: dual-video swap on iOS.** Render a second `<video>`
+  element kept paused at `currentTime=0` with frame 0 forcibly decoded
+  via a 40ms play+pause prime. When the active video ends, swap to the
+  standby and play it — playback resumes from a pre-decoded frame so iOS
+  skips the decode-from-seek latency entirely. The just-finished video
+  gets reset and re-primed for the next swap. iOS-only — Mac/non-iOS
+  keeps the simpler native loop path.
 
 ### 3. Video stops playing entirely after 3-4 cycles (iOS Safari)
 
@@ -94,9 +108,11 @@ white).
 **Things we tried:**
 - Add a 700ms watchdog after `play()` — if `currentTime` is still ~0, force
   `video.load()` + `play()` again. Helped but not 100% reliable.
-- **Switch single-source to `<video loop>`** (same fix as issue 2). With
+- **Switch single-source to `<video loop>`** (fixed issue 2 too). With
   native loop there is no manual `play()` per cycle, so iOS has nothing to
-  rate-limit. Failure mode disappeared.
+  rate-limit. Failure mode disappeared. The dual-video swap on iOS still
+  uses `play()` per cycle but on alternating elements, which iOS doesn't
+  appear to rate-limit the same way.
 
 ### 4. SSR layout flicker on first load
 
@@ -170,8 +186,11 @@ The "right" architectures are:
    detection for the fade. (This is what we landed on for single-source.)
 
 What we have now:
-- Single-source clips: native `<video loop>`, RAF-based loop detection,
-  clear+suppress on the boundary to handle iOS's stale buffer.
+- Single-source clips on **non-iOS**: native `<video loop>`, RAF-based loop
+  detection, clear+suppress + cached frame-0 paint on the boundary.
+- Single-source clips on **iOS**: dual `<video>` elements, swap on `ended`,
+  standby element kept paused at currentTime=0 with frame 0 forcibly
+  pre-decoded so the swap-time `play()` skips iOS's decode-from-seek wait.
 - Multi-source playlists: sequential canvas fade-out → src swap → fade-in,
   so both clips can never be visible at once.
 - Mobile: batched dither rendering for the per-cell `fill()` reduction.
@@ -183,12 +202,20 @@ What we have now:
 
 - `components/ascii-dither.tsx` — all rendering and playback state.
 - `clearCanvas()` — wipes to bg color before re-revealing.
+- `frame0Canvas` / `frame0Captured` — offscreen cache of the first
+  rendered frame, painted onto the visible canvas at every loop boundary
+  so the fade-in reveals real content immediately.
 - `suppressSampleUntilT` — gates the draw loop's `drawImage` until the
   video has actually advanced past the seek/loop point.
 - `lastDrawnVideoTime` — frame-skip cache; reset on restart so the next
   draw can't be incorrectly skipped.
 - `colorBuckets` (when `batched` is on) — per-frame `Map<number, Path2D>`
   for color-grouped fills.
+- `useDualVideo` / `activeVideo` / `standbyVideo` / `primeStandby()` —
+  iOS-only dual-video swap. Both `<video>` elements share the src;
+  `activeVideo` is sampled by `drawImage`, `standbyVideo` is paused at
+  currentTime=0 with frame 0 pre-decoded. On `ended`, refs swap and
+  the new active plays from a pre-decoded frame.
 
 ---
 

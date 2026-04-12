@@ -39,16 +39,38 @@ interface Props {
 export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, tintRGB, cropTop = false, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale = 1, onEnded, playbackRate = 1, batched = false, className = '' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  // Second video element used only on iOS single-source loops: kept paused at
+  // currentTime=0 with frame 0 pre-decoded so we can swap to it on the loop
+  // boundary instead of waiting for the same element to decode-after-seek.
+  const videoBRef = useRef<HTMLVideoElement>(null);
   const [dimensions, setDimensions] = useState({ w: 600, h: 400 });
 
   useEffect(() => {
     const cvs = canvasRef.current!;
-    const video = videoRef.current!;
-    if (!cvs || !video) return;
+    const videoA = videoRef.current!;
+    const videoB = videoBRef.current!;
+    if (!cvs || !videoA || !videoB) return;
 
     const ctx = cvs.getContext('2d')!;
     const sampler = document.createElement('canvas');
     const samplerCtx = sampler.getContext('2d', { willReadFrequently: true })!;
+
+    // iOS Safari has 200-500ms decode-after-loop latency that makes native
+    // <video loop> visibly stutter at every loop boundary. Detect iOS and use
+    // a second video element kept paused at currentTime=0 so we can swap to
+    // a pre-decoded element instead of waiting on a fresh decode.
+    const isIOS = typeof navigator !== 'undefined' && (
+      /iP(hone|od|ad)/.test(navigator.platform) ||
+      (navigator.platform === 'MacIntel' && (navigator as Navigator & { maxTouchPoints?: number }).maxTouchPoints !== undefined && (navigator as Navigator & { maxTouchPoints?: number }).maxTouchPoints! > 1)
+    );
+
+    // Two-video swap path used only for iOS single-source loops. Everything
+    // else (multi-source playlists, non-iOS) keeps a single video element
+    // and the native loop / src-swap behavior.
+    const useDualVideo = isIOS && !Array.isArray(src) && !onEnded;
+    let activeVideo = videoA;
+    let standbyVideo = videoB;
+    const video = videoA;
 
     let alive = true;
     const dpr = window.devicePixelRatio || 1;
@@ -96,11 +118,12 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       if (!alive) return;
       requestAnimationFrame(draw);
 
-      const vw = video.videoWidth;
-      const vh = video.videoHeight;
-      if (!vw || !vh || video.readyState < 2) return;
+      const v = activeVideo;
+      const vw = v.videoWidth;
+      const vh = v.videoHeight;
+      if (!vw || !vh || v.readyState < 2) return;
 
-      const curT = video.currentTime;
+      const curT = v.currentTime;
 
       // Detect a native loop boundary on the RAF tick (~60Hz). Paint the
       // cached frame-0 onto the canvas (instead of clearing) so the fade-in
@@ -225,7 +248,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       sampleRows = Math.max(1, Math.floor(sampleRows) || 1);
       sampler.width = sampleCols;
       sampler.height = sampleRows;
-      samplerCtx.drawImage(video, cropSX, cropSY, cropSW, cropSH, 0, 0, sampleCols, sampleRows);
+      samplerCtx.drawImage(v, cropSX, cropSY, cropSW, cropSH, 0, 0, sampleCols, sampleRows);
       const pixels = samplerCtx.getImageData(0, 0, sampleCols, sampleRows).data;
 
       // Render
@@ -380,7 +403,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         });
       }
 
-      if (fill && !darkMode && video.currentTime > 9.5) {
+      if (fill && !darkMode && v.currentTime > 9.5) {
         ctx.globalAlpha = 1;
         ctx.fillStyle = '#fff';
         ctx.fillRect(0, 0, containerW, totalH * 0.17);
@@ -424,9 +447,37 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     const sources = Array.isArray(src) ? src : [src];
     let currentIdx = 0;
     video.src = sources[currentIdx];
-    // Single-source uses the browser's native loop instead of manual
-    // seek+play (which iOS Safari starts dropping after a few cycles).
-    video.loop = sources.length === 1 && !onEnded;
+    // Native loop only when we're not dual-buffering. Dual-buffering manages
+    // the loop manually by swapping to the standby video on 'ended'.
+    video.loop = sources.length === 1 && !onEnded && !useDualVideo;
+
+    // Brief play+pause to force iOS to decode the standby video's frame 0
+    // into its display buffer, so the swap-time play() doesn't pay the same
+    // decode-from-seek latency we're trying to avoid.
+    const primeStandby = (v: HTMLVideoElement) => {
+      v.pause();
+      try { v.currentTime = 0; } catch {}
+      v.play().then(() => {
+        window.setTimeout(() => {
+          if (!alive) return;
+          v.pause();
+          try { v.currentTime = 0; } catch {}
+        }, 40);
+      }).catch(() => {});
+    };
+
+    if (useDualVideo) {
+      videoB.src = sources[0];
+      videoB.muted = true;
+      videoB.playsInline = true;
+      const onBReady = () => {
+        videoB.removeEventListener('canplay', onBReady);
+        if (!alive) return;
+        primeStandby(videoB);
+      };
+      videoB.addEventListener('canplay', onBReady);
+      videoB.load();
+    }
     cvs.style.transition = 'opacity 0.25s ease';
     cvs.style.opacity = onEnded ? '1' : '0';
     let fadeTimer: number | null = null;
@@ -437,28 +488,30 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     let earlyEndFired = false;
     let onNextPlaying: (() => void) | null = null;
 
-    const onLoaded = () => {
+    const onLoaded = (e: Event) => {
+      if (useDualVideo && e.target !== activeVideo) return;
       if (onEnded && !started) {
-        video.pause();
+        activeVideo.pause();
         setTimeout(() => {
           if (started) return;
           started = true;
-          video.playbackRate = playbackRate;
-          video.play().catch(() => {});
+          activeVideo.playbackRate = playbackRate;
+          activeVideo.play().catch(() => {});
           cvs.style.opacity = '1';
         }, HOLD_MS);
       }
     };
-    const onCanPlay = () => {
+    const onCanPlay = (e: Event) => {
+      if (useDualVideo && e.target !== activeVideo) return;
       if (!onEnded && !started) {
         started = true;
-        video.playbackRate = playbackRate;
-        video.play().catch(() => {});
+        activeVideo.playbackRate = playbackRate;
+        activeVideo.play().catch(() => {});
       }
       cvs.style.opacity = '1';
     };
     const applyOffset = () => {
-      const t = video.currentTime;
+      const t = activeVideo.currentTime;
       let activeY = '0%';
       if (offsetYSchedule && offsetYSchedule.length > 0) {
         for (const [start, y] of offsetYSchedule) {
@@ -476,14 +529,15 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         for (const [start, rate] of playbackRateSchedule) {
           if (t >= start) activeRate = rate;
         }
-        if (video.playbackRate !== activeRate) video.playbackRate = activeRate;
+        if (activeVideo.playbackRate !== activeRate) activeVideo.playbackRate = activeRate;
       }
     };
-    const onTimeUpdate = () => {
+    const onTimeUpdate = (e: Event) => {
+      if (useDualVideo && e.target !== activeVideo) return;
       if (onEnded) return;
-      if (!video.duration || isNaN(video.duration)) return;
-      const t = video.currentTime;
-      const remaining = video.duration - t;
+      if (!activeVideo.duration || isNaN(activeVideo.duration)) return;
+      const t = activeVideo.currentTime;
+      const remaining = activeVideo.duration - t;
 
       if (sources.length <= 1) {
         // Loop boundary is caught in the draw RAF; timeupdate just handles
@@ -495,25 +549,53 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       } else if (remaining < 0.4 && !earlyEndFired) {
         // Multi-source: trigger early so we can swap src under cover of fade.
         earlyEndFired = true;
-        video.dispatchEvent(new Event('ended'));
+        activeVideo.dispatchEvent(new Event('ended'));
       }
     };
-    const onPlay = () => {
+    const onPlay = (e: Event) => {
+      if (useDualVideo && e.target !== activeVideo) return;
       earlyEndFired = false;
       endedFired = false;
     };
-    const onEndedHandler = () => {
+    const onEndedHandler = (e: Event) => {
+      if (useDualVideo && e.target !== activeVideo) return;
       if (endedFired) return;
       endedFired = true;
       if (onEnded) {
         // Hold last frame briefly before signaling end
-        video.pause();
+        activeVideo.pause();
         setTimeout(() => onEnded(), HOLD_MS);
         return;
       }
-      // Single-source loops natively via the video element's loop attribute;
-      // the timeupdate handler manages the fade across the loop boundary.
-      if (sources.length <= 1) return;
+      if (sources.length <= 1) {
+        if (useDualVideo) {
+          // Swap to the pre-decoded standby video. Paint cached frame-0 so
+          // the canvas reveals real content the moment opacity returns to 1
+          // — no waiting on iOS to decode-from-seek.
+          const old = activeVideo;
+          activeVideo = standbyVideo;
+          standbyVideo = old;
+          activeVideo.play().catch(() => {});
+          if (frame0Captured && frame0Dims.w === cvs.width && frame0Dims.h === cvs.height) {
+            ctx.save();
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.globalAlpha = 1;
+            ctx.drawImage(frame0Canvas, 0, 0);
+            ctx.restore();
+          } else {
+            clearCanvas();
+          }
+          lastDrawnVideoTime = -1;
+          suppressSampleUntilT = activeVideo.currentTime;
+          suppressDeadlineMs = performance.now() + 400;
+          if (cvs.style.opacity !== '1') cvs.style.opacity = '1';
+          // Reset the just-finished video back to a primed standby state
+          // so it has frame 0 decoded and ready for the next swap.
+          primeStandby(old);
+        }
+        // Native loop (non-iOS) handles its own loop; nothing else to do.
+        return;
+      }
       // Sequential fade: hide current clip fully, then swap src, then reveal
       // new clip — guarantees no frame where both clips are visible.
       const FADE_OUT_MS = 400;
@@ -554,11 +636,18 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       }, FADE_OUT_MS);
     };
 
-    video.addEventListener('loadeddata', onLoaded);
-    video.addEventListener('canplay', onCanPlay);
-    video.addEventListener('timeupdate', onTimeUpdate);
-    video.addEventListener('play', onPlay);
-    video.addEventListener('ended', onEndedHandler);
+    videoA.addEventListener('loadeddata', onLoaded);
+    videoA.addEventListener('canplay', onCanPlay);
+    videoA.addEventListener('timeupdate', onTimeUpdate);
+    videoA.addEventListener('play', onPlay);
+    videoA.addEventListener('ended', onEndedHandler);
+    if (useDualVideo) {
+      videoB.addEventListener('loadeddata', onLoaded);
+      videoB.addEventListener('canplay', onCanPlay);
+      videoB.addEventListener('timeupdate', onTimeUpdate);
+      videoB.addEventListener('play', onPlay);
+      videoB.addEventListener('ended', onEndedHandler);
+    }
 
     draw();
 
@@ -571,12 +660,19 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     return () => {
       alive = false;
       window.removeEventListener('resize', onResize);
-      video.removeEventListener('loadeddata', onLoaded);
-      video.removeEventListener('canplay', onCanPlay);
-      video.removeEventListener('timeupdate', onTimeUpdate);
-      video.removeEventListener('play', onPlay);
-      video.removeEventListener('ended', onEndedHandler);
-      if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
+      videoA.removeEventListener('loadeddata', onLoaded);
+      videoA.removeEventListener('canplay', onCanPlay);
+      videoA.removeEventListener('timeupdate', onTimeUpdate);
+      videoA.removeEventListener('play', onPlay);
+      videoA.removeEventListener('ended', onEndedHandler);
+      if (useDualVideo) {
+        videoB.removeEventListener('loadeddata', onLoaded);
+        videoB.removeEventListener('canplay', onCanPlay);
+        videoB.removeEventListener('timeupdate', onTimeUpdate);
+        videoB.removeEventListener('play', onPlay);
+        videoB.removeEventListener('ended', onEndedHandler);
+      }
+      if (onNextPlaying) videoA.removeEventListener('playing', onNextPlaying);
       if (fadeTimer) clearTimeout(fadeTimer);
     };
   }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize, binarySizeScale, filterGreen, filterBlue, pureColor, greyscale, rawColor, tintRGB, cropTop, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale, batched]);
@@ -586,6 +682,13 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       <video
         ref={videoRef}
         autoPlay={!onEnded}
+        muted
+        playsInline
+        preload="auto"
+        style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: '100%', height: '100%', top: 0, left: 0 }}
+      />
+      <video
+        ref={videoBRef}
         muted
         playsInline
         preload="auto"

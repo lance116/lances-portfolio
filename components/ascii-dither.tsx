@@ -456,7 +456,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
   }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize, binarySizeScale, filterGreen, filterBlue, pureColor, greyscale, rawColor, tintRGB, cropTop, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale]);
 
   return (
-    <div className={className} style={{ width: '100%', height: '100%', position: 'relative' }}>
+    <div className={className} style={{ width: '100%', height: '100%', position: 'relative', backgroundColor: darkMode ? '#000' : '#fff' }}>
       <video
         ref={videoRef}
         autoPlay={!onEnded}

@@ -213,7 +213,7 @@ export default function Home() {
 
         {/* Text right */}
         <div className="w-[42%] flex items-center relative z-10">
-          <div className="px-8 sm:px-12 lg:px-16 py-16 sm:py-24 w-[820px] max-w-[820px] flex-shrink-0 -translate-x-[205px] bg-white">
+          <div className="px-8 sm:px-12 lg:px-16 py-16 sm:py-24 w-[820px] max-w-[820px] flex-shrink-0 -translate-x-[245px] bg-white">
             <BioContent dark={false} onSwitch={handleSwitch} />
           </div>
         </div>

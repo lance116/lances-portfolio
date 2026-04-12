@@ -1,0 +1,54 @@
+<h2>Pretext-powered portfolio ideas</h2>
+<p class="subtitle">3 approaches for making your single-page bio more interactive</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Expandable Bio Cards</h3>
+      <p>Each line item (Kalshi, UWaterloo, Traverse, etc.) becomes clickable. Clicking smoothly expands to reveal more detail — what you built, what you learned, key metrics. Pretext pre-calculates the expanded text height so the animation is <strong>buttery smooth with zero layout jank</strong>.</p>
+      <p style="margin-top:8px;opacity:0.7">Think: your resume becomes an interactive story. Visitors discover depth on demand.</p>
+      <div class="mockup" style="margin-top:12px">
+        <div class="mockup-header">Example interaction</div>
+        <div class="mockup-body" style="font-family:system-ui;font-size:14px;line-height:1.8">
+          <div style="opacity:0.5">◆ Previously:</div>
+          <div style="cursor:pointer;padding:8px 12px;border-radius:8px;background:rgba(100,100,255,0.08);border:1px solid rgba(100,100,255,0.2)">
+            <div>↳ Software Engineer/Builder at <strong>Kalshi</strong> <span style="opacity:0.4;font-size:12px">▼ click to expand</span></div>
+            <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(100,100,255,0.15);opacity:0.75;font-size:13px">
+              Built prediction market trading infrastructure handling $2M+ daily volume. Designed real-time order matching systems and WebSocket APIs for live market data.
+            </div>
+          </div>
+          <div style="margin-top:4px;opacity:0.5">↳ Founding Engineer at Stealth Startup</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Animated Page Load Cascade</h3>
+      <p>Instead of all text appearing at once, sections <strong>smoothly cascade in</strong> from zero height to their full measured height. Pretext calculates each section's final height upfront, so the staggered reveal animation is perfectly choreographed — no content jumping.</p>
+      <p style="margin-top:8px;opacity:0.7">Think: each section unfolds like a letter being opened, timed to the WebGL cursor effect.</p>
+      <div class="mockup" style="margin-top:12px">
+        <div class="mockup-header">Load sequence</div>
+        <div class="mockup-body" style="font-family:system-ui;font-size:13px;line-height:1.6">
+          <div style="opacity:1">1. "Lance Yan" + icons fade in (0ms)</div>
+          <div style="opacity:0.8">2. "Currently" section grows from 0 → full height (200ms)</div>
+          <div style="opacity:0.6">3. "Previously" section grows from 0 → full height (400ms)</div>
+          <div style="opacity:0.4">4. "Building" section grows from 0 → full height (600ms)</div>
+          <div style="margin-top:8px;font-size:12px;opacity:0.5">Each section's target height is pre-calculated by pretext — no DOM measurement needed, so animations start instantly without a layout pass.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Both A + B Combined</h3>
+      <p>Page loads with the cascade animation, then each item is expandable for detail. The site feels <strong>alive</strong> — it breathes on load, then responds to curiosity.</p>
+      <p style="margin-top:8px;opacity:0.7">This is the full pretext showcase. Cascade on load, expand on click, smooth reflow on resize. Every text transition is pre-measured and silky.</p>
+    </div>
+  </div>
+</div>

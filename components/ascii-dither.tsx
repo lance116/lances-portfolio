@@ -52,10 +52,6 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     let alive = true;
     const dpr = window.devicePixelRatio || 1;
     let pendingPaintCallback: (() => void) | null = null;
-    // Reused across frames: groups cells by quantized color+alpha so we can
-    // emit one fill() per group instead of one per cell. Keys are packed
-    // numbers to avoid per-cell string allocation (qr<<15 | qg<<10 | qb<<5 | aQ).
-    const colorBuckets = new Map<number, Path2D>();
 
     // Wipe the canvas to bg color. Used before re-revealing on a seek/swap so
     // a stale frame held in the iOS Safari decode buffer can't flash through
@@ -183,9 +179,21 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       const halfY = cellY / 2;
       const cell = cellX;
 
-      colorBuckets.clear();
-      const binR = binarySize ? cell * binarySizeScale : 0;
-      const fadeInv = 16 / 0.12; // const alpha multiplier (alpha = (darkness-threshold) * fadeInv)
+      // Pre-build a unit diamond Path2D once per frame for the binarySize case
+      let fixedDiamond: Path2D | null = null;
+      if (binarySize) {
+        const r = cell * binarySizeScale;
+        fixedDiamond = new Path2D();
+        fixedDiamond.moveTo(0, -r);
+        fixedDiamond.lineTo(r, 0);
+        fixedDiamond.lineTo(0, r);
+        fixedDiamond.lineTo(-r, 0);
+        fixedDiamond.closePath();
+      }
+
+      // Cache last fillStyle/alpha to skip redundant style mutations
+      let lastFr = -1, lastFg = -1, lastFb = -1, lastAlpha = -1;
+      const fadeInv = 16 / 0.12;
 
       for (let row = 0; row < sampleRows; row++) {
         const rowBase = row * sampleCols;
@@ -204,7 +212,10 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           let alphaQ = Math.round((darkness - threshold) * fadeInv);
           if (alphaQ <= 0) continue;
           if (alphaQ > 16) alphaQ = 16;
+          const alpha = alphaQ / 16;
 
+          const cx = (col + colOffset) * cellX + halfX;
+          const cy = (row + rowOffset) * cellY + halfY;
           let fr = r, fg = g, fb = b;
           if (rawColor) {
             if (filterGreen) fg = Math.min(g, Math.max(r, b));
@@ -250,45 +261,31 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
               fr = fg = fb = grey;
             }
           }
-
-          // Quantize to 5 bits per channel and pack with alpha into a numeric key
-          const qr = fr >> 3;
-          const qg = fg >> 3;
-          const qb = fb >> 3;
-          const key = (qr << 15) | (qg << 10) | (qb << 5) | alphaQ;
-
-          let path = colorBuckets.get(key);
-          if (path === undefined) {
-            path = new Path2D();
-            colorBuckets.set(key, path);
+          if (fr !== lastFr || fg !== lastFg || fb !== lastFb) {
+            ctx.fillStyle = `rgb(${fr},${fg},${fb})`;
+            lastFr = fr; lastFg = fg; lastFb = fb;
+          }
+          if (alpha !== lastAlpha) {
+            ctx.globalAlpha = alpha;
+            lastAlpha = alpha;
           }
 
-          const cx = (col + colOffset) * cellX + halfX;
-          const cy = (row + rowOffset) * cellY + halfY;
-          const rad = binarySize ? binR : Math.sqrt(darkness) * cell * 0.85;
-          path.moveTo(cx, cy - rad);
-          path.lineTo(cx + rad, cy);
-          path.lineTo(cx, cy + rad);
-          path.lineTo(cx - rad, cy);
-          path.closePath();
+          if (fixedDiamond) {
+            ctx.translate(cx, cy);
+            ctx.fill(fixedDiamond);
+            ctx.translate(-cx, -cy);
+          } else {
+            const rad = Math.sqrt(darkness) * cell * 0.85;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - rad);
+            ctx.lineTo(cx + rad, cy);
+            ctx.lineTo(cx, cy + rad);
+            ctx.lineTo(cx - rad, cy);
+            ctx.closePath();
+            ctx.fill();
+          }
         }
       }
-
-      // Single fill per (color, alpha) bucket — collapses thousands of fill()
-      // calls per frame into one per unique quantized color.
-      ctx.globalAlpha = 1;
-      colorBuckets.forEach((path, key) => {
-        const qr = (key >> 15) & 31;
-        const qg = (key >> 10) & 31;
-        const qb = (key >> 5) & 31;
-        const aQ = key & 31;
-        // Reconstruct ~original 0-255 channel from 5-bit quantized value
-        const r8 = (qr << 3) | (qr >> 2);
-        const g8 = (qg << 3) | (qg >> 2);
-        const b8 = (qb << 3) | (qb >> 2);
-        ctx.fillStyle = `rgba(${r8},${g8},${b8},${aQ / 16})`;
-        ctx.fill(path);
-      });
 
       if (fill && !darkMode && video.currentTime > 9.5) {
         ctx.globalAlpha = 1;

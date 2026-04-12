@@ -34,18 +34,18 @@ function BioContent({ dark, onSwitch }: { dark: boolean; onSwitch: () => void })
 
   return (
     <>
-      <h1 className={`text-3xl sm:text-4xl font-bold mb-8 ${headingColor} flex items-center gap-4`}>
+      <h1 className={`text-2xl sm:text-4xl font-bold mb-5 sm:mb-8 ${headingColor} flex items-center gap-3 sm:gap-4`}>
         <span className="leading-none">Lance Yan</span>
         <button
           onClick={onSwitch}
-          className={`p-1 transition-colors flex items-center relative top-[5px] ${dark ? 'text-white/50 hover:text-white' : 'text-neutral-400 hover:text-neutral-800'}`}
+          className={`p-1 transition-colors flex items-center relative top-[4px] sm:top-[5px] ${dark ? 'text-white/50 hover:text-white' : 'text-neutral-400 hover:text-neutral-800'}`}
           aria-label="Switch background"
         >
-          <RefreshCw size={26} />
+          <RefreshCw className="w-[22px] h-[22px] sm:w-[26px] sm:h-[26px]" />
         </button>
       </h1>
 
-      <div className={`space-y-6 text-base sm:text-lg leading-relaxed ${bodyColor}`}>
+      <div className={`space-y-4 sm:space-y-6 text-sm sm:text-lg leading-relaxed ${bodyColor}`}>
         <p>
           I&apos;m the co-founder and CEO of{' '}
           <Logo src="/traversing logo.png" alt="Traverse" />
@@ -76,7 +76,7 @@ function BioContent({ dark, onSwitch }: { dark: boolean; onSwitch: () => void })
         </p>
       </div>
 
-      <div className={`mt-12 text-sm space-x-6 ${footerColor}`}>
+      <div className={`mt-8 sm:mt-12 text-xs sm:text-sm space-x-6 ${footerColor}`}>
         <a href="https://x.com/lanceyyan/" target="_blank" rel="noreferrer" className={footerLink}>x</a>
         <a href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer" className={footerLink}>linkedin</a>
         <a href="mailto:lance.yan.business@gmail.com" className={footerLink}>email</a>
@@ -122,7 +122,7 @@ export default function Home() {
   if (mode === 'fish') {
     if (isNarrow) {
       return (
-        <main className="min-h-screen bg-black text-white flex flex-col transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
+        <main className="min-h-screen bg-black text-white flex flex-col justify-center transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
           <div className="w-full overflow-hidden" style={{ aspectRatio: '16 / 9' }}>
             <AsciiDither
               key="fish"
@@ -142,7 +142,7 @@ export default function Home() {
               className="w-full h-full"
             />
           </div>
-          <div className="flex-1 flex items-start justify-center px-10 sm:px-12 pt-8 pb-12" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
+          <div className="flex justify-center px-8 sm:px-12 pt-6 pb-8" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
             <div className="w-full max-w-[400px]">
               <BioContent dark onSwitch={handleSwitch} />
             </div>
@@ -180,8 +180,8 @@ export default function Home() {
   if (mode === 'orchids') {
     if (isNarrow) {
       return (
-        <main className="min-h-screen bg-black text-white transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
-          <div className="px-6 pt-12 pb-8" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
+        <main className="min-h-screen bg-black text-white flex flex-col justify-center transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
+          <div className="px-6 pt-8 pb-6 mx-auto w-full max-w-[480px]" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
             <BioContent dark onSwitch={handleSwitch} />
           </div>
           <div className="w-full" style={{ aspectRatio: '16 / 9' }}>
@@ -237,8 +237,8 @@ export default function Home() {
 
   if (isNarrow) {
     return (
-      <main className="min-h-screen bg-white text-neutral-800 transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
-        <div className="mx-auto px-6 sm:px-8 pt-12 pb-8 max-w-[640px] lg:max-w-[820px]" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
+      <main className="min-h-screen bg-white text-neutral-800 flex flex-col justify-center transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
+        <div className="mx-auto px-6 sm:px-8 pt-8 pb-6 max-w-[480px] sm:max-w-[640px] lg:max-w-[820px] w-full" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
           <BioContent dark={false} onSwitch={handleSwitch} />
         </div>
         <div className="w-full overflow-hidden" style={{ aspectRatio: '9 / 16' }}>

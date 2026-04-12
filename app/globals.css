@@ -70,15 +70,16 @@
   }
   html {
     min-height: 100%;
-    background: transparent;
+    min-height: 100dvh;
+    background: #fff;
     zoom: 0.85;
     -webkit-text-size-adjust: 70%;
   }
   body {
     @apply text-foreground;
     min-height: 100vh;
-    min-height: 100dvh; /* Dynamic viewport height for mobile */
-    background: transparent;
+    min-height: 100dvh;
+    background: #fff;
     position: relative;
   }
 

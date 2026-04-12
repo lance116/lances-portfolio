@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import { SplashCursor } from '@/components/ui/splash-cursor'
 import { Analytics } from '@vercel/analytics/react'
@@ -7,6 +7,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { MoreSpaceZoom } from '@/components/more-space-zoom'
 
 const inter = Inter({ subsets: ['latin'], weight: ['200','300'] })
+const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400','500','600','700','800','900'], variable: '--font-serif' })
 
 export const metadata: Metadata = {
   title: "Lance's Portfolio",
@@ -20,27 +21,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" style={{ backgroundColor: '#fff' }}>
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                const theme = localStorage.getItem('theme');
-                if (theme === 'dark') {
-                  document.documentElement.classList.add('dark');
-                }
-                // Ensure no white flash on page load
-                document.documentElement.style.backgroundColor = theme === 'dark' ? '#000' : '#fff';
-              })();
-            `,
-          }}
-        />
       </head>
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.className} ${playfair.variable} antialiased`}>
         <ThemeProvider>
-          <MoreSpaceZoom />
-          <SplashCursor />
           {children}
           <Analytics />
         </ThemeProvider>

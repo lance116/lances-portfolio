@@ -1,82 +1,99 @@
 'use client';
 
-import Image from "next/image";
-import { Mail } from "lucide-react";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { useNavigationBounce } from "@/lib/useNavigationBounce";
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { RefreshCw } from 'lucide-react';
+import { AsciiDither } from '@/components/ascii-dither';
 
-function Logo({ src, alt, size = 26, className = "" }: { src: string; alt: string; size?: number; className?: string }) {
+function Logo({ src, alt }: { src: string; alt: string }) {
   return (
-    <span className="inline-flex items-center align-middle relative -top-[1px]">
+    <span className="inline-flex items-center align-middle relative -top-[2px] mr-1">
       <Image
         src={src}
         alt={alt}
-        width={size}
-        height={size}
-        sizes={`${size}px`}
+        width={20}
+        height={20}
+        sizes="20px"
         quality={100}
-        priority={false}
-        className={`h-[18px] w-[18px] sm:h-[26px] sm:w-[26px] object-contain align-middle ${className}`}
+        className="h-[16px] w-[16px] sm:h-[18px] sm:w-[18px] object-contain align-middle"
       />
     </span>
   );
 }
 
-const Label = ({ children }: { children: React.ReactNode }) => (
-  <span className="relative -top-[1px] leading-none align-middle">{children}</span>
-);
-
 export default function Home() {
-  const { shouldBounce, markAsVisited } = useNavigationBounce('home');
+  const [videoSrc, setVideoSrc] = useState('/butterfly.mp4');
+
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+  }, []);
 
   return (
-    <main className="relative">
-      <div className="relative z-10 mx-auto max-w-[960px] px-4 md:px-12">
-        <div className="pt-16 sm:pt-24" />
+    <main className="fixed inset-0 bg-white text-neutral-800 overflow-hidden">
+      <div className="h-full flex flex-col sm:flex-row" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
+        {/* Butterfly left — full height */}
+        <div className="w-full sm:w-[58%] h-[50vh] sm:h-full overflow-hidden relative">
+          <AsciiDither
+            src={videoSrc}
+            cols={200}
+            color="source"
+            threshold={0.22}
+            fill
+            borderRight
+            className="w-full h-full"
+          />
+          <button
+            onClick={() => setVideoSrc('/fish 2.mov')}
+            className="absolute top-4 right-4 p-1.5 text-neutral-400 hover:text-neutral-800 transition-colors"
+            aria-label="Switch video"
+          >
+            <RefreshCw size={14} />
+          </button>
+        </div>
 
-        {/* Header */}
-        <div className="text-sm sm:text-xl leading-tight space-y-3">
-          <div className="flex items-center justify-between">
-            <h1 className="underline underline-offset-[3px] font-semibold">Lance Yan</h1>
-            {/* Social icons and theme toggle */}
-            <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-300">
-              <a href="https://x.com/lanceyyan/" target="_blank" rel="noreferrer" className={`hover:opacity-60 transition-opacity ${shouldBounce('x') ? 'nav-bounce' : ''}`} onClick={() => markAsVisited('x')}><Logo src="/X.png" alt="X" size={20} /></a>
-              <a href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer" className={`hover:opacity-60 transition-opacity ${shouldBounce('linkedin') ? 'nav-bounce-delayed-1' : ''}`} onClick={() => markAsVisited('linkedin')}><Logo src="/linkedin.webp" alt="LinkedIn" size={20} /></a>
-              <a href="mailto:lance.yan.business@gmail.com" className="hover:opacity-60 transition-opacity"><Mail size={20} /></a>
-              <ThemeToggle />
+        {/* Text right */}
+        <div className="w-full sm:w-[42%] flex items-center justify-center">
+          <div className="px-8 sm:px-12 lg:px-16 py-16 sm:py-24 sm:w-[800px] sm:min-w-[800px] sm:flex-shrink-0 sm:-translate-x-[170px]">
+            <h1 className="text-3xl sm:text-4xl font-bold text-neutral-900 mb-8">Lance Yan</h1>
+
+            <div className="space-y-6 text-base sm:text-lg leading-relaxed text-neutral-600">
+              <p>
+                I&apos;m the co-founder and CEO of{' '}
+                <Logo src="/traversing logo.png" alt="Traverse" />
+                <a href="https://traverse.so" target="_blank" rel="noreferrer" className="text-neutral-900 underline underline-offset-4 decoration-neutral-300 hover:decoration-neutral-900 transition-colors">Traverse</a>.
+                We&apos;re backed by{' '}
+                <Logo src="/YClogo.png" alt="Y Combinator" />
+                <a href="https://www.ycombinator.com/companies/clice-ai" target="_blank" rel="noreferrer" className="text-neutral-900 underline underline-offset-4 decoration-neutral-300 hover:decoration-neutral-900 transition-colors">Y Combinator</a>
+                {' '}with angels from{' '}
+                <Logo src="/OAI.webp" alt="OpenAI" />OpenAI,{' '}
+                <Logo src="/GDM.png" alt="Google DeepMind" />Google DeepMind,{' '}
+                <Logo src="/AN.png" alt="Anthropic" />Anthropic, and{' '}
+                <Logo src="/meta icon.png" alt="Meta" />Meta.
+              </p>
+
+              <p>
+                Previously, I studied CS at{' '}
+                <Logo src="/waterloo-logo.png" alt="UWaterloo" />UWaterloo — dropped out first semester. I had very brief stints as a builder/SWE at{' '}
+                <Logo src="/kalshi logo.png" alt="Kalshi" />
+                <a href="https://kalshi.com" target="_blank" rel="noreferrer" className="text-neutral-900 underline underline-offset-4 decoration-neutral-300 hover:decoration-neutral-900 transition-colors">Kalshi</a>,
+                founding engineer at a{' '}
+                <Logo src="/stealth logo.png" alt="Stealth" />stealth startup, and led 12 ML engineers at{' '}
+                <Logo src="/wat.jpeg" alt="wat.ai" />
+                <a href="https://watai.ca" target="_blank" rel="noreferrer" className="text-neutral-900 underline underline-offset-4 decoration-neutral-300 hover:decoration-neutral-900 transition-colors">wat.ai</a>.
+              </p>
+
+              <p>
+                We&apos;re building an applied data research lab that partners with frontier AI labs to produce the training data required for models to develop taste and judgment.
+              </p>
+            </div>
+
+            <div className="mt-12 text-sm text-neutral-500 space-x-6">
+              <a href="https://x.com/lanceyyan/" target="_blank" rel="noreferrer" className="underline underline-offset-4 hover:text-neutral-800 transition-colors">x</a>
+              <a href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer" className="underline underline-offset-4 hover:text-neutral-800 transition-colors">linkedin</a>
+              <a href="mailto:lance.yan.business@gmail.com" className="underline underline-offset-4 hover:text-neutral-800 transition-colors">email</a>
             </div>
           </div>
         </div>
-
-        {/* Currently */}
-        <div className="text-sm sm:text-xl leading-tight space-y-3 mt-6">
-          <div>◆ <span className="font-semibold">Currently:</span></div>
-          <div>↳ Co-Founder & CEO at <span className="inline-flex items-center align-middle gap-1"><Logo src="/traversing logo.png" alt="Traverse" /><Label><a href="https://traverse.so" target="_blank" rel="noreferrer" className="hover-underline-nudge font-semibold">Traverse</a></Label></span></div>
-          <div className="ml-4">↳ Backed by <span className="inline-flex items-center align-middle gap-1"><Logo src="/YClogo.png" alt="Y Combinator" /><Label><a href="https://www.ycombinator.com/companies/clice-ai" target="_blank" rel="noreferrer" className="hover-underline-nudge">Y Combinator</a></Label></span> with angels from <span className="inline-flex items-center align-middle gap-1"><Logo src="/OAI.webp" alt="OpenAI" /><Label>OpenAI</Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/GDM.png" alt="Google DeepMind" /><Label>Google DeepMind</Label></span>, and <span className="inline-flex items-center align-middle gap-1"><Logo src="/AN.png" alt="Anthropic" /><Label>Anthropic</Label></span></div>
-        </div>
-
-        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
-
-        {/* Previously */}
-        <div className="text-sm sm:text-xl leading-tight space-y-3">
-          <div>◆ <span className="font-semibold">Previously:</span></div>
-          <div>↳ CS at <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label>UWaterloo</Label></span></div>
-          <div className="ml-4">↳ First semester dropout</div>
-          <div>↳ Software Engineer/Builder at <span className="inline-flex items-center align-middle gap-1"><Logo src="/kalshi logo.png" alt="Kalshi" /><Label>Kalshi</Label></span></div>
-          <div>↳ Founding Engineer at <span className="inline-flex items-center align-middle gap-1"><Logo src="/stealth logo.png" alt="Stealth Startup" /><Label>Stealth Startup</Label></span></div>
-          <div>↳ Lead Machine Learning Engineer at <span className="inline-flex items-center align-middle gap-1"><Logo src="/wat.jpeg" alt="wat.ai" /><Label>wat.ai</Label></span>, <span className="inline-flex items-center align-middle gap-1"><Logo src="/waterloo-logo.png" alt="UWaterloo" /><Label>UWaterloo</Label></span>'s AI organization</div>
-        </div>
-
-        <div className="my-6 border-t border-neutral-200 dark:border-neutral-700" />
-
-        {/* Building */}
-        <div className="text-sm sm:text-xl leading-loose space-y-3">
-          <div>◆ <span className="font-semibold">Building:</span></div>
-          <div>↳ <span className="inline-flex items-center align-middle gap-1"><Logo src="/traversing logo.png" alt="Traverse" /><Label><a href="https://traverse.so" target="_blank" rel="noreferrer" className="hover-underline-nudge font-semibold">Traverse</a></Label></span> - Applied data research lab that partners with frontier AI labs to produce the training data required for models to develop taste and judgment.</div>
-          <div className="ml-4">↳ Our long-term goal is to give frontier models the foundations needed to perform and eventually surpass human white-collar work, accelerating the path toward artificial superintelligence.</div>
-        </div>
-
-        <div className="pb-16 sm:pb-24" />
       </div>
     </main>
   );

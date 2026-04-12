@@ -119,7 +119,7 @@ export default function Home() {
           <AsciiDither
             key="fish"
             src={['/fish3.mp4', '/fish4.mp4', '/fish2.mp4']}
-            cols={180}
+            cols={280}
             color="source"
             threshold={0.08}
             saturation={2}

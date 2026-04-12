@@ -7,8 +7,8 @@ const inter = Inter({ subsets: ['latin'], weight: ['200','300'] })
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400','500','600','700','800','900'], variable: '--font-serif' })
 
 export const metadata: Metadata = {
-  title: "Lance's Portfolio",
-  description: 'Built by Lance Y, Co-Founder and CEO of Traverse (YC W26)',
+  title: 'Lance Yan',
+  description: "Lance's website, Co-Founder and CEO of Traverse (YC W26)",
   icons: { icon: '/lance new logo.png' },
 }
 

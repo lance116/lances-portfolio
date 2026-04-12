@@ -17,6 +17,7 @@ interface Props {
   saturation?: number;
   loopPauseMs?: number;
   binarySize?: boolean;
+  binarySizeScale?: number;
   filterGreen?: boolean;
   pureColor?: boolean;
   onEnded?: () => void;
@@ -24,7 +25,7 @@ interface Props {
   className?: string;
 }
 
-export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, filterGreen = false, pureColor = false, onEnded, playbackRate = 1, className = '' }: Props) {
+export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, pureColor = false, onEnded, playbackRate = 1, className = '' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -199,7 +200,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           ctx.globalAlpha = alpha;
 
           // Halftone — diamond shapes (45° squares) scale with darkness
-          const rad = binarySize ? cell * 0.85 : Math.sqrt(darkness) * cell * 0.85;
+          const rad = binarySize ? cell * binarySizeScale : Math.sqrt(darkness) * cell * 0.85;
           ctx.beginPath();
           ctx.moveTo(cx, cy - rad);
           ctx.lineTo(cx + rad, cy);
@@ -239,6 +240,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     const HOLD_MS = 200;
 
     let earlyEndFired = false;
+    let onNextPlaying: (() => void) | null = null;
 
     const onLoaded = () => {
       if (onEnded && !started) {
@@ -301,7 +303,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         return;
       }
       currentIdx = (currentIdx + 1) % sources.length;
-      // Snapshot current main canvas to overlay for crossfade
+      // Snapshot current main canvas to overlay so it covers the swap
       overlay.width = cvs.width;
       overlay.height = cvs.height;
       overlay.style.width = cvs.style.width;
@@ -309,16 +311,36 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       overlayCtx.drawImage(cvs, 0, 0);
       overlay.style.transition = 'none';
       overlay.style.opacity = '1';
-      // Start fade after a frame so transition catches
-      requestAnimationFrame(() => {
-        overlay.style.transition = 'opacity 0.6s ease';
-        overlay.style.opacity = '0';
-      });
+
+      // Wait until the next clip is actually playing before fading the overlay
+      if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
+      const startFade = () => {
+        if (fadeTimer) clearTimeout(fadeTimer);
+        requestAnimationFrame(() => {
+          overlay.style.transition = 'opacity 0.6s ease';
+          overlay.style.opacity = '0';
+        });
+      };
+      onNextPlaying = () => {
+        if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
+        onNextPlaying = null;
+        startFade();
+      };
+      video.addEventListener('playing', onNextPlaying);
+
       if (fadeTimer) clearTimeout(fadeTimer);
+      // Safety fallback: if `playing` never fires, fade anyway after 1.5s
       fadeTimer = window.setTimeout(() => {
-        video.src = sources[currentIdx];
-        video.load();
-      }, 50);
+        if (onNextPlaying) {
+          video.removeEventListener('playing', onNextPlaying);
+          onNextPlaying = null;
+        }
+        startFade();
+      }, 1500);
+
+      video.src = sources[currentIdx];
+      video.load();
+      video.play().catch(() => {});
     };
 
     video.addEventListener('loadeddata', onLoaded);
@@ -339,9 +361,10 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       video.removeEventListener('timeupdate', onTimeUpdate);
       video.removeEventListener('play', onPlay);
       video.removeEventListener('ended', onEndedHandler);
+      if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
       if (fadeTimer) clearTimeout(fadeTimer);
     };
-  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize, filterGreen, pureColor]);
+  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize, binarySizeScale, filterGreen, pureColor]);
 
   return (
     <div className={className} style={{ width: '100%', height: '100%', position: 'relative' }}>

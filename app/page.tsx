@@ -199,7 +199,7 @@ export default function Home() {
               binarySize
               pureColor
               loopPauseMs={400}
-              scale={1.1}
+              scale={1.3}
               className="w-full h-full"
             />
           </div>

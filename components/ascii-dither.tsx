@@ -37,18 +37,15 @@ interface Props {
 
 export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, tintRGB, cropTop = false, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale = 1, onEnded, playbackRate = 1, className = '' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const overlayRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [dimensions, setDimensions] = useState({ w: 600, h: 400 });
 
   useEffect(() => {
     const cvs = canvasRef.current!;
-    const overlay = overlayRef.current!;
     const video = videoRef.current!;
-    if (!cvs || !overlay || !video) return;
+    if (!cvs || !video) return;
 
     const ctx = cvs.getContext('2d')!;
-    const overlayCtx = overlay.getContext('2d')!;
     const sampler = document.createElement('canvas');
     const samplerCtx = sampler.getContext('2d', { willReadFrequently: true })!;
 
@@ -477,7 +474,6 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: '100%', height: '100%', top: 0, left: 0 }}
       />
       <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover', position: 'relative', zIndex: 1 }} />
-      <canvas ref={overlayRef} style={{ display: 'block', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none', opacity: 0, zIndex: 2 }} />
     </div>
   );
 }

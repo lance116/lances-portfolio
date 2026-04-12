@@ -27,12 +27,15 @@ interface Props {
   cropTop?: boolean;
   offsetYSchedule?: Array<[number, string]>;
   playbackRateSchedule?: Array<[number, number]>;
+  xOffsetBySrc?: string[];
+  yOffsetBySrc?: string[];
+  scale?: number;
   onEnded?: () => void;
   playbackRate?: number;
   className?: string;
 }
 
-export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, tintRGB, cropTop = false, offsetYSchedule, playbackRateSchedule, onEnded, playbackRate = 1, className = '' }: Props) {
+export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, tintRGB, cropTop = false, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale = 1, onEnded, playbackRate = 1, className = '' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -315,13 +318,18 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     };
     const applyOffset = () => {
       const t = video.currentTime;
+      let activeY = '0%';
       if (offsetYSchedule && offsetYSchedule.length > 0) {
-        let active = '0%';
         for (const [start, y] of offsetYSchedule) {
-          if (t >= start) active = y;
+          if (t >= start) activeY = y;
         }
-        cvs.style.transform = `translateY(${active})`;
       }
+      const activeX = xOffsetBySrc && xOffsetBySrc[currentIdx] ? xOffsetBySrc[currentIdx] : '0%';
+      const srcY = yOffsetBySrc && yOffsetBySrc[currentIdx] ? yOffsetBySrc[currentIdx] : '0%';
+      const composedY = activeY === '0%' ? srcY : (srcY === '0%' ? activeY : `calc(${activeY} + ${srcY})`);
+      const transform = `translate(${activeX}, ${composedY}) scale(${scale})`;
+      if (cvs.style.transform !== transform) cvs.style.transform = transform;
+
       if (playbackRateSchedule && playbackRateSchedule.length > 0) {
         let activeRate = playbackRate;
         for (const [start, rate] of playbackRateSchedule) {
@@ -432,7 +440,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
       if (fadeTimer) clearTimeout(fadeTimer);
     };
-  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize, binarySizeScale, filterGreen, filterBlue, pureColor, greyscale, rawColor, tintRGB, cropTop, offsetYSchedule, playbackRateSchedule]);
+  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize, binarySizeScale, filterGreen, filterBlue, pureColor, greyscale, rawColor, tintRGB, cropTop, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale]);
 
   return (
     <div className={className} style={{ width: '100%', height: '100%', position: 'relative' }}>

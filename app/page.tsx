@@ -122,11 +122,8 @@ export default function Home() {
   if (mode === 'fish') {
     if (isNarrow) {
       return (
-        <main className="min-h-screen bg-black text-white transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
-          <div className="px-6 pt-12 pb-8" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
-            <BioContent dark onSwitch={handleSwitch} />
-          </div>
-          <div className="w-full" style={{ aspectRatio: '16 / 9' }}>
+        <main className="min-h-screen bg-black text-white flex flex-col transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
+          <div className="w-full overflow-hidden" style={{ aspectRatio: '16 / 9' }}>
             <AsciiDither
               key="fish"
               src={['/fish3.mp4', '/fish4.mp4', '/fish2.mp4']}
@@ -139,8 +136,16 @@ export default function Home() {
               invert
               darkMode
               binarySize
+              xOffsetBySrc={['-35%', '40%', '0%']}
+              yOffsetBySrc={['15%', '10%', '15%']}
+              scale={1.4}
               className="w-full h-full"
             />
+          </div>
+          <div className="flex-1 flex items-start justify-center px-10 sm:px-12 pt-8 pb-12" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
+            <div className="w-full max-w-[400px]">
+              <BioContent dark onSwitch={handleSwitch} />
+            </div>
           </div>
         </main>
       );
@@ -256,22 +261,22 @@ export default function Home() {
   return (
     <main className="fixed inset-0 bg-white text-neutral-800 overflow-hidden transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
       <div className="h-full flex flex-row" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
-        {/* Butterfly left — full height */}
-        <div className="w-[58%] h-full overflow-hidden relative">
+        {/* Butterfly left — full height, sized to video aspect */}
+        <div className="h-full overflow-hidden relative" style={{ width: '35%', borderRight: '1px solid rgba(0,0,0,0.1)' }}>
           <AsciiDither
             src="/butterfly.mp4"
-            cols={200}
+            cols={140}
             color="source"
             threshold={0.22}
             fill
-            borderRight
+            cover
             loopPauseMs={400}
             className="w-full h-full"
           />
         </div>
 
-        {/* Text right */}
-        <div className="w-[42%] flex items-center justify-center relative z-10">
+        {/* Text right — fills remaining space, paragraph centered in it */}
+        <div className="flex-1 flex items-center justify-center relative z-10">
           <div className="px-6 py-16 sm:py-24 w-full max-w-[580px]">
             <BioContent dark={false} onSwitch={handleSwitch} />
           </div>

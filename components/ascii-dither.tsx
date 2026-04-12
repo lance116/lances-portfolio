@@ -442,8 +442,15 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
 
       if (sources.length <= 1) {
         // Native loop just looped — currentTime jumped from near-end back to
-        // near-start. Reveal the canvas again for the new playthrough.
+        // near-start. Clear the canvas and suppress sampling until the video
+        // genuinely advances past the loop point (iOS Safari can hold the
+        // previous clip's last frame in its decode buffer for a beat),
+        // otherwise the fade-in reveals the stale end-frame.
         if (t < prevTime - 1 && cvs.style.opacity === '0') {
+          clearCanvas();
+          lastDrawnVideoTime = -1;
+          suppressSampleUntilT = t;
+          suppressDeadlineMs = performance.now() + 800;
           cvs.style.opacity = '1';
         }
         if (remaining < 1.2 && cvs.style.opacity === '1') {

@@ -94,6 +94,18 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
 
       const curT = video.currentTime;
 
+      // Detect a native loop boundary on the RAF tick (fires ~60Hz), instead
+      // of waiting for the next timeupdate (~4Hz) — that lag was the leftover
+      // ~250ms freeze before the cocoon came back in. Same clear+suppress
+      // dance to keep iOS Safari from flashing a stale buffered end-frame.
+      if (sources.length <= 1 && lastDrawnVideoTime > 0 && curT < lastDrawnVideoTime - 1) {
+        clearCanvas();
+        suppressSampleUntilT = curT;
+        suppressDeadlineMs = performance.now() + 500;
+        if (cvs.style.opacity !== '1') cvs.style.opacity = '1';
+        lastDrawnVideoTime = -1;
+      }
+
       // After a clear+restart, hold off sampling until the video has produced
       // a fresh frame past the seek point — otherwise drawImage would pull the
       // stale buffered last-frame and overwrite the cleared canvas.
@@ -383,7 +395,6 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     video.loop = sources.length === 1 && !onEnded;
     cvs.style.transition = 'opacity 0.4s ease';
     cvs.style.opacity = onEnded ? '1' : '0';
-    let prevTime = 0;
     let fadeTimer: number | null = null;
     let started = false;
     let endedFired = false;
@@ -441,18 +452,8 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       const remaining = video.duration - t;
 
       if (sources.length <= 1) {
-        // Native loop just looped — currentTime jumped from near-end back to
-        // near-start. Clear the canvas and suppress sampling until the video
-        // genuinely advances past the loop point (iOS Safari can hold the
-        // previous clip's last frame in its decode buffer for a beat),
-        // otherwise the fade-in reveals the stale end-frame.
-        if (t < prevTime - 1 && cvs.style.opacity === '0') {
-          clearCanvas();
-          lastDrawnVideoTime = -1;
-          suppressSampleUntilT = t;
-          suppressDeadlineMs = performance.now() + 800;
-          cvs.style.opacity = '1';
-        }
+        // Loop boundary is now caught in the draw RAF — timeupdate just
+        // handles the fade-out trigger near the end of each pass.
         if (remaining < 1.2 && cvs.style.opacity === '1') {
           cvs.style.opacity = '0';
         }
@@ -461,8 +462,6 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         earlyEndFired = true;
         video.dispatchEvent(new Event('ended'));
       }
-
-      prevTime = t;
     };
     const onPlay = () => {
       earlyEndFired = false;

@@ -184,7 +184,7 @@ export default function Home() {
           <div className="px-6 pt-8 pb-6 mx-auto w-full max-w-[480px]" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
             <BioContent dark onSwitch={handleSwitch} />
           </div>
-          <div className="w-full" style={{ aspectRatio: '16 / 9' }}>
+          <div className="w-full overflow-hidden" style={{ aspectRatio: '16 / 9' }}>
             <AsciiDither
               key="orchids"
               src="/orchids.mp4"
@@ -199,6 +199,7 @@ export default function Home() {
               binarySize
               pureColor
               loopPauseMs={400}
+              scale={1.1}
               className="w-full h-full"
             />
           </div>

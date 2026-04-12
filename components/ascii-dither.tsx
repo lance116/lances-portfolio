@@ -402,51 +402,45 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         }
         return;
       }
-      // Snapshot current main canvas + its transform to overlay so it covers
-      // the swap even after applyOffset jumps the canvas to the next clip's
-      // per-source offset/scale on the next draw.
-      overlay.width = cvs.width;
-      overlay.height = cvs.height;
-      overlay.style.width = cvs.style.width;
-      overlay.style.height = cvs.style.height;
-      overlayCtx.drawImage(cvs, 0, 0);
-      overlay.style.transition = 'none';
-      overlay.style.transform = cvs.style.transform;
-      overlay.style.opacity = '1';
+      // Sequential fade: hide current clip fully, then swap src, then reveal
+      // new clip — guarantees no frame where both clips are visible.
+      const FADE_OUT_MS = 400;
+      cvs.style.transition = 'opacity 0.4s ease';
+      cvs.style.opacity = '0';
 
-      currentIdx = (currentIdx + 1) % sources.length;
+      setTimeout(() => {
+        if (!alive) return;
+        currentIdx = (currentIdx + 1) % sources.length;
 
-      // Wait until the next clip is actually playing AND a fresh frame is painted before fading the overlay
-      if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
-      const startFade = () => {
-        if (fadeTimer) clearTimeout(fadeTimer);
-        pendingPaintCallback = () => {
-          overlay.style.transition = 'opacity 0.6s ease';
-          overlay.style.opacity = '0';
-        };
-      };
-      onNextPlaying = () => {
         if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
-        onNextPlaying = null;
-        waitForFreshFrame(startFade);
-      };
-      video.addEventListener('playing', onNextPlaying);
-
-      if (fadeTimer) clearTimeout(fadeTimer);
-      // Safety fallback: if `playing` never fires, fade anyway after 1.5s
-      fadeTimer = window.setTimeout(() => {
-        if (onNextPlaying) {
-          video.removeEventListener('playing', onNextPlaying);
+        const reveal = () => {
+          pendingPaintCallback = () => {
+            cvs.style.opacity = '1';
+          };
+        };
+        onNextPlaying = () => {
+          if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
           onNextPlaying = null;
-        }
-        pendingPaintCallback = null;
-        overlay.style.transition = 'opacity 0.6s ease';
-        overlay.style.opacity = '0';
-      }, 1500);
+          if (fadeTimer) clearTimeout(fadeTimer);
+          waitForFreshFrame(reveal);
+        };
+        video.addEventListener('playing', onNextPlaying);
 
-      video.src = sources[currentIdx];
-      video.load();
-      video.play().catch(() => {});
+        if (fadeTimer) clearTimeout(fadeTimer);
+        // Safety fallback: if `playing` never fires, reveal anyway after 1.5s
+        fadeTimer = window.setTimeout(() => {
+          if (onNextPlaying) {
+            video.removeEventListener('playing', onNextPlaying);
+            onNextPlaying = null;
+          }
+          pendingPaintCallback = null;
+          cvs.style.opacity = '1';
+        }, 1500);
+
+        video.src = sources[currentIdx];
+        video.load();
+        video.play().catch(() => {});
+      }, FADE_OUT_MS);
     };
 
     video.addEventListener('loadeddata', onLoaded);

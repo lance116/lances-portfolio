@@ -460,9 +460,19 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           clearCanvas();
           lastDrawnVideoTime = -1;
           suppressSampleUntilT = 0;
-          suppressDeadlineMs = performance.now() + 1000;
+          suppressDeadlineMs = performance.now() + 1500;
           video.currentTime = 0;
           video.play().catch(() => {});
+          // iOS Safari starts dropping rapid seek+play after a few cycles —
+          // currentTime gets stuck at 0 and play() resolves without actually
+          // playing. If the seek+play didn't take, force a hard reload.
+          window.setTimeout(() => {
+            if (!alive) return;
+            if (video.currentTime < 0.05) {
+              video.load();
+              video.play().catch(() => {});
+            }
+          }, 700);
           requestAnimationFrame(() => {
             cvs.style.opacity = '1';
           });

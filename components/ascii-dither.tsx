@@ -94,24 +94,30 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
 
       const curT = video.currentTime;
 
-      // Detect a native loop boundary on the RAF tick (fires ~60Hz), instead
-      // of waiting for the next timeupdate (~4Hz) — that lag was the leftover
-      // ~250ms freeze before the cocoon came back in. Same clear+suppress
-      // dance to keep iOS Safari from flashing a stale buffered end-frame.
+      // Detect a native loop boundary on the RAF tick (~60Hz), instead of
+      // waiting for the next timeupdate (~4Hz). Clear the canvas, suppress
+      // sampling until the video genuinely advances past the loop point, and
+      // — critically — leave opacity at 0. We hold the fade-in until the
+      // video is actually playing so the fade never reveals the cleared bg
+      // (which iOS reaches mid-fade because its decode-after-loop latency
+      // varies wildly, looking like a white flash).
       if (sources.length <= 1 && lastDrawnVideoTime > 0 && curT < lastDrawnVideoTime - 1) {
         clearCanvas();
         suppressSampleUntilT = curT;
-        suppressDeadlineMs = performance.now() + 500;
-        if (cvs.style.opacity !== '1') cvs.style.opacity = '1';
+        suppressDeadlineMs = performance.now() + 800;
         lastDrawnVideoTime = -1;
       }
 
-      // After a clear+restart, hold off sampling until the video has produced
-      // a fresh frame past the seek point — otherwise drawImage would pull the
-      // stale buffered last-frame and overwrite the cleared canvas.
       if (suppressSampleUntilT >= 0) {
         if (curT > suppressSampleUntilT + 0.001 || performance.now() > suppressDeadlineMs) {
           suppressSampleUntilT = -1;
+          // Video has a fresh frame ready — start the fade-in after this
+          // draw renders it, so the transition only ever shows the video.
+          if (sources.length <= 1 && cvs.style.opacity === '0') {
+            pendingPaintCallback = () => {
+              cvs.style.opacity = '1';
+            };
+          }
         } else {
           if (pendingPaintCallback) {
             const cb = pendingPaintCallback;

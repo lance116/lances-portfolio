@@ -69,6 +69,8 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       return container ? container.clientWidth : 600;
     }
 
+    let lastDrawnVideoTime = -1;
+
     function draw() {
       if (!alive) return;
       requestAnimationFrame(draw);
@@ -76,6 +78,20 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       const vw = video.videoWidth;
       const vh = video.videoHeight;
       if (!vw || !vh || video.readyState < 2) return;
+
+      // Skip the heavy resample/render if the video frame hasn't advanced.
+      // 60fps RAF on 25fps video would otherwise repeat identical work.
+      const curT = video.currentTime;
+      if (curT === lastDrawnVideoTime) {
+        if (pendingPaintCallback) {
+          const cb = pendingPaintCallback;
+          pendingPaintCallback = null;
+          cb();
+        }
+        return;
+      }
+      lastDrawnVideoTime = curT;
+
       applyOffset();
 
       const container = cvs.parentElement;

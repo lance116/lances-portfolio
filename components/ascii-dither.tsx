@@ -57,15 +57,30 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     // numbers to avoid per-cell string allocation (qr<<15 | qg<<10 | qb<<5 | aQ).
     const colorBuckets = new Map<number, Path2D>();
 
-    // After seek/src-swap, give the draw loop two RAFs so it samples the new
-    // frame at least once before we reveal it. Avoids relying on rVFC, which
-    // can be delayed by hundreds of ms after a seek and looks like a freeze.
+    // After seek/src-swap, wait until the video has actually advanced past the
+    // seek point — that's the only reliable signal that iOS Safari has
+    // presented a fresh frame (rather than the stale end-of-clip frame still
+    // sitting in its decode buffer). Then one extra RAF so the draw loop has
+    // sampled it before we reveal the canvas. 800ms safety cap so a stalled
+    // play() never leaves the canvas hidden forever.
     const waitForFreshFrame = (cb: () => void) => {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          if (alive) cb();
-        });
-      });
+      const startT = video.currentTime;
+      const startMs = performance.now();
+      const check = () => {
+        if (!alive) return;
+        if (video.currentTime > startT + 0.001) {
+          requestAnimationFrame(() => { if (alive) cb(); });
+          return;
+        }
+        if (performance.now() - startMs > 800) {
+          // Video stalled — try to kick it and reveal anyway.
+          video.play().catch(() => {});
+          cb();
+          return;
+        }
+        requestAnimationFrame(check);
+      };
+      requestAnimationFrame(check);
     };
 
     function getSize() {

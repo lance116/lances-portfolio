@@ -144,14 +144,22 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           clearCanvas();
         }
         suppressSampleUntilT = curT;
-        suppressDeadlineMs = performance.now() + 500;
-        if (cvs.style.opacity !== '1') cvs.style.opacity = '1';
+        suppressDeadlineMs = performance.now() + 800;
+        // Don't kick off the fade-in here — the suppress-release path below
+        // does it once the video has actually advanced past the loop point,
+        // so the fade only ever reveals genuinely-playing video.
         lastDrawnVideoTime = -1;
       }
 
       if (suppressSampleUntilT >= 0) {
         if (curT > suppressSampleUntilT + 0.001 || performance.now() > suppressDeadlineMs) {
           suppressSampleUntilT = -1;
+          if (sources.length <= 1 && cvs.style.opacity === '0') {
+            // Schedule fade-in after this same draw renders the fresh frame.
+            pendingPaintCallback = () => {
+              cvs.style.opacity = '1';
+            };
+          }
         } else {
           if (pendingPaintCallback) {
             const cb = pendingPaintCallback;
@@ -570,8 +578,10 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       if (sources.length <= 1) {
         if (useDualVideo) {
           // Swap to the pre-decoded standby video. Paint cached frame-0 so
-          // the canvas reveals real content the moment opacity returns to 1
-          // — no waiting on iOS to decode-from-seek.
+          // the canvas has real content if anything peeks through, then let
+          // the suppress-release path handle the fade-in once the new active
+          // video is actually playing — that way the fade never starts
+          // before iOS has the new clip going.
           const old = activeVideo;
           activeVideo = standbyVideo;
           standbyVideo = old;
@@ -587,8 +597,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           }
           lastDrawnVideoTime = -1;
           suppressSampleUntilT = activeVideo.currentTime;
-          suppressDeadlineMs = performance.now() + 400;
-          if (cvs.style.opacity !== '1') cvs.style.opacity = '1';
+          suppressDeadlineMs = performance.now() + 800;
           // Reset the just-finished video back to a primed standby state
           // so it has frame 0 decoded and ready for the next swap.
           primeStandby(old);

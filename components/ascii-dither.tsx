@@ -54,6 +54,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
 
     let alive = true;
     const dpr = window.devicePixelRatio || 1;
+    let pendingPaintCallback: (() => void) | null = null;
 
     function getSize() {
       const container = cvs.parentElement;
@@ -280,6 +281,12 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       }
 
       ctx.restore();
+
+      if (pendingPaintCallback) {
+        const cb = pendingPaintCallback;
+        pendingPaintCallback = null;
+        cb();
+      }
     }
 
     // Playlist support with fade transitions
@@ -365,11 +372,15 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       }
       if (sources.length <= 1) {
         const restart = () => {
+          const onSeeked = () => {
+            video.removeEventListener('seeked', onSeeked);
+            pendingPaintCallback = () => {
+              cvs.style.opacity = '1';
+            };
+          };
+          video.addEventListener('seeked', onSeeked);
           video.currentTime = 0;
           video.play().catch(() => {});
-          requestAnimationFrame(() => {
-            cvs.style.opacity = '1';
-          });
         };
         if (loopPauseMs > 0) {
           setTimeout(restart, loopPauseMs);
@@ -388,14 +399,14 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       overlay.style.transition = 'none';
       overlay.style.opacity = '1';
 
-      // Wait until the next clip is actually playing before fading the overlay
+      // Wait until the next clip is actually playing AND a fresh frame is painted before fading the overlay
       if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
       const startFade = () => {
         if (fadeTimer) clearTimeout(fadeTimer);
-        requestAnimationFrame(() => {
+        pendingPaintCallback = () => {
           overlay.style.transition = 'opacity 0.6s ease';
           overlay.style.opacity = '0';
-        });
+        };
       };
       onNextPlaying = () => {
         if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
@@ -411,7 +422,9 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           video.removeEventListener('playing', onNextPlaying);
           onNextPlaying = null;
         }
-        startFade();
+        pendingPaintCallback = null;
+        overlay.style.transition = 'opacity 0.6s ease';
+        overlay.style.opacity = '0';
       }, 1500);
 
       video.src = sources[currentIdx];

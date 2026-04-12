@@ -17,22 +17,27 @@ interface Props {
   saturation?: number;
   loopPauseMs?: number;
   binarySize?: boolean;
+  filterGreen?: boolean;
+  pureColor?: boolean;
   onEnded?: () => void;
   playbackRate?: number;
   className?: string;
 }
 
-export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, onEnded, playbackRate = 1, className = '' }: Props) {
+export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, filterGreen = false, pureColor = false, onEnded, playbackRate = 1, className = '' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const overlayRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [dimensions, setDimensions] = useState({ w: 600, h: 400 });
 
   useEffect(() => {
     const cvs = canvasRef.current!;
+    const overlay = overlayRef.current!;
     const video = videoRef.current!;
-    if (!cvs || !video) return;
+    if (!cvs || !overlay || !video) return;
 
     const ctx = cvs.getContext('2d')!;
+    const overlayCtx = overlay.getContext('2d')!;
     const sampler = document.createElement('canvas');
     const samplerCtx = sampler.getContext('2d', { willReadFrequently: true })!;
 
@@ -148,7 +153,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           let lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
           if (invert) lum = 1 - lum;
 
-          const isGreen = g > 50 && g > r * 1.1 && g > b * 1.1;
+          const isGreen = filterGreen && g > 50 && g > r * 1.1 && g > b * 1.1;
           const darkness = 1 - lum;
           if (darkness < threshold || isGreen) continue;
           const fade = 0.12;
@@ -160,14 +165,22 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           const min = Math.min(r, g, b);
           const range = max - min;
           let fr = r, fg = g, fb = b;
-          if (range > 15) {
+          if (pureColor) {
+            // Mild vibrancy: small saturation + brightness boost while preserving hue
+            // Slight pink shift (lift R and B, drop G a touch) to counter yellow cast
+            const avg = (r + g + b) / 3;
+            const sat = saturation;
+            fr = Math.max(0, Math.min(255, (avg + (r - avg) * sat) * 1.32));
+            fg = Math.max(0, Math.min(255, (avg + (g - avg) * sat) * 1.10));
+            fb = Math.max(0, Math.min(255, (avg + (b - avg) * sat) * 1.35));
+          } else if (range > 15) {
             const avg = (r + g + b) / 3;
             const sat = saturation;
             fr = Math.max(0, Math.min(255, avg + (r - avg) * sat));
             fg = Math.max(0, Math.min(255, avg + (g - avg) * sat));
             fb = Math.max(0, Math.min(255, avg + (b - avg) * sat));
             const targetLum = darkMode
-              ? Math.max(120, darkness * 255)
+              ? Math.max(150, darkness * 280)
               : Math.min(170, (1 - darkness) * 250);
             const curLum = (fr + fg + fb) / 3;
             if (curLum > 0) {
@@ -225,9 +238,10 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     let endedFired = false;
     const HOLD_MS = 200;
 
-    video.addEventListener('loadeddata', () => {
+    let earlyEndFired = false;
+
+    const onLoaded = () => {
       if (onEnded && !started) {
-        // Transition mode: hold on first frame briefly, then play
         video.pause();
         setTimeout(() => {
           if (started) return;
@@ -237,41 +251,35 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           cvs.style.opacity = '1';
         }, HOLD_MS);
       }
-    });
-
-    video.addEventListener('canplay', () => {
+    };
+    const onCanPlay = () => {
       if (!onEnded && !started) {
         started = true;
         video.playbackRate = playbackRate;
         video.play().catch(() => {});
       }
       cvs.style.opacity = '1';
-    });
-
-    let earlyEndFired = false;
-    video.addEventListener('timeupdate', () => {
+    };
+    const onTimeUpdate = () => {
       if (onEnded) return;
       if (!video.duration || isNaN(video.duration)) return;
       const remaining = video.duration - video.currentTime;
-      // Start fading out 0.8s before the cut point (0.4s before actual end)
-      if (remaining < 1.2 && cvs.style.opacity === '1') {
+      if (sources.length <= 1 && remaining < 1.2 && cvs.style.opacity === '1') {
         cvs.style.opacity = '0';
       }
-      // Trigger swap/loop 0.4s before actual end
       if (remaining < 0.4 && !earlyEndFired) {
         earlyEndFired = true;
         video.dispatchEvent(new Event('ended'));
       }
-    });
-
-    video.addEventListener('play', () => {
+    };
+    const onPlay = () => {
       earlyEndFired = false;
-    });
-
-    video.addEventListener('ended', () => {
+      endedFired = false;
+    };
+    const onEndedHandler = () => {
+      if (endedFired) return;
+      endedFired = true;
       if (onEnded) {
-        if (endedFired) return;
-        endedFired = true;
         // Hold last frame briefly before signaling end
         video.pause();
         setTimeout(() => onEnded(), HOLD_MS);
@@ -293,22 +301,50 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         return;
       }
       currentIdx = (currentIdx + 1) % sources.length;
+      // Snapshot current main canvas to overlay for crossfade
+      overlay.width = cvs.width;
+      overlay.height = cvs.height;
+      overlay.style.width = cvs.style.width;
+      overlay.style.height = cvs.style.height;
+      overlayCtx.drawImage(cvs, 0, 0);
+      overlay.style.transition = 'none';
+      overlay.style.opacity = '1';
+      // Start fade after a frame so transition catches
+      requestAnimationFrame(() => {
+        overlay.style.transition = 'opacity 0.6s ease';
+        overlay.style.opacity = '0';
+      });
       if (fadeTimer) clearTimeout(fadeTimer);
       fadeTimer = window.setTimeout(() => {
         video.src = sources[currentIdx];
         video.load();
-      }, 100);
-    });
+      }, 50);
+    };
+
+    video.addEventListener('loadeddata', onLoaded);
+    video.addEventListener('canplay', onCanPlay);
+    video.addEventListener('timeupdate', onTimeUpdate);
+    video.addEventListener('play', onPlay);
+    video.addEventListener('ended', onEndedHandler);
 
     draw();
 
     const onResize = () => draw();
     window.addEventListener('resize', onResize);
-    return () => { alive = false; window.removeEventListener('resize', onResize); };
-  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize]);
+    return () => {
+      alive = false;
+      window.removeEventListener('resize', onResize);
+      video.removeEventListener('loadeddata', onLoaded);
+      video.removeEventListener('canplay', onCanPlay);
+      video.removeEventListener('timeupdate', onTimeUpdate);
+      video.removeEventListener('play', onPlay);
+      video.removeEventListener('ended', onEndedHandler);
+      if (fadeTimer) clearTimeout(fadeTimer);
+    };
+  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize, filterGreen, pureColor]);
 
   return (
-    <div className={className} style={{ width: '100%', height: '100%', position: 'relative', backgroundColor: '#fff' }}>
+    <div className={className} style={{ width: '100%', height: '100%', position: 'relative' }}>
       <video
         ref={videoRef}
         autoPlay={!onEnded}
@@ -318,7 +354,8 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         crossOrigin="anonymous"
         style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 1, height: 1 }}
       />
-      <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} />
+      <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover', position: 'relative', zIndex: 1 }} />
+      <canvas ref={overlayRef} style={{ display: 'block', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none', opacity: 0, zIndex: 2 }} />
     </div>
   );
 }

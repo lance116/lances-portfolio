@@ -35,14 +35,14 @@ function BioContent({ dark, onSwitch }: { dark: boolean; onSwitch: () => void })
 
   return (
     <>
-      <h1 className={`text-3xl sm:text-4xl font-bold mb-8 ${headingColor} flex items-center gap-3`}>
-        <span>Lance Yan</span>
+      <h1 className={`text-3xl sm:text-4xl font-bold mb-8 ${headingColor} flex items-center gap-4`}>
+        <span className="leading-none">Lance Yan</span>
         <button
           onClick={onSwitch}
-          className={`p-1.5 transition-colors ${dark ? 'text-white/50 hover:text-white' : 'text-neutral-400 hover:text-neutral-800'}`}
+          className={`p-1 transition-colors flex items-center ${dark ? 'text-white/50 hover:text-white' : 'text-neutral-400 hover:text-neutral-800'}`}
           aria-label="Switch background"
         >
-          <RefreshCw size={16} />
+          <RefreshCw size={26} />
         </button>
       </h1>
 
@@ -87,10 +87,9 @@ function BioContent({ dark, onSwitch }: { dark: boolean; onSwitch: () => void })
 }
 
 export default function Home() {
-  const [mode, setMode] = useState<'butterfly' | 'fish'>('butterfly');
+  const [mode, setMode] = useState<'butterfly' | 'fish' | 'orchids'>('butterfly');
   const [fading, setFading] = useState(false);
   const [isNarrow, setIsNarrow] = useState(false);
-  const isFish = mode === 'fish';
 
   useEffect(() => {
     document.documentElement.classList.add('dark');
@@ -101,18 +100,25 @@ export default function Home() {
   }, []);
 
   const handleSwitch = () => {
+    if (mode === 'orchids') {
+      setFading(true);
+      setTimeout(() => window.location.reload(), 400);
+      return;
+    }
     setFading(true);
     setTimeout(() => {
-      setMode(mode === 'butterfly' ? 'fish' : 'butterfly');
+      const next = mode === 'butterfly' ? 'fish' : 'orchids';
+      setMode(next);
       setFading(false);
     }, 400);
   };
 
-  if (isFish) {
+  if (mode === 'fish') {
     return (
       <main className="fixed inset-0 bg-black text-white overflow-hidden transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
         <div className="absolute inset-0 z-0">
           <AsciiDither
+            key="fish"
             src={['/fish3.mp4', '/fish4.mp4', '/fish2.mp4']}
             cols={180}
             color="source"
@@ -127,6 +133,36 @@ export default function Home() {
         </div>
         <div className="absolute inset-0 z-10 flex items-center justify-center px-6 sm:px-12 overflow-y-auto" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
           <div className="max-w-[640px] py-16">
+            <BioContent dark onSwitch={handleSwitch} />
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (mode === 'orchids') {
+    return (
+      <main className="fixed inset-0 bg-black text-white overflow-hidden transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
+        <div className="absolute inset-0 z-0" style={{ transform: 'translateY(120px)' }}>
+          <AsciiDither
+            key="orchids"
+            src="/orchids.mp4"
+            cols={280}
+            color="source"
+            threshold={0.2}
+            saturation={2}
+            fill
+            cover
+            invert
+            darkMode
+            binarySize
+            pureColor
+            loopPauseMs={400}
+            className="w-full h-full"
+          />
+        </div>
+        <div className="absolute inset-0 z-10 flex items-start justify-start overflow-y-auto" style={{ fontFamily: 'var(--font-serif), Georgia, serif', padding: '98px 0 0 114px' }}>
+          <div className="max-w-[640px]">
             <BioContent dark onSwitch={handleSwitch} />
           </div>
         </div>
@@ -176,8 +212,8 @@ export default function Home() {
         </div>
 
         {/* Text right */}
-        <div className="w-[42%] flex items-center justify-center">
-          <div className="px-8 sm:px-12 lg:px-16 py-16 sm:py-24 w-[800px] min-w-[800px] flex-shrink-0 -translate-x-[170px]">
+        <div className="w-[42%] flex items-center relative z-10">
+          <div className="px-8 sm:px-12 lg:px-16 py-16 sm:py-24 w-[820px] max-w-[820px] flex-shrink-0 -translate-x-[205px] bg-white">
             <BioContent dark={false} onSwitch={handleSwitch} />
           </div>
         </div>

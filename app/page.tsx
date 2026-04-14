@@ -24,63 +24,62 @@ function Logo({ src, alt, invert = false }: { src: string; alt: string; invert?:
 type BioVariant = 'intro' | 'about' | 'books';
 type Mode = 'butterfly' | 'fish' | 'orchids';
 
-type TimelineItem = { label: string; title: string; detail: string };
+type TimelineItem = { label: string; title: string; details: string[] };
 
 const timelineItems: TimelineItem[] = [
+  { label: 'Age 19', title: 'Present.', details: [] },
   {
     label: 'Age 18',
-    title: 'Founded Traverse. Got into Y Combinator.',
-    detail: 'Traverse is an applied data research lab. Backed by Y Combinator with angels from OpenAI, Google DeepMind, Anthropic, and Meta.',
+    title: 'Founded Traverse.',
+    details: ['Got into Y Combinator.'],
   },
   {
     label: 'Age 18',
     title: 'Started CS at UWaterloo, dropped out after 2 months.',
-    detail: 'Four weeks in I was fielding VC offers. I realized chasing them was self-interest, not what the company needed. Left to focus on Traverse full-time.',
+    details: [
+      'Builder at Kalshi.',
+      'Founding engineer at a Stealth Startup.',
+      'Led 12 ML engineers at wat.ai.',
+    ],
   },
   {
-    label: 'Age 18',
-    title: 'Graduated valedictorian.',
-    detail: 'Finished high school at 99.2% and gave the valedictory address.',
+    label: 'Ages 16\u201317',
+    title: 'Graduated high school.',
+    details: ['Rank 1/312. 99.2% average.'],
   },
   {
-    label: 'Age 16',
-    title: 'Started my second business.',
-    detail: 'Built it over two back-to-back all-nighters. Ships faster when I don\u2019t sleep.',
+    label: 'Ages 13\u201315',
+    title: 'Started high school.',
+    details: ['Started my second business. Failed miserably, learned a lot.'],
   },
   {
-    label: 'Age 13',
-    title: 'Started high school. Got into psychology and philosophy.',
-    detail: 'First time school felt like something I actually cared about. Ran clubs, organizations, anything where I could call the shots.',
-  },
-  {
-    label: 'Age 12',
+    label: 'Ages 8\u201312',
     title: 'Started my first business.',
-    detail: 'First real attempt to make and sell something. Learned more from it failing than most things I\u2019ve done since.',
+    details: [
+      'On Minecraft Hypixel, ran a 100-member guild with 30,000+ applications. My first taste of proper leadership.',
+      'Joined the gifted program at my elementary school.',
+    ],
   },
   {
-    label: 'Age 7',
-    title: 'Joined orchestra on cello.',
-    detail: 'Played competitively through most of my childhood. More hours on it than I want to count.',
+    label: 'Ages 4\u20137',
+    title: 'Started coding.',
+    details: [
+      'Played cello through most of my childhood.',
+      'Built a Minecraft mod.',
+      'Started elementary school.',
+    ],
   },
   {
-    label: 'Age 6',
-    title: 'Started coding; built a Minecraft mod.',
-    detail: 'Built a mod, led Minecraft guilds, quit after a year. First time I shipped something other people used.',
-  },
-  {
-    label: 'Age 5',
-    title: 'Started cello and badminton.',
-    detail: 'Didn\u2019t pick either. Got competitive fast anyway.',
-  },
-  {
-    label: 'Age 3',
+    label: 'Ages 1\u20133',
     title: 'Moved from China to Canada.',
-    detail: 'My mom worked as a cashier at the dollar store. My dad drove a taxi.',
+    details: [
+      'My mom worked as a cashier at the dollar store. My dad was a taxi driver. Someday, I will retire my parents.',
+    ],
   },
   {
     label: 'Born',
     title: 'Beijing, China.',
-    detail: 'First-generation immigrant kid.',
+    details: ['Learned to walk and talk here.', 'Went to preschool.'],
   },
 ];
 
@@ -102,10 +101,10 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
         <span className="leading-none">Lance Yan</span>
         <button
           onClick={onSwitch}
-          className={`p-1 transition-colors flex items-center relative top-[4px] sm:top-[5px] ${dark ? 'text-white/50 hover:text-white' : 'text-neutral-400 hover:text-neutral-800'}`}
+          className={`p-1 transition-colors flex items-center ${dark ? 'text-white/50 hover:text-white' : 'text-neutral-400 hover:text-neutral-800'}`}
           aria-label="Switch background"
         >
-          <RefreshCw className="w-[22px] h-[22px] sm:w-[26px] sm:h-[26px]" />
+          <RefreshCw className="w-[0.72em] h-[0.72em]" />
         </button>
       </h1>
 
@@ -130,7 +129,7 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
               Previously, I studied CS at{' '}
               <Logo src="/waterloo-logo.png" alt="UWaterloo" />UWaterloo and dropped out after 2 months. I was a builder/software engineer at{' '}
               <Logo src="/kalshi logo.png" alt="Kalshi" />
-              <a href="https://kalshi.com" target="_blank" rel="noreferrer" className={linkClass}>Kalshi</a>, founding engineer at the{' '}
+              <a href="https://kalshi.com" target="_blank" rel="noreferrer" className={linkClass}>Kalshi</a>, founding engineer at{' '}
               <Logo src="/stealth logo.png" alt="Stealth Startup" />Stealth Startup, and led 12 ML engineers at{' '}
               <Logo src="/wat.jpeg" alt="wat.ai" />
               <a href="https://watai.ca" target="_blank" rel="noreferrer" className={linkClass}>wat.ai</a>.
@@ -146,7 +145,7 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
               >
                 life&apos;s goal
               </button>
-              {' '}is to advance humanity towards a cyberpunk, intergalactic civilization. I also love{' '}
+              {' '}is to meaningfully advance humanity towards a cyberpunk, intergalactic civilization. I also enjoy{' '}
               <button
                 type="button"
                 onClick={() => onNavigate?.('orchids')}
@@ -163,30 +162,55 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
         {variant === 'about' && (
           <>
             <p>
-              I&apos;ve done a bit so far. Here&apos;s a rough timeline:
+              Here&apos;s a rough timeline of what I&apos;ve done so far:
             </p>
 
             <ul className={`list-none pl-0 divide-y ${dark ? 'divide-white/10' : 'divide-black/10'}`}>
               {timelineItems.map((item, i) => {
-                const isOpen = openTimelineIdx === i;
+                const hasDetail = item.details.length > 0;
+                const isOpen = hasDetail && openTimelineIdx === i;
                 return (
                   <li key={i}>
-                    <button
-                      type="button"
-                      onClick={() => setOpenTimelineIdx(isOpen ? null : i)}
-                      aria-expanded={isOpen}
-                      className="w-full text-left flex items-start gap-0 py-3 cursor-pointer"
-                    >
-                      <span className="tabular-nums opacity-60 inline-block w-16 shrink-0">{item.label}</span>
-                      <span className="flex-1 pr-2">{item.title}</span>
-                      <ChevronDown
-                        size={18}
-                        className={`mt-[2px] opacity-60 transition-transform duration-200 shrink-0 ${isOpen ? 'rotate-180' : ''}`}
-                      />
-                    </button>
-                    {isOpen && (
-                      <div className="pl-16 pr-6 pb-3 -mt-1 text-sm sm:text-base opacity-75">
-                        {item.detail}
+                    {hasDetail ? (
+                      <button
+                        type="button"
+                        onClick={() => setOpenTimelineIdx(isOpen ? null : i)}
+                        aria-expanded={isOpen}
+                        className="w-full text-left flex items-start gap-0 py-3 cursor-pointer"
+                      >
+                        <span className="tabular-nums opacity-60 inline-block w-28 shrink-0 whitespace-nowrap">{item.label}</span>
+                        <span className="flex-1 pr-2">{item.title}</span>
+                        <ChevronDown
+                          size={18}
+                          className={`mt-[2px] opacity-60 transition-transform duration-200 shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+                        />
+                      </button>
+                    ) : (
+                      <div className="flex items-start py-3">
+                        <span className="tabular-nums opacity-60 inline-block w-28 shrink-0 whitespace-nowrap">{item.label}</span>
+                        <span className="flex-1 pr-2">{item.title}</span>
+                      </div>
+                    )}
+                    {hasDetail && (
+                      <div
+                        className="grid transition-[grid-template-rows] duration-300 ease-out"
+                        style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}
+                      >
+                        <div className="overflow-hidden">
+                          <div
+                            className={`pl-28 pr-6 pb-3 text-sm sm:text-base transition-opacity duration-300 ease-out ${isOpen ? 'opacity-75' : 'opacity-0'}`}
+                          >
+                            {item.details.length === 1 ? (
+                              <p>{item.details[0]}</p>
+                            ) : (
+                              <ul className="list-disc pl-5 space-y-1">
+                                {item.details.map((d, j) => (
+                                  <li key={j}>{d}</li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     )}
                   </li>
@@ -224,7 +248,7 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
 }
 
 export default function Home() {
-  const [mode, setMode] = useState<'butterfly' | 'fish' | 'orchids'>('butterfly');
+  const [mode, setMode] = useState<Mode>('butterfly');
   const [fading, setFading] = useState(false);
   const [isNarrow, setIsNarrow] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -253,13 +277,13 @@ export default function Home() {
     }
     setFading(true);
     setTimeout(() => {
-      const next = mode === 'butterfly' ? 'fish' : 'orchids';
+      const next: Mode = mode === 'butterfly' ? 'fish' : 'orchids';
       setMode(next);
       setFading(false);
     }, 400);
   };
 
-  const switchTo = (target: 'butterfly' | 'fish' | 'orchids') => {
+  const switchTo = (target: Mode) => {
     if (target === mode) return;
     setFading(true);
     setTimeout(() => {
@@ -276,8 +300,8 @@ export default function Home() {
   if (mode === 'fish') {
     if (isNarrow) {
       return (
-        <main className="h-[100dvh] overflow-hidden bg-black text-white flex flex-col justify-center transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
-          <div className="w-full overflow-hidden" style={{ aspectRatio: '16 / 9' }}>
+        <main className="min-h-[100dvh] bg-black text-white flex flex-col transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
+          <div className="w-full overflow-hidden shrink-0" style={{ aspectRatio: '16 / 9' }}>
             <AsciiDither
               key="fish"
               src={['/fish3.mp4', '/fish4.mp4', '/fish2.mp4']}
@@ -323,8 +347,8 @@ export default function Home() {
             className="w-full h-full"
           />
         </div>
-        <div className="absolute inset-0 z-10 flex items-center justify-center px-6 sm:px-12 overflow-y-auto" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
-          <div className="max-w-[640px] py-16">
+        <div className="absolute inset-0 z-10 flex justify-center px-6 sm:px-12 overflow-y-auto" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
+          <div className="max-w-[640px] py-16 my-auto">
             <BioContent dark onSwitch={handleSwitch} variant="about" />
           </div>
         </div>

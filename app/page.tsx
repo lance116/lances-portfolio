@@ -31,13 +31,16 @@ const timelineItems: TimelineItem[] = [
   {
     label: 'Age 18',
     title: 'Founded Traverse.',
-    details: ['Got into Y Combinator.'],
+    details: [
+      'Data research for non-verifiable work.',
+      'Backed by Y Combinator (W26) and angels from OpenAI, Anthropic, Google DeepMind, Meta, Coinbase, and Pinterest.',
+    ],
   },
   {
     label: 'Age 18',
     title: 'Started CS at UWaterloo, dropped out after 2 months.',
     details: [
-      'Builder at Kalshi.',
+      'Builder/SWE at Kalshi.',
       'Founding engineer at a Stealth Startup.',
       'Led 12 ML engineers at wat.ai.',
     ],
@@ -50,7 +53,9 @@ const timelineItems: TimelineItem[] = [
   {
     label: 'Ages 13\u201315',
     title: 'Started high school.',
-    details: ['Started my second business. Failed miserably, learned a lot.'],
+    details: [
+      'Started my second business. Advertising for SMBs; failed miserably, learned a lot.',
+    ],
   },
   {
     label: 'Ages 8\u201312',
@@ -58,6 +63,7 @@ const timelineItems: TimelineItem[] = [
     details: [
       'On Minecraft Hypixel, ran a 100-member guild with 30,000+ applications. My first taste of proper leadership.',
       'Joined the gifted program at my elementary school.',
+      'Started orchestra as a cellist.',
     ],
   },
   {
@@ -73,13 +79,13 @@ const timelineItems: TimelineItem[] = [
     label: 'Ages 1\u20133',
     title: 'Moved from China to Canada.',
     details: [
-      'My mom worked as a cashier at the dollar store. My dad was a taxi driver. Someday, I will retire my parents.',
+      'My mom worked as a cashier at the dollar store. My dad was a taxi driver. My short-term goal is to retire my parents.',
     ],
   },
   {
     label: 'Born',
     title: 'Beijing, China.',
-    details: ['Learned to walk and talk here.', 'Went to preschool.'],
+    details: ['Learned to walk and talk, went to preschool.'],
   },
 ];
 

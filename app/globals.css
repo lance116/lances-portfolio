@@ -83,12 +83,6 @@
     position: relative;
   }
 
-  html,
-  body,
-  body * {
-    cursor: none !important;
-  }
-
   /* Smooth transitions only when theme-transitioning class is present */
   html.theme-transitioning,
   html.theme-transitioning * {

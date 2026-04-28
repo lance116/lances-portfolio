@@ -247,6 +247,7 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
       <div className={`mt-8 sm:mt-12 text-xs sm:text-sm space-x-6 ${footerColor}`}>
         <a href="https://x.com/lanceyyan/" target="_blank" rel="noreferrer" className={footerLink}>x</a>
         <a href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer" className={footerLink}>linkedin</a>
+        <a href="https://github.com/lance116" target="_blank" rel="noreferrer" className={footerLink}>github</a>
         <a href="mailto:lance.yan.business@gmail.com" className={footerLink}>email</a>
       </div>
     </>

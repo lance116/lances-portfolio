@@ -26,9 +26,18 @@ type Mode = 'butterfly' | 'fish' | 'orchids';
 
 type TimelineItem = { label: string; title: string; details: string[] };
 
+const EMAIL_LABEL = 'email';
 const OBFUSCATED_EMAIL = 'lance [at] traverse [dot] so';
 const EMAIL_MATRIX_CHARS = '01[]{}<>/\\|#$%&*+-=~';
 const EMAIL_REVEAL_FRAMES = 18;
+
+function matrixRevealLabel(target: string, frame: number) {
+  const revealedChars = Math.floor((frame / EMAIL_REVEAL_FRAMES) * target.length);
+  return target.split('').map((char, i) => {
+    if (char === ' ' || i < revealedChars || frame >= EMAIL_REVEAL_FRAMES) return char;
+    return EMAIL_MATRIX_CHARS[(i * 7 + frame * 11) % EMAIL_MATRIX_CHARS.length];
+  }).join('');
+}
 
 const timelineItems: TimelineItem[] = [
   { label: 'Age 19', title: 'Present.', details: [] },
@@ -96,7 +105,9 @@ const timelineItems: TimelineItem[] = [
 function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: boolean; onSwitch: () => void; onNavigate?: (m: Mode) => void; variant?: BioVariant }) {
   const [openTimelineIdx, setOpenTimelineIdx] = useState<number | null>(null);
   const [emailRevealRun, setEmailRevealRun] = useState(0);
-  const [emailLabel, setEmailLabel] = useState('email');
+  const [emailLabel, setEmailLabel] = useState(EMAIL_LABEL);
+  const [emailTargetLabel, setEmailTargetLabel] = useState(OBFUSCATED_EMAIL);
+  const [emailShowingAddress, setEmailShowingAddress] = useState(false);
   const linkClass = dark
     ? 'text-white underline underline-offset-4 decoration-white/40 hover:decoration-white transition-colors'
     : 'text-neutral-900 underline underline-offset-4 decoration-neutral-300 hover:decoration-neutral-900 transition-colors';
@@ -111,22 +122,23 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
     if (emailRevealRun === 0) return;
 
     let frame = 0;
-    setEmailLabel('email');
+    setEmailLabel(matrixRevealLabel(emailTargetLabel, frame));
 
     const timer = window.setInterval(() => {
       frame += 1;
-      const revealedChars = Math.floor((frame / EMAIL_REVEAL_FRAMES) * OBFUSCATED_EMAIL.length);
-      const nextLabel = OBFUSCATED_EMAIL.split('').map((char, i) => {
-        if (char === ' ' || i < revealedChars || frame >= EMAIL_REVEAL_FRAMES) return char;
-        return EMAIL_MATRIX_CHARS[(i * 7 + frame * 11) % EMAIL_MATRIX_CHARS.length];
-      }).join('');
-
-      setEmailLabel(nextLabel);
+      setEmailLabel(matrixRevealLabel(emailTargetLabel, frame));
       if (frame >= EMAIL_REVEAL_FRAMES) window.clearInterval(timer);
     }, 32);
 
     return () => window.clearInterval(timer);
-  }, [emailRevealRun]);
+  }, [emailRevealRun, emailTargetLabel]);
+
+  const handleEmailClick = () => {
+    const nextTarget = emailShowingAddress ? EMAIL_LABEL : OBFUSCATED_EMAIL;
+    setEmailTargetLabel(nextTarget);
+    setEmailShowingAddress(!emailShowingAddress);
+    setEmailRevealRun((run) => run + 1);
+  };
 
   return (
     <>
@@ -277,7 +289,7 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
         <a href="https://github.com/lance116" target="_blank" rel="noreferrer" className={footerLink}>github</a>
         <button
           type="button"
-          onClick={() => setEmailRevealRun((run) => run + 1)}
+          onClick={handleEmailClick}
           className={footerLink}
           style={{ background: 'none', border: 'none', padding: 0, font: 'inherit' }}
           aria-label="Reveal email"

@@ -33,10 +33,11 @@ interface Props {
   onEnded?: () => void;
   playbackRate?: number;
   batched?: boolean;
+  maxRenderFps?: number;
   className?: string;
 }
 
-export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, tintRGB, cropTop = false, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale = 1, onEnded, playbackRate = 1, batched = false, className = '' }: Props) {
+export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, tintRGB, cropTop = false, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale = 1, onEnded, playbackRate = 1, batched = false, maxRenderFps, className = '' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   // Second video element used only on iOS single-source loops: kept paused at
@@ -113,6 +114,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     }
 
     let lastDrawnVideoTime = -1;
+    let lastDrawnFrameKey = -1;
 
     function draw() {
       if (!alive) return;
@@ -149,6 +151,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         // does it once the video has actually advanced past the loop point,
         // so the fade only ever reveals genuinely-playing video.
         lastDrawnVideoTime = -1;
+        lastDrawnFrameKey = -1;
       }
 
       if (suppressSampleUntilT >= 0) {
@@ -172,7 +175,8 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
 
       // Skip the heavy resample/render if the video frame hasn't advanced.
       // 60fps RAF on 25fps video would otherwise repeat identical work.
-      if (curT === lastDrawnVideoTime) {
+      const frameKey = maxRenderFps ? Math.floor(curT * maxRenderFps) : curT;
+      if (frameKey === lastDrawnFrameKey) {
         if (pendingPaintCallback) {
           const cb = pendingPaintCallback;
           pendingPaintCallback = null;
@@ -180,6 +184,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         }
         return;
       }
+      lastDrawnFrameKey = frameKey;
       lastDrawnVideoTime = curT;
 
       applyOffset();
@@ -254,8 +259,10 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
 
       sampleCols = Math.max(1, Math.floor(sampleCols) || 1);
       sampleRows = Math.max(1, Math.floor(sampleRows) || 1);
-      sampler.width = sampleCols;
-      sampler.height = sampleRows;
+      if (sampler.width !== sampleCols || sampler.height !== sampleRows) {
+        sampler.width = sampleCols;
+        sampler.height = sampleRows;
+      }
       samplerCtx.drawImage(v, cropSX, cropSY, cropSW, cropSH, 0, 0, sampleCols, sampleRows);
       const pixels = samplerCtx.getImageData(0, 0, sampleCols, sampleRows).data;
 
@@ -616,6 +623,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
             clearCanvas();
           }
           lastDrawnVideoTime = -1;
+          lastDrawnFrameKey = -1;
           suppressSampleUntilT = activeVideo.currentTime;
           suppressDeadlineMs = performance.now() + 800;
           // Reset the just-finished video back to a primed standby state
@@ -642,6 +650,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           if (fadeTimer) clearTimeout(fadeTimer);
           clearCanvas();
           lastDrawnVideoTime = -1;
+          lastDrawnFrameKey = -1;
           suppressSampleUntilT = video.currentTime;
           suppressDeadlineMs = performance.now() + 1000;
           cvs.style.opacity = '1';
@@ -683,7 +692,8 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     const onResize = () => {
       // Cached frame-0 dims won't match the new canvas size; let it re-capture.
       frame0Captured = false;
-      draw();
+      lastDrawnVideoTime = -1;
+      lastDrawnFrameKey = -1;
     };
     window.addEventListener('resize', onResize);
     return () => {
@@ -704,7 +714,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       if (onNextPlaying) videoA.removeEventListener('playing', onNextPlaying);
       if (fadeTimer) clearTimeout(fadeTimer);
     };
-  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize, binarySizeScale, filterGreen, filterBlue, pureColor, greyscale, rawColor, tintRGB, cropTop, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale, batched]);
+  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize, binarySizeScale, filterGreen, filterBlue, pureColor, greyscale, rawColor, tintRGB, cropTop, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale, batched, maxRenderFps]);
 
   return (
     <div className={className} style={{ width: '100%', height: '100%', position: 'relative', backgroundColor: darkMode ? '#000' : '#fff' }}>

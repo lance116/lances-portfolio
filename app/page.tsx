@@ -438,6 +438,7 @@ export default function Home() {
             fill
             cover
             loopPauseMs={400}
+            maxRenderFps={25}
             offsetYSchedule={[[0, '-20%'], [4.2014, '0%'], [9.4918, '-20%']]}
             batched
             className="w-full h-full"
@@ -467,6 +468,7 @@ export default function Home() {
             fill
             cover
             loopPauseMs={400}
+            maxRenderFps={25}
             className="w-full h-full"
           />
         </div>

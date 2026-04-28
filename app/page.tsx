@@ -26,6 +26,10 @@ type Mode = 'butterfly' | 'fish' | 'orchids';
 
 type TimelineItem = { label: string; title: string; details: string[] };
 
+const OBFUSCATED_EMAIL = 'lance [at] traverse [dot] so';
+const EMAIL_MATRIX_CHARS = '01[]{}<>/\\|#$%&*+-=~';
+const EMAIL_REVEAL_FRAMES = 18;
+
 const timelineItems: TimelineItem[] = [
   { label: 'Age 19', title: 'Present.', details: [] },
   {
@@ -91,6 +95,8 @@ const timelineItems: TimelineItem[] = [
 
 function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: boolean; onSwitch: () => void; onNavigate?: (m: Mode) => void; variant?: BioVariant }) {
   const [openTimelineIdx, setOpenTimelineIdx] = useState<number | null>(null);
+  const [emailRevealRun, setEmailRevealRun] = useState(0);
+  const [emailLabel, setEmailLabel] = useState('email');
   const linkClass = dark
     ? 'text-white underline underline-offset-4 decoration-white/40 hover:decoration-white transition-colors'
     : 'text-neutral-900 underline underline-offset-4 decoration-neutral-300 hover:decoration-neutral-900 transition-colors';
@@ -100,6 +106,27 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
   const footerLink = dark
     ? 'underline underline-offset-4 hover:text-white transition-colors'
     : 'underline underline-offset-4 hover:text-neutral-800 transition-colors';
+
+  useEffect(() => {
+    if (emailRevealRun === 0) return;
+
+    let frame = 0;
+    setEmailLabel('email');
+
+    const timer = window.setInterval(() => {
+      frame += 1;
+      const revealedChars = Math.floor((frame / EMAIL_REVEAL_FRAMES) * OBFUSCATED_EMAIL.length);
+      const nextLabel = OBFUSCATED_EMAIL.split('').map((char, i) => {
+        if (char === ' ' || i < revealedChars || frame >= EMAIL_REVEAL_FRAMES) return char;
+        return EMAIL_MATRIX_CHARS[(i * 7 + frame * 11) % EMAIL_MATRIX_CHARS.length];
+      }).join('');
+
+      setEmailLabel(nextLabel);
+      if (frame >= EMAIL_REVEAL_FRAMES) window.clearInterval(timer);
+    }, 32);
+
+    return () => window.clearInterval(timer);
+  }, [emailRevealRun]);
 
   return (
     <>
@@ -135,7 +162,7 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
               Previously, I studied CS at{' '}
               <Logo src="/waterloo-logo.png" alt="UWaterloo" />UWaterloo and dropped out after 2 months. I was a builder/software engineer at{' '}
               <Logo src="/kalshi logo.png" alt="Kalshi" />
-              <a href="https://kalshi.com" target="_blank" rel="noreferrer" className={linkClass}>Kalshi</a>, founding engineer at{' '}
+              <a href="https://kalshi.com" target="_blank" rel="noreferrer" className={linkClass}>Kalshi</a>, founding engineer at a{' '}
               <Logo src="/stealth logo.png" alt="Stealth Startup" />Stealth Startup, and led 12 ML engineers at{' '}
               <Logo src="/wat.jpeg" alt="wat.ai" />
               <a href="https://watai.ca" target="_blank" rel="noreferrer" className={linkClass}>wat.ai</a>.
@@ -248,7 +275,15 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
         <a href="https://x.com/lanceyyan/" target="_blank" rel="noreferrer" className={footerLink}>x</a>
         <a href="https://www.linkedin.com/in/lance-yan/" target="_blank" rel="noreferrer" className={footerLink}>linkedin</a>
         <a href="https://github.com/lance116" target="_blank" rel="noreferrer" className={footerLink}>github</a>
-        <a href="mailto:lance.yan.business@gmail.com" className={footerLink}>email</a>
+        <button
+          type="button"
+          onClick={() => setEmailRevealRun((run) => run + 1)}
+          className={footerLink}
+          style={{ background: 'none', border: 'none', padding: 0, font: 'inherit' }}
+          aria-label="Reveal email"
+        >
+          {emailLabel}
+        </button>
       </div>
     </>
   );

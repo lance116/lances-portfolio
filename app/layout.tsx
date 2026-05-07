@@ -8,7 +8,7 @@ const libreBaskerville = Libre_Baskerville({ subsets: ['latin'], weight: ['400',
 
 export const metadata: Metadata = {
   title: 'Lance Yan',
-  description: "Lance's website, Co-Founder and CEO of Traverse (YC W26)",
+  description: "Lance's website, Founder and CEO of Traverse (YC W26)",
   icons: { icon: '/lance new logo.png' },
 }
 

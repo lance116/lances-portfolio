@@ -40,52 +40,57 @@ function matrixRevealLabel(target: string, frame: number) {
 }
 
 const timelineItems: TimelineItem[] = [
-  { label: 'Age 19', title: 'Present.', details: [] },
   {
-    label: 'Age 18',
-    title: 'Founded Traverse.',
+    label: 'Age 19',
+    title: 'Present.',
     details: [
-      'Data research for non-verifiable work.',
-      'Backed by Y Combinator (W26) and angels from OpenAI, Anthropic, Google DeepMind, Meta, Coinbase, and Pinterest.',
+      'Outside the US, waiting for my O1 visa.',
+      "If you're a Machine Learning researcher outside the US (Zurich, London, wherever), I'd love to meet and tell you about what we're working on!",
     ],
   },
   {
     label: 'Age 18',
-    title: 'Started CS at UWaterloo, dropped out after 2 months.',
+    title: 'Founded Traverse.',
     details: [
-      'Builder/SWE at Kalshi.',
+      'Research lab for non-verifiable work.',
+      'Backed by Y Combinator (W26), angels from OpenAI, Anthropic, Google DeepMind, and board members from Meta, Coinbase, and Pinterest.',
+    ],
+  },
+  {
+    label: 'Age 18',
+    title: 'Started and dropped out of university.',
+    details: [
+      'Studied Computer Science at UWaterloo.',
+      'Software Engineer/Builder at Kalshi.',
       'Founding engineer at a Stealth Startup.',
       'Led 12 ML engineers at wat.ai.',
     ],
   },
   {
-    label: 'Ages 16\u201317',
-    title: 'Graduated high school.',
-    details: ['Rank 1/312. 99.2% average.'],
-  },
-  {
-    label: 'Ages 13\u201315',
-    title: 'Started high school.',
+    label: 'Ages 13\u201317',
+    title: 'Started and graduated high school.',
     details: [
+      'Rank 1/312. 99.2% average.',
       'Started my second business. Advertising for SMBs; failed miserably, learned a lot.',
+      'Quit cello, got back into coding.',
     ],
   },
   {
     label: 'Ages 8\u201312',
     title: 'Started my first business.',
     details: [
-      'On Minecraft Hypixel, ran a 100-member guild with 30,000+ applications. My first taste of proper leadership.',
+      'On a popular Minecraft server, ran a hundred member guild with 30,000+ applications. My first taste of proper leadership, made a little money.',
       'Joined the gifted program at my elementary school.',
-      'Started orchestra as a cellist.',
+      'Started orchestra as a junior cellist.',
     ],
   },
   {
     label: 'Ages 4\u20137',
     title: 'Started coding.',
     details: [
-      'Played cello through most of my childhood.',
-      'Built a Minecraft mod.',
+      'Built a Minecraft mod, then quit.',
       'Started elementary school.',
+      'Played cello through most of my childhood.',
     ],
   },
   {
@@ -157,17 +162,15 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
         {variant === 'intro' && (
           <>
             <p>
-              I&apos;m the co-founder and CEO of{' '}
+              I&apos;m the founder and CEO of{' '}
               <Logo src="/traversing logo.png" alt="Traverse" />
-              <a href="https://traverse.so" target="_blank" rel="noreferrer" className={linkClass}>Traverse</a>.
-              We&apos;re backed by{' '}
+              <a href="https://traverse.so" target="_blank" rel="noreferrer" className={linkClass}>Traverse</a>, a research lab for non-verifiable work. We&apos;re backed by{' '}
               <Logo src="/YClogo.png" alt="Y Combinator" />
-              <a href="https://www.ycombinator.com/companies/clice-ai" target="_blank" rel="noreferrer" className={linkClass}>Y Combinator</a>
+              <a href="https://www.ycombinator.com/companies/traverse" target="_blank" rel="noreferrer" className={linkClass}>Y Combinator</a>
               {' '}with angels from{' '}
               <Logo src="/OAI.webp" alt="OpenAI" invert={dark} />OpenAI,{' '}
-              <Logo src="/GDM.png" alt="Google DeepMind" />Google DeepMind,{' '}
               <Logo src="/AN.png" alt="Anthropic" invert={dark} />Anthropic, and{' '}
-              <Logo src="/meta icon.png" alt="Meta" />Meta.
+              <Logo src="/GDM.png" alt="Google DeepMind" />Google DeepMind.
             </p>
 
             <p>
@@ -402,7 +405,7 @@ export default function Home() {
           />
         </div>
         <div className="absolute inset-0 z-10 flex justify-center px-6 sm:px-12 overflow-y-auto" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
-          <div className="max-w-[640px] py-16 my-auto">
+          <div className="max-w-[640px] pb-16" style={{ paddingTop: 'max(4rem, calc(50vh - 15rem))' }}>
             <BioContent dark onSwitch={handleSwitch} variant="about" />
           </div>
         </div>

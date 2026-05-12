@@ -177,10 +177,10 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
               Previously, I studied CS at{' '}
               <Logo src="/waterloo-logo.png" alt="UWaterloo" />UWaterloo and dropped out after 2 months. I was a builder/software engineer at{' '}
               <Logo src="/kalshi logo.png" alt="Kalshi" />
-              <a href="https://kalshi.com" target="_blank" rel="noreferrer" className={linkClass}>Kalshi</a>, founding engineer at a{' '}
+              Kalshi, founding engineer at a{' '}
               <Logo src="/stealth logo.png" alt="Stealth Startup" />Stealth Startup, and led 12 ML engineers at{' '}
               <Logo src="/wat.jpeg" alt="wat.ai" />
-              <a href="https://watai.ca" target="_blank" rel="noreferrer" className={linkClass}>wat.ai</a>.
+              wat.ai.
             </p>
 
             <p>

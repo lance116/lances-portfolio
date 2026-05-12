@@ -435,6 +435,7 @@ export default function Home() {
               binarySize
               pureColor
               loopPauseMs={400}
+              endHoldMs={2000}
               playbackRateSchedule={[[0, 1], [25, 0.4]]}
               scale={1.3}
               batched
@@ -461,6 +462,7 @@ export default function Home() {
             binarySize
             pureColor
             loopPauseMs={400}
+            endHoldMs={2000}
             playbackRateSchedule={[[0, 1], [25, 0.4]]}
             className="w-full h-full"
           />

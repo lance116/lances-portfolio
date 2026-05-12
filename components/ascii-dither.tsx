@@ -16,6 +16,7 @@ interface Props {
   cover?: boolean;
   saturation?: number;
   loopPauseMs?: number;
+  endHoldMs?: number;
   binarySize?: boolean;
   binarySizeScale?: number;
   filterGreen?: boolean;
@@ -37,7 +38,7 @@ interface Props {
   className?: string;
 }
 
-export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, tintRGB, cropTop = false, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale = 1, onEnded, playbackRate = 1, batched = false, maxRenderFps, className = '' }: Props) {
+export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, endHoldMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, tintRGB, cropTop = false, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale = 1, onEnded, playbackRate = 1, batched = false, maxRenderFps, className = '' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   // Second video element used only on iOS single-source loops: kept paused at
@@ -510,8 +511,44 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     const HOLD_MS = 200;
 
     let earlyEndFired = false;
+    let endHoldFired = false;
+    let endHoldTimer: number | null = null;
     let standbyReprimed = false;
     let onNextPlaying: (() => void) | null = null;
+
+    const restartSingleSourceLoop = () => {
+      if (useDualVideo) {
+        const old = activeVideo;
+        activeVideo = standbyVideo;
+        standbyVideo = old;
+        activeVideo.playbackRate = playbackRate;
+        activeVideo.play().catch(() => {});
+        if (frame0Captured && frame0Dims.w === cvs.width && frame0Dims.h === cvs.height) {
+          ctx.save();
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.globalAlpha = 1;
+          ctx.drawImage(frame0Canvas, 0, 0);
+          ctx.restore();
+        } else {
+          clearCanvas();
+        }
+        lastDrawnVideoTime = -1;
+        lastDrawnFrameKey = -1;
+        suppressSampleUntilT = activeVideo.currentTime;
+        suppressDeadlineMs = performance.now() + 800;
+        primeStandby(old);
+        return;
+      }
+
+      activeVideo.pause();
+      try { activeVideo.currentTime = 0; } catch {}
+      activeVideo.playbackRate = playbackRate;
+      lastDrawnVideoTime = -1;
+      lastDrawnFrameKey = -1;
+      suppressSampleUntilT = activeVideo.currentTime;
+      suppressDeadlineMs = performance.now() + 800;
+      activeVideo.play().catch(() => {});
+    };
 
     const onLoaded = (e: Event) => {
       if (useDualVideo && e.target !== activeVideo) return;
@@ -568,7 +605,22 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         // Loop boundary is caught in the draw RAF; timeupdate just handles
         // the fade-out trigger near the end of each pass. Trigger as late as
         // safely possible so the invisible tail before the loop is short.
-        if (remaining < 0.5 && cvs.style.opacity === '1') {
+        if (endHoldMs > 0 && remaining < 0.15 && !endHoldFired) {
+          endHoldFired = true;
+          activeVideo.pause();
+          cvs.style.opacity = '1';
+          endHoldTimer = window.setTimeout(() => {
+            if (!alive) return;
+            cvs.style.opacity = '0';
+            endHoldTimer = window.setTimeout(() => {
+              if (!alive) return;
+              restartSingleSourceLoop();
+            }, 250);
+          }, endHoldMs);
+          return;
+        }
+
+        if (endHoldMs <= 0 && remaining < 0.5 && cvs.style.opacity === '1') {
           cvs.style.opacity = '0';
         }
         // Re-prime the standby video while the active is in its last
@@ -590,6 +642,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       if (useDualVideo && e.target !== activeVideo) return;
       earlyEndFired = false;
       endedFired = false;
+      endHoldFired = false;
       standbyReprimed = false;
     };
     const onEndedHandler = (e: Event) => {
@@ -699,6 +752,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     return () => {
       alive = false;
       window.removeEventListener('resize', onResize);
+      if (endHoldTimer) clearTimeout(endHoldTimer);
       videoA.removeEventListener('loadeddata', onLoaded);
       videoA.removeEventListener('canplay', onCanPlay);
       videoA.removeEventListener('timeupdate', onTimeUpdate);
@@ -714,7 +768,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       if (onNextPlaying) videoA.removeEventListener('playing', onNextPlaying);
       if (fadeTimer) clearTimeout(fadeTimer);
     };
-  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, binarySize, binarySizeScale, filterGreen, filterBlue, pureColor, greyscale, rawColor, tintRGB, cropTop, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale, batched, maxRenderFps]);
+  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, endHoldMs, binarySize, binarySizeScale, filterGreen, filterBlue, pureColor, greyscale, rawColor, tintRGB, cropTop, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale, batched, maxRenderFps]);
 
   return (
     <div className={className} style={{ width: '100%', height: '100%', position: 'relative', backgroundColor: darkMode ? '#000' : '#fff' }}>

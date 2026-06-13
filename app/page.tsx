@@ -44,8 +44,7 @@ const timelineItems: TimelineItem[] = [
     label: 'Age 19',
     title: 'Present.',
     details: [
-      'Outside the US, waiting for my O1 visa.',
-      "If you're a Machine Learning researcher outside the US (Zurich, London, wherever), I'd love to meet and tell you about what we're working on!",
+      '???',
     ],
   },
   {
@@ -53,14 +52,14 @@ const timelineItems: TimelineItem[] = [
     title: 'Founded Traverse.',
     details: [
       'Research lab for non-verifiable work.',
-      'Backed by Y Combinator (W26), angels from OpenAI, Anthropic, Google DeepMind, and board members from Meta, Coinbase, and Pinterest.',
+      'Backed by Y Combinator (W26), researchers from OpenAI, Anthropic, Google DeepMind, and board members from Meta, Coinbase, and Pinterest.',
     ],
   },
   {
     label: 'Age 18',
-    title: 'Started and dropped out of university.',
+    title: 'Began and dropped out of university.',
     details: [
-      'Studied Computer Science at UWaterloo.',
+      'Studied Computer Science at UWaterloo for 2 months.',
       'Software Engineer/Builder at Kalshi.',
       'Founding engineer at a Stealth Startup.',
       'Led 12 ML engineers at wat.ai.',
@@ -68,9 +67,9 @@ const timelineItems: TimelineItem[] = [
   },
   {
     label: 'Ages 13\u201317',
-    title: 'Started and graduated high school.',
+    title: 'Graduated high school.',
     details: [
-      'Rank 1/312. 99.2% average.',
+      'Rank 1/312, 99.2% average.',
       'Started my second business. Advertising for SMBs; failed miserably, learned a lot.',
       'Quit cello, got back into coding.',
     ],
@@ -86,7 +85,7 @@ const timelineItems: TimelineItem[] = [
   },
   {
     label: 'Ages 4\u20137',
-    title: 'Started coding.',
+    title: 'Began coding.',
     details: [
       'Built a Minecraft mod, then quit.',
       'Started elementary school.',
@@ -167,18 +166,18 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
               <a href="https://traverse.so" target="_blank" rel="noreferrer" className={linkClass}>Traverse</a>, a research lab for non-verifiable work. We&apos;re backed by{' '}
               <Logo src="/YClogo.png" alt="Y Combinator" />
               <a href="https://www.ycombinator.com/companies/traverse" target="_blank" rel="noreferrer" className={linkClass}>Y Combinator</a>
-              {' '}with angels from{' '}
+              {' '}and researchers from{' '}
               <Logo src="/OAI.webp" alt="OpenAI" invert={dark} />OpenAI,{' '}
               <Logo src="/AN.png" alt="Anthropic" invert={dark} />Anthropic, and{' '}
               <Logo src="/GDM.png" alt="Google DeepMind" />Google DeepMind.
             </p>
 
             <p>
-              Previously, I studied CS at{' '}
-              <Logo src="/waterloo-logo.png" alt="UWaterloo" />UWaterloo and dropped out after 2 months. I was a builder/software engineer at{' '}
+              Had brief stints as a CS student at{' '}
+              <Logo src="/waterloo-logo.png" alt="UWaterloo" />UWaterloo, Software Engineer/Builder at{' '}
               <Logo src="/kalshi logo.png" alt="Kalshi" />
-              Kalshi, founding engineer at a{' '}
-              <Logo src="/stealth logo.png" alt="Stealth Startup" />Stealth Startup, and led 12 ML engineers at{' '}
+              Kalshi, Founding Engineer at a{' '}
+              <Logo src="/stealth logo.png" alt="Stealth Startup" />Stealth Startup, and ML lead for 12 engineers at{' '}
               <Logo src="/wat.jpeg" alt="wat.ai" />
               wat.ai.
             </p>

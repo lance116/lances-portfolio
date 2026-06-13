@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { RefreshCw, ChevronDown } from 'lucide-react';
 import { AsciiDither } from '@/components/ascii-dither';
@@ -157,7 +157,7 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
         </button>
       </h1>
 
-      <div className={`space-y-4 sm:space-y-6 text-sm sm:text-lg leading-relaxed ${bodyColor}`}>
+      <div className={`space-y-4 sm:space-y-6 text-sm sm:text-lg leading-7 sm:leading-relaxed ${bodyColor}`}>
         {variant === 'intro' && (
           <>
             <p>
@@ -303,11 +303,16 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
   );
 }
 
+// How many full cycles a page plays before auto-advancing to the next.
+// One cycle = one butterfly play / one full pass of the 3 fishes / one orchids play.
+const CYCLES_BEFORE_ADVANCE = 1;
+
 export default function Home() {
   const [mode, setMode] = useState<Mode>('butterfly');
   const [fading, setFading] = useState(false);
   const [isNarrow, setIsNarrow] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const cycleCountRef = useRef(0);
 
   useEffect(() => {
     document.documentElement.classList.add('dark');
@@ -323,7 +328,23 @@ export default function Home() {
     const color = dark ? '#000' : '#fff';
     document.documentElement.style.backgroundColor = color;
     document.body.style.backgroundColor = color;
+    // Reset the cycle counter whenever the page changes (auto-advance or manual).
+    cycleCountRef.current = 0;
   }, [mode]);
+
+  // Called once per full video cycle. After CYCLES_BEFORE_ADVANCE cycles,
+  // advance to the next page along the same chain as the manual refresh button.
+  const handleCycle = () => {
+    cycleCountRef.current += 1;
+    if (cycleCountRef.current < CYCLES_BEFORE_ADVANCE) return;
+    cycleCountRef.current = 0;
+    if (mode === 'orchids') {
+      setFading(true);
+      setTimeout(() => window.location.reload(), 400);
+      return;
+    }
+    switchTo(mode === 'butterfly' ? 'fish' : 'orchids');
+  };
 
   const handleSwitch = () => {
     if (mode === 'orchids') {
@@ -374,6 +395,7 @@ export default function Home() {
               yOffsetBySrc={['15%', '10%', '15%']}
               scale={1.4}
               batched
+              onCycle={handleCycle}
               className="w-full h-full"
             />
           </div>
@@ -400,6 +422,7 @@ export default function Home() {
             invert
             darkMode
             binarySize
+            onCycle={handleCycle}
             className="w-full h-full"
           />
         </div>
@@ -438,6 +461,7 @@ export default function Home() {
               playbackRateSchedule={[[0, 1], [25, 0.4]]}
               scale={1.3}
               batched
+              onCycle={handleCycle}
               className="w-full h-full"
             />
           </div>
@@ -463,6 +487,7 @@ export default function Home() {
             loopPauseMs={400}
             endHoldMs={2000}
             playbackRateSchedule={[[0, 1], [25, 0.4]]}
+            onCycle={handleCycle}
             className="w-full h-full"
           />
         </div>
@@ -493,6 +518,7 @@ export default function Home() {
             maxRenderFps={25}
             offsetYSchedule={[[0, '-20%'], [4.2014, '0%'], [9.4918, '-20%']]}
             batched
+            onCycle={handleCycle}
             className="w-full h-full"
           />
         </div>
@@ -521,6 +547,7 @@ export default function Home() {
             cover
             loopPauseMs={400}
             maxRenderFps={25}
+            onCycle={handleCycle}
             className="w-full h-full"
           />
         </div>

@@ -32,15 +32,21 @@ interface Props {
   yOffsetBySrc?: string[];
   scale?: number;
   onEnded?: () => void;
+  onCycle?: () => void;
   playbackRate?: number;
   batched?: boolean;
   maxRenderFps?: number;
   className?: string;
 }
 
-export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, endHoldMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, tintRGB, cropTop = false, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale = 1, onEnded, playbackRate = 1, batched = false, maxRenderFps, className = '' }: Props) {
+export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, endHoldMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, tintRGB, cropTop = false, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale = 1, onEnded, onCycle, playbackRate = 1, batched = false, maxRenderFps, className = '' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  // Keep the latest onCycle in a ref so the long-lived effect below can call it
+  // without listing onCycle in its deps (which would tear down the video on
+  // every parent render that passes a fresh callback).
+  const onCycleRef = useRef(onCycle);
+  onCycleRef.current = onCycle;
   // Second video element used only on iOS single-source loops: kept paused at
   // currentTime=0 with frame 0 pre-decoded so we can swap to it on the loop
   // boundary instead of waiting for the same element to decode-after-seek.
@@ -153,6 +159,10 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
         // so the fade only ever reveals genuinely-playing video.
         lastDrawnVideoTime = -1;
         lastDrawnFrameKey = -1;
+        // One full cycle of a native-looping single source completed. The
+        // endHold path (orchids) restarts via restartSingleSourceLoop instead,
+        // so exclude it here to avoid double-counting.
+        if (endHoldMs <= 0) onCycleRef.current?.();
       }
 
       if (suppressSampleUntilT >= 0) {
@@ -517,6 +527,8 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     let onNextPlaying: (() => void) | null = null;
 
     const restartSingleSourceLoop = () => {
+      // Only the endHold single-source path (orchids) restarts through here.
+      onCycleRef.current?.();
       if (useDualVideo) {
         const old = activeVideo;
         activeVideo = standbyVideo;
@@ -657,6 +669,9 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       }
       if (sources.length <= 1) {
         if (useDualVideo) {
+          // One full cycle completed (iOS single-source loop). endHold sources
+          // restart via restartSingleSourceLoop, so exclude them here.
+          if (endHoldMs <= 0) onCycleRef.current?.();
           // Swap to the pre-decoded standby video. Paint cached frame-0 so
           // the canvas has real content if anything peeks through, then let
           // the suppress-release path handle the fade-in once the new active
@@ -695,6 +710,8 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       setTimeout(() => {
         if (!alive) return;
         currentIdx = (currentIdx + 1) % sources.length;
+        // Wrapped back to the first clip — one full pass of the playlist done.
+        if (currentIdx === 0) onCycleRef.current?.();
 
         if (onNextPlaying) video.removeEventListener('playing', onNextPlaying);
         onNextPlaying = () => {

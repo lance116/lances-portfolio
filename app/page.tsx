@@ -289,6 +289,7 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
               <li>Thinking, Fast and Slow — Daniel Kahneman</li>
               <li>High Output Management — Andy Grove</li>
               <li>The Hard Thing About Hard Things — Ben Horowitz</li>
+              <li>Freedom of the Hills — The Mountaineers</li>
             </ul>
           </>
         )}
@@ -296,7 +297,7 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
         {variant === 'mountains' && (
           <>
             <p>
-              I enjoy climbing mountains and pushing myself to the limit. Here&apos;s my favorite quote:
+              I enjoy climbing mountains and pushing myself to the limit. Here&apos;s one of my favorite quotes:
             </p>
             <p>
               &ldquo;While seeking the freedom of the hills, we come face to face with ourselves.&rdquo;

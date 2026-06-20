@@ -297,7 +297,7 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
         {variant === 'mountains' && (
           <>
             <p>
-              One of the many ways I push myself is climbing mountains. Here&apos;s one of my favorite quotes:
+              I enjoy pushing myself by climbing mountains. Here&apos;s one of my favorite quotes:
             </p>
             <p>
               &ldquo;While seeking the freedom of the hills, we come face to face with ourselves.&rdquo;

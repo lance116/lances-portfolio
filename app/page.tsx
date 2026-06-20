@@ -297,7 +297,7 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
         {variant === 'mountains' && (
           <>
             <p>
-              I enjoy pushing myself to the limit while climbing mountains. Here&apos;s one of my favorite quotes:
+              One of my favorite ways to push myself is climbing mountains. A quote that captures why I climb:
             </p>
             <p>
               &ldquo;While seeking the freedom of the hills, we come face to face with ourselves.&rdquo;
@@ -534,7 +534,7 @@ export default function Home() {
             src="/mountain timelapse.mp4"
             cols={isNarrow ? 180 : 280}
             color="source"
-            threshold={0.13}
+            threshold={0.16}
             invert
             rawColor
             brightness={1.9}

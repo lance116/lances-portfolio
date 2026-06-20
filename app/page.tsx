@@ -296,7 +296,7 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
         {variant === 'mountains' && (
           <>
             <p>
-              I enjoy climbing mountains and pushing myself to the limit. Here&apos;s my favorite mountaineering quote:
+              I enjoy climbing mountains and pushing myself to the limit. Here&apos;s my favorite quote:
             </p>
             <p>
               &ldquo;While seeking the freedom of the hills, we come face to face with ourselves.&rdquo;
@@ -325,7 +325,7 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
 
 // How many full cycles a page plays before auto-advancing to the next.
 // One cycle = one butterfly play / one full pass of the 3 fishes / one orchids play.
-const CYCLES_BEFORE_ADVANCE = 1;
+const CYCLES_BEFORE_ADVANCE = 2;
 
 export default function Home() {
   const [mode, setMode] = useState<Mode>('butterfly');

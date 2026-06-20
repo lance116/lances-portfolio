@@ -534,7 +534,7 @@ export default function Home() {
             src="/mountain timelapse.mp4"
             cols={isNarrow ? 180 : 280}
             color="source"
-            threshold={0.16}
+            threshold={0.13}
             invert
             rawColor
             brightness={1.9}

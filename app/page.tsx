@@ -324,6 +324,32 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
   );
 }
 
+// Subtle "last visited from {city}" line shown only on the intro page,
+// bottom-left. Reads the previous visitor's location from /api/last-visitor;
+// renders nothing until/unless a location comes back.
+function LastVisitor() {
+  const [loc, setLoc] = useState<{ city: string; country: string } | null>(null);
+  useEffect(() => {
+    let alive = true;
+    fetch('/api/last-visitor')
+      .then((r) => r.json())
+      .then((d) => { if (alive && d?.location) setLoc(d.location); })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, []);
+  if (!loc) return null;
+  const label = [loc.city, loc.country].filter(Boolean).join(', ');
+  if (!label) return null;
+  return (
+    <div
+      className="fixed bottom-5 left-5 z-20 text-xs text-neutral-400"
+      style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}
+    >
+      last visited from {label}
+    </div>
+  );
+}
+
 // How many full cycles a page plays before auto-advancing to the next.
 // One cycle = one butterfly play / one full pass of the 3 fishes / one orchids play.
 const CYCLES_BEFORE_ADVANCE = 2;
@@ -580,6 +606,7 @@ export default function Home() {
             className="w-full h-full"
           />
         </div>
+        <LastVisitor />
       </main>
     );
   }
@@ -610,6 +637,7 @@ export default function Home() {
           />
         </div>
       </div>
+      <LastVisitor />
     </main>
   );
 }

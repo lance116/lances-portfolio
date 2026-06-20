@@ -13,6 +13,9 @@ interface Props {
   fill?: boolean;
   borderRight?: boolean;
   darkMode?: boolean;
+  // Override the canvas background fill (defaults to black in darkMode, white
+  // otherwise). Use a solid color to render ASCII over a flat backdrop.
+  bgColor?: string;
   cover?: boolean;
   saturation?: number;
   loopPauseMs?: number;
@@ -24,10 +27,25 @@ interface Props {
   pureColor?: boolean;
   greyscale?: boolean;
   rawColor?: boolean;
+  // Multiplies the final dot color (after the color mode). >1 brightens dark
+  // footage so features pop without inverting the image.
+  brightness?: number;
   tintRGB?: [number, number, number];
   cropTop?: boolean;
   offsetYSchedule?: Array<[number, string]>;
   playbackRateSchedule?: Array<[number, number]>;
+  // Vertical render mask (fractions 0=top, 1=bottom). Cells above maskFadeStart
+  // never draw (solid background); cells between maskFadeStart and maskFadeEnd
+  // fade in; cells below render fully. Used to keep a region (e.g. the sky)
+  // solid while only the lower part (e.g. a mountain) renders as ASCII.
+  maskFadeStart?: number;
+  maskFadeEnd?: number;
+  // Per-column horizon mask: an array of height-fractions sampled left→right
+  // across the width. A cell only renders below its column's horizon (plus a
+  // maskFeather fade band). Lets an irregular ridgeline keep the sky solid
+  // while the mountain below it renders. Takes precedence over maskFadeStart.
+  maskHorizon?: number[];
+  maskFeather?: number;
   xOffsetBySrc?: string[];
   yOffsetBySrc?: string[];
   scale?: number;
@@ -39,7 +57,7 @@ interface Props {
   className?: string;
 }
 
-export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, cover = false, saturation = 6, loopPauseMs = 0, endHoldMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, tintRGB, cropTop = false, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale = 1, onEnded, onCycle, playbackRate = 1, batched = false, maxRenderFps, className = '' }: Props) {
+export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, invert = false, fill = false, borderRight = false, darkMode = false, bgColor, cover = false, saturation = 6, loopPauseMs = 0, endHoldMs = 0, binarySize = false, binarySizeScale = 0.85, filterGreen = false, filterBlue = false, pureColor = false, greyscale = false, rawColor = false, brightness = 1, tintRGB, cropTop = false, offsetYSchedule, playbackRateSchedule, maskFadeStart, maskFadeEnd, maskHorizon, maskFeather = 0.06, xOffsetBySrc, yOffsetBySrc, scale = 1, onEnded, onCycle, playbackRate = 1, batched = false, maxRenderFps, className = '' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   // Keep the latest onCycle in a ref so the long-lived effect below can call it
@@ -95,7 +113,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
     const clearCanvas = () => {
       ctx.save();
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.fillStyle = darkMode ? '#000' : '#fff';
+      ctx.fillStyle = bgColor ?? (darkMode ? '#000' : '#fff');
       ctx.fillRect(0, 0, cvs.width / dpr, cvs.height / dpr);
       ctx.restore();
     };
@@ -321,6 +339,38 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
           let alphaQ = Math.round((darkness - threshold) * fadeInv);
           if (alphaQ <= 0) continue;
           if (alphaQ > 16) alphaQ = 16;
+
+          // Vertical render mask: keep a region solid while another renders.
+          // maskHorizon (per-column ridgeline) takes precedence; otherwise a
+          // flat maskFadeStart→maskFadeEnd band. In both cases cells fade in
+          // below the boundary so the transition isn't a hard line.
+          if (maskHorizon && maskHorizon.length > 0) {
+            // Map this cell to normalized video coordinates through the active
+            // crop window so the baked ridgeline stays aligned under cover-crop
+            // at any viewport aspect (incl. portrait), not just the native one.
+            const vxFrac = (cropSX + ((col + 0.5) / sampleCols) * cropSW) / vw;
+            const vyFrac = (cropSY + ((row + 0.5) / sampleRows) * cropSH) / vh;
+            const fx = vxFrac * (maskHorizon.length - 1);
+            const i0 = Math.max(0, Math.min(maskHorizon.length - 1, Math.floor(fx)));
+            const i1 = Math.min(maskHorizon.length - 1, i0 + 1);
+            const hz = maskHorizon[i0] + (maskHorizon[i1] - maskHorizon[i0]) * (fx - i0);
+            let t = (vyFrac - hz) / maskFeather;
+            if (t <= 0) continue;
+            if (t > 1) t = 1;
+            const vis = t * t * (3 - 2 * t);
+            alphaQ = Math.round(alphaQ * vis);
+            if (alphaQ <= 0) continue;
+          } else if (maskFadeStart !== undefined) {
+            const frac = ((row + rowOffset) * cellY + halfY) / totalH;
+            const span = (maskFadeEnd ?? 1) - maskFadeStart;
+            let t = span <= 0 ? (frac >= maskFadeStart ? 1 : 0) : (frac - maskFadeStart) / span;
+            if (t <= 0) continue;
+            if (t > 1) t = 1;
+            const vis = t * t * (3 - 2 * t);
+            alphaQ = Math.round(alphaQ * vis);
+            if (alphaQ <= 0) continue;
+          }
+
           const alpha = alphaQ / 16;
 
           const cx = (col + colOffset) * cellX + halfX;
@@ -369,6 +419,11 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
                 : Math.floor(Math.max(0, (1 - darkness) * 140));
               fr = fg = fb = grey;
             }
+          }
+          if (brightness !== 1) {
+            fr = Math.min(255, fr * brightness);
+            fg = Math.min(255, fg * brightness);
+            fb = Math.min(255, fb * brightness);
           }
           if (batched) {
             // 4 bits per color channel (16 levels each = 4096 colors) keeps
@@ -785,7 +840,7 @@ export function AsciiDither({ src, cols = 90, color = '#6b5ce7', threshold = 0, 
       if (onNextPlaying) videoA.removeEventListener('playing', onNextPlaying);
       if (fadeTimer) clearTimeout(fadeTimer);
     };
-  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, endHoldMs, binarySize, binarySizeScale, filterGreen, filterBlue, pureColor, greyscale, rawColor, tintRGB, cropTop, offsetYSchedule, playbackRateSchedule, xOffsetBySrc, yOffsetBySrc, scale, batched, maxRenderFps]);
+  }, [src, cols, color, threshold, invert, fill, darkMode, borderRight, cover, saturation, loopPauseMs, endHoldMs, binarySize, binarySizeScale, filterGreen, filterBlue, pureColor, greyscale, rawColor, brightness, tintRGB, cropTop, offsetYSchedule, playbackRateSchedule, maskFadeStart, maskFadeEnd, maskHorizon, maskFeather, xOffsetBySrc, yOffsetBySrc, scale, batched, maxRenderFps]);
 
   return (
     <div className={className} style={{ width: '100%', height: '100%', position: 'relative', backgroundColor: darkMode ? '#000' : '#fff' }}>

@@ -21,8 +21,8 @@ function Logo({ src, alt, invert = false }: { src: string; alt: string; invert?:
   );
 }
 
-type BioVariant = 'intro' | 'about' | 'books';
-type Mode = 'butterfly' | 'fish' | 'orchids';
+type BioVariant = 'intro' | 'about' | 'books' | 'mountains';
+type Mode = 'butterfly' | 'fish' | 'orchids' | 'mountain';
 
 type TimelineItem = { label: string; title: string; details: string[] };
 
@@ -201,6 +201,15 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
               >
                 reading
               </button>
+              , and{' '}
+              <button
+                type="button"
+                onClick={() => onNavigate?.('mountain')}
+                className={`${linkClass} cursor-pointer`}
+                style={{ background: 'none', border: 'none', padding: 0, font: 'inherit' }}
+              >
+                climbing mountains
+              </button>
               .
             </p>
           </>
@@ -283,6 +292,17 @@ function BioContent({ dark, onSwitch, onNavigate, variant = 'intro' }: { dark: b
             </ul>
           </>
         )}
+
+        {variant === 'mountains' && (
+          <>
+            <p>
+              I enjoy climbing mountains and pushing myself to the limit. Here&apos;s my favorite mountaineering quote:
+            </p>
+            <p>
+              &ldquo;While seeking the freedom of the hills, we come face to face with ourselves.&rdquo;
+            </p>
+          </>
+        )}
       </div>
 
       <div className={`mt-8 sm:mt-12 text-xs sm:text-sm space-x-6 ${footerColor}`}>
@@ -324,7 +344,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const dark = mode === 'fish' || mode === 'orchids';
+    const dark = mode === 'fish' || mode === 'orchids' || mode === 'mountain';
     const color = dark ? '#000' : '#fff';
     document.documentElement.style.backgroundColor = color;
     document.body.style.backgroundColor = color;
@@ -338,16 +358,20 @@ export default function Home() {
     cycleCountRef.current += 1;
     if (cycleCountRef.current < CYCLES_BEFORE_ADVANCE) return;
     cycleCountRef.current = 0;
-    if (mode === 'orchids') {
+    if (mode === 'mountain') {
       setFading(true);
       setTimeout(() => window.location.reload(), 400);
       return;
     }
-    switchTo(mode === 'butterfly' ? 'fish' : 'orchids');
+    switchTo(mode === 'butterfly' ? 'fish' : mode === 'fish' ? 'orchids' : 'mountain');
   };
 
   const handleSwitch = () => {
     if (mode === 'orchids') {
+      switchTo('mountain');
+      return;
+    }
+    if (mode === 'mountain') {
       setFading(true);
       setTimeout(() => window.location.reload(), 400);
       return;
@@ -370,7 +394,7 @@ export default function Home() {
   };
 
   if (!mounted) {
-    const dark = mode === 'fish' || mode === 'orchids';
+    const dark = mode === 'fish' || mode === 'orchids' || mode === 'mountain';
     return <main className={`min-h-screen ${dark ? 'bg-black' : 'bg-white'}`} />;
   }
 
@@ -494,6 +518,39 @@ export default function Home() {
         <div className="absolute inset-0 z-10 flex items-start justify-start overflow-y-auto" style={{ fontFamily: 'var(--font-serif), Georgia, serif', padding: '98px 0 0 114px' }}>
           <div className="max-w-[640px]">
             <BioContent dark onSwitch={handleSwitch} variant="books" />
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (mode === 'mountain') {
+    return (
+      <main className="fixed inset-0 bg-black text-white overflow-hidden transition-opacity duration-500" style={{ opacity: fading ? 0 : 1 }}>
+        <div className="absolute inset-0 z-0">
+          <AsciiDither
+            key="mountain"
+            src="/mountain timelapse.mp4"
+            cols={isNarrow ? 180 : 280}
+            color="source"
+            threshold={0.13}
+            invert
+            rawColor
+            brightness={1.9}
+            fill
+            cover
+            darkMode
+            binarySize
+            playbackRate={0.6}
+            loopPauseMs={400}
+            batched={isNarrow}
+            onCycle={handleCycle}
+            className="w-full h-full"
+          />
+        </div>
+        <div className="absolute inset-0 z-10 flex items-start justify-start overflow-y-auto" style={{ fontFamily: 'var(--font-serif), Georgia, serif', padding: isNarrow ? '40px 24px 0 24px' : '98px 0 0 114px' }}>
+          <div className="max-w-[640px]">
+            <BioContent dark onSwitch={handleSwitch} variant="mountains" />
           </div>
         </div>
       </main>

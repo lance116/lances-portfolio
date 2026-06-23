@@ -71,6 +71,7 @@ const timelineItems: TimelineItem[] = [
     details: [
       'Rank 1/312, 99.2% average.',
       'Started my second business. Advertising for SMBs; failed miserably, learned a lot.',
+      'Grandmaster in Aimlabs, top 1000 out of 40M.',
       'Quit cello, got back into coding.',
     ],
   },
